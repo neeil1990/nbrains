@@ -1,4 +1,10 @@
 <?
+$MESS["BX_TRANSLATE_GROUP_ACTION_REMOVE_LANG_PHRASES"] = "clean up files";
+$MESS["BX_TRANSLATE_REMOVE_LANG_PHRASES"] = "delete entries not existing in language:";
+$MESS["BX_TRANSLATE_PHRASE_LANG_EMPTY"] = "...";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_LANGUAGE_ABSENT"] = "language not selected";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_CREATE_BACKUP_LANG_FILE"] = "Cannot create backup for #FILEPATH#";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_REWRITE_LANG_FILE"] = "Cannot overwrite file #FILEPATH#";
 $MESS["TRANS_TITLE"] = "Interface localization";
 $MESS["TRANS_FILE_NAME"] = "File/folder name";
 $MESS["TRANS_BACK"] = "Back";

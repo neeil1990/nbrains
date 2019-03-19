@@ -109,7 +109,13 @@ if($arParams['PLACEMENT'] === \Bitrix\Rest\PlacementTable::PLACEMENT_DEFAULT && 
 	$requestOptions = $_GET;
 	if($arParams['POPUP'])
 	{
-		$requestOptions = array_merge($requestOptions, $_REQUEST['param']);
+		if (
+			isset($_REQUEST['param'])
+			&& is_array($_REQUEST['param'])
+		)
+		{
+			$requestOptions = array_merge($requestOptions, $_REQUEST['param']);
+		}
 		$arParams['PARENT_SID'] = $_REQUEST['parentsid'];
 	}
 
@@ -456,6 +462,12 @@ if(
 		}
 
 		CJSCore::Init(array('applayout'));
+
+		if($arResult['APP_STATUS']['PAYMENT_ALLOW'] === 'Y')
+		{
+			\Bitrix\Rest\StatTable::logPlacement($arResult['APP_ID'], $arParams['PLACEMENT']);
+			\Bitrix\Rest\StatTable::finalize();
+		}
 
 		$this->IncludeComponentTemplate();
 

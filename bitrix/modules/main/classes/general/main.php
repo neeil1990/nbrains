@@ -146,6 +146,7 @@ abstract class CAllMain
 	public function GetCurPageParam($strParam="", $arParamKill=array(), $get_index_page=null)
 	{
 		$sUrlPath = $this->GetCurPage($get_index_page);
+
 		$strNavQueryString = DeleteParam($arParamKill);
 		if($strNavQueryString <> "" && $strParam <> "")
 			$strNavQueryString = "&".$strNavQueryString;
@@ -3483,10 +3484,12 @@ abstract class CAllMain
 
 	public static function FinalActions($response = "")
 	{
-		global $DB;
-
 		\Bitrix\Main\Context::getCurrent()->getResponse()->flush($response);
+		self::RunFinalActionsInternal();
+	}
 
+	public static function RunFinalActionsInternal()
+	{
 		self::EpilogActions();
 
 		if (!defined('BX_WITH_ON_AFTER_EPILOG'))
@@ -3499,6 +3502,7 @@ abstract class CAllMain
 			ExecuteModuleEventEx($arEvent);
 		}
 
+		global $DB;
 		$DB->Disconnect();
 
 		self::ForkActions();

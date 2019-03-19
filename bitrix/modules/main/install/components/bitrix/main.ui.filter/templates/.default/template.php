@@ -12,7 +12,7 @@
 	use Bitrix\Main\UI\Filter\DateType;
 	use Bitrix\Main\UI\Filter\AdditionalDateType;
 	use Bitrix\Main\UI\Filter\NumberType;
-	\Bitrix\Main\UI\Extension::load("ui.buttons");
+	\Bitrix\Main\UI\Extension::load("ui.buttons", "ui.fonts.opensans");
 
 	if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
 	{
@@ -165,7 +165,7 @@
 
 <script>
 	BX.Main.filterManager.push(
-		'<?=$arParams["FILTER_ID"]?>',
+		'<?=\CUtil::jSEscape($arParams["FILTER_ID"])?>',
 		new BX.Main.Filter(
 			<?=CUtil::PhpToJSObject($arResult)?>,
 			<?=CUtil::PhpToJSObject($arParams["CONFIG"])?>,

@@ -14,12 +14,33 @@
 		this.handlers = {};
 
 		this.setItems(options.items || []);
+
+		this.zIndex = options.zIndex || 999999;
+		this.cycleMode = options.hasOwnProperty('cycleMode')? options.cycleMode : true;
+		this.optionsByGroup = {};
+		this.layout = {
+			container: null,
+			content: null,
+			inner: null,
+			itemContainer: null,
+			next: null,
+			prev: null,
+			close: null,
+			error: null,
+			loader: null,
+			loaderContainer: null,
+			loaderText: null,
+			panel: null
+		};
+
 		/**
 		 * @type {BX.UI.ActionPanel}
 		 */
 		this.actionPanel = new BX.UI.ActionPanel({
 			darkMode: true,
+			floatMode: false,
 			autoHide: false,
+			zIndex: this.zIndex,
 			showTotalSelectedBlock: false,
 			showResetAllBlock: false,
 			alignItems: 'center',
@@ -29,54 +50,50 @@
 		});
 
 		this.init();
-
-		this.zIndex = options.zIndex || 999999;
-		this.layout = {
-			container: null,
-			content: null,
-			inner: null,
-			items: null,
-			next: null,
-			prev: null,
-			close: null,
-			error: null,
-			loader: null,
-			loaderContainer: null,
-			panel: null
-		}
 	};
 
 	BX.UI.Viewer.Controller.prototype = {
+		/**
+		 * @param {HTMLElement} node
+		 */
+		buildItemListByNode: function (node)
+		{
+			if (!BX.type.isDomNode(node) || !node.dataset)
+			{
+				return [];
+			}
+
+			if (!node.dataset.hasOwnProperty('viewer'))
+			{
+				return [];
+			}
+
+			if (!node.dataset.viewerGroupBy)
+			{
+				return [
+					BX.UI.Viewer.buildItemByNode(node)
+				];
+			}
+
+			var nodes = [].slice.call(node.ownerDocument.querySelectorAll("[data-viewer][data-viewer-group-by='" + node.dataset.viewerGroupBy + "']"));
+
+			return nodes.map(function(node) {
+				return BX.UI.Viewer.buildItemByNode(node);
+			});
+		},
+
 		handleDocumentClick: function (event)
 		{
 			var target = BX.getEventTarget(event);
-			if (!target.dataset.hasOwnProperty('viewer'))
+			var items = this.buildItemListByNode(target);
+			if (items.length === 0)
 			{
 				return;
 			}
 
-			var indexToShow = 0;
-			var viewer = BX.UI.Viewer.Instance;
-			if (!target.dataset.viewerGroupBy)
-			{
-				viewer.setItems([
-					BX.UI.Viewer.buildItemByNode(target)
-				]);
-			}
-			else
-			{
-				var nodes = [].slice.call(target.ownerDocument.querySelectorAll("[data-viewer][data-viewer-group-by='" + target.dataset.viewerGroupBy + "']"));
-				var items = nodes.map(function(node, index) {
-					if (node === target)
-					{
-						indexToShow = index;
-					}
-					return BX.UI.Viewer.buildItemByNode(node);
-				});
-
-				viewer.setItems(items);
-			}
-			viewer.open(indexToShow);
+			this.setItems(items).then(function(){
+				this.open(this.getIndexByNode(target));
+			}.bind(this));
 
 			event.preventDefault();
 		},
@@ -87,48 +104,156 @@
 			this.handlers.touchStart = this.handleTouchStart.bind(this);
 			this.handlers.touchEnd = this.handleTouchEnd.bind(this);
 			this.handlers.resize = this.adjustViewerHeight.bind(this);
+			this.handlers.showNext = this.showNext.bind(this);
+			this.handlers.showPrev = this.showPrev.bind(this);
+			this.handlers.close = this.close.bind(this);
+			this.handlers.handleClickOnItemContainer = this.handleClickOnItemContainer.bind(this);
+			this.handlers.handleSliderOpen = this.handleSliderOpen.bind(this);
+			this.handlers.handleSliderCloseComplete = this.handleSliderCloseComplete.bind(this);
+			this.handlers.handleSliderCloseByEsc = this.handleSliderCloseByEsc.bind(this);
 
 			BX.bind(document, 'keydown', this.handlers.keyPress);
 			BX.bind(window, 'resize', this.handlers.resize);
-			BX.bind(this.getItemListNode(), 'touchstart', this.handlers.touchStart);
-			BX.bind(this.getItemListNode(), 'touchend', this.handlers.touchEnd);
+			BX.bind(this.getItemContainer(), 'touchstart', this.handlers.touchStart);
+			BX.bind(this.getItemContainer(), 'touchend', this.handlers.touchEnd);
 
-			BX.bind(this.getNextButton(), 'click', this.showNext.bind(this));
-			BX.bind(this.getPrevButton(), 'click', this.showPrev.bind(this));
-			BX.bind(this.getCloseButton(), 'click', this.close.bind(this));
+			BX.bind(this.getItemContainer(), 'click', this.handlers.handleClickOnItemContainer);
+			BX.bind(this.getNextButton(), 'click', this.handlers.showNext);
+			BX.bind(this.getPrevButton(), 'click', this.handlers.showPrev);
+			BX.bind(this.getCloseButton(), 'click', this.handlers.close);
 
-			BX.addCustomEvent('SidePanel.Slider:onOpen', function(event) {
-				if (!this.originalZIndex)
-				{
-					this.originalZIndex = this.getZindex();
-				}
+			BX.addCustomEvent('SidePanel.Slider:onOpen', this.handlers.handleSliderOpen);
+			BX.addCustomEvent('SidePanel.Slider:onCloseComplete', this.handlers.handleSliderCloseComplete);
+			BX.addCustomEvent('SidePanel.Slider:onCloseByEsc', this.handlers.handleSliderCloseByEsc);			
+		},
 
-				this.setZindex(event.getSlider().getZindex() - 1);
-			}.bind(this));
-			BX.addCustomEvent('SidePanel.Slider:onCloseComplete', function(event) {
-				var slider = BX.SidePanel.Instance.getTopSlider();
-				if (slider)
-				{
-					this.setZindex(slider.getZindex() - 1);
-				}
-				else
-				{
-					this.setZindex(this.originalZIndex);
-					this.originalZIndex = null;
-				}
-			}.bind(this));
+		/**
+		 * @param {BX.SidePanel.Event} event
+		 */
+		handleSliderCloseByEsc: function(event)
+		{
+			if (this.isOpen() && (this.getZindex() > event.getSlider().getZindex()))
+			{
+				event.denyAction();
+			}
+		},
+
+		/**
+		 * @param {BX.SidePanel.Event} event
+		 */
+		handleSliderCloseComplete: function(event)
+		{
+			var slider = BX.SidePanel.Instance.getTopSlider();
+			if (slider)
+			{
+				console.log('grab zIndex from closed slider', slider.getZindex());
+				this.setZindex(slider.getZindex() - 1);
+			}
+			else
+			{
+				console.log('reset zIndex by originalZIndex', this.originalZIndex);
+				this.setZindex(this.originalZIndex);
+				this.originalZIndex = null;
+			}
+		},
+
+		/**
+		 * @param {BX.SidePanel.Event} event
+		 */
+		handleSliderOpen: function (event)
+		{
+			if (!this.originalZIndex)
+			{
+				this.originalZIndex = this.getZindex();
+			}
+			console.log('SidePanel.Slider:onOpen', this.originalZIndex, event.getSlider().getZindex() - 1);
+
+			this.setZindex(event.getSlider().getZindex() - 1);
+		},
+
+		adjustZindex: function ()
+		{
+			if (!BX.getClass('BX.SidePanel.Instance'))
+			{
+				return;
+			}
+
+			if (!BX.SidePanel.Instance.isOpen())
+			{
+				this.setZindex(this.originalZIndex || this.zIndex);
+				this.originalZIndex = null;
+
+				return;
+			}
+
+			//we have to show viewer over sidepanel
+			var slider = BX.SidePanel.Instance.getTopSlider();
+			this.originalZIndex = this.zIndex;
+
+			this.setZindex(slider.getZindex() + 1);
 		},
 
 		unbindEvents: function()
 		{
 			BX.unbind(document, 'keydown', this.handlers.keyPress);
 			BX.unbind(window, 'resize', this.handlers.resize);
-			BX.unbind(this.getItemListNode(), 'touchstart', this.handlers.touchStart);
-			BX.unbind(this.getItemListNode(), 'touchend', this.handlers.touchEnd);
+			BX.unbind(this.getItemContainer(), 'touchstart', this.handlers.touchStart);
+			BX.unbind(this.getItemContainer(), 'touchend', this.handlers.touchEnd);
+
+			BX.unbind(this.getItemContainer(), 'click', this.handlers.handleClickOnItemContainer);
+			BX.unbind(this.getNextButton(), 'click', this.handlers.showNext);
+			BX.unbind(this.getPrevButton(), 'click', this.handlers.showPrev);
+			BX.unbind(this.getCloseButton(), 'click', this.handlers.close);
+
+			BX.removeCustomEvent('SidePanel.Slider:onOpen', this.handlers.handleSliderOpen);
+			BX.removeCustomEvent('SidePanel.Slider:onCloseComplete', this.handlers.handleSliderCloseComplete);
 		},
 
 		init: function ()
 		{},
+
+		openByNode: function (node)
+		{
+			var items = this.buildItemListByNode(node);
+			if (items.length === 0)
+			{
+				return;
+			}
+
+			this.setItems(items).then(function(){
+				this.open(this.getIndexByNode(node));
+			}.bind(this));
+		},
+
+		runActionByNode: function (node, actionId, additionalParams)
+		{
+			var items = this.buildItemListByNode(node);
+			if (items.length === 0)
+			{
+				return;
+			}
+
+			this.setItems(items).then(function(){
+				this.runAction(this.getIndexByNode(node), actionId, additionalParams);
+			}.bind(this));
+		},
+
+		runAction: function (index, actionId, additionalParams)
+		{
+			var item = this.getItemByIndex(index);
+			var actionToRun = item.getActions().find(function (action) {
+				return action.id === actionId;
+			});
+
+			console.log('actionToRun', actionId, actionToRun);
+			if (!BX.type.isFunction(actionToRun.action))
+			{
+				console.log('action is not a function');
+				return;
+			}
+
+			actionToRun.action.call(this, item, additionalParams);
+		},
 
 		getZindex: function ()
 		{
@@ -137,10 +262,15 @@
 
 		setZindex: function (zIndex)
 		{
+			console.log('setZindex', zIndex);
 			this.zIndex = zIndex;
 			this.getViewerContainer().style.zIndex = zIndex;
 		},
 
+		/**
+		 * @param items
+		 * @return {Promise<extensionsCollection>}
+		 */
 		setItems: function (items)
 		{
 			if (!BX.type.isArray(items))
@@ -154,6 +284,54 @@
 			this.items.forEach(function (item) {
 				item.setController(this);
 			}, this);
+
+			return this.loadExtensions(this.collectExtensionsForAction(items));
+		},
+
+		/**
+		 *
+		 * @param {String|String[]} extensions - Extension name
+		 * @return {Promise<extensionsCollection>}
+		 */
+		loadExtensions: function (extensions)
+		{
+			return BX.loadExt(extensions);
+		},
+
+		/**
+		 *
+		 * @param {BX.UI.Viewer.Item[]} items
+		 * @return {Array}
+		 */
+		collectExtensionsForAction: function (items)
+		{
+			var extensionSet = new Set();
+
+			items.forEach(function (item) {
+				var actions = item.getActions() || [];
+				actions.forEach(function (action) {
+					if (!action.extension)
+					{
+						return;
+					}
+
+					if (!BX.type.isArray(action.extension))
+					{
+						action.extension = [action.extension];
+					}
+
+					action.extension.forEach(function (ext) {
+						extensionSet.add(ext);
+					});
+				});
+			});
+
+			var extensions = [];
+			extensionSet.forEach(function (ext) {
+				extensions.push(ext);
+			});
+
+			return extensions;
 		},
 
 		appendItem: function (item)
@@ -167,7 +345,44 @@
 			this.items.push(item);
 		},
 
-		show: function (index, forceReload)
+		/**
+		 * Reloads item in collection items. It means that we replace old item by the one new
+		 * which is the copy.
+		 * @param {BX.UI.Viewer.Item} item
+		 * @param {Object} options
+		 */
+		reloadItem: function (item, options)
+		{
+			options = options || {};
+
+			if (!(item instanceof BX.UI.Viewer.Item))
+			{
+				throw new Error("BX.UI.Viewer.Controller.reloadItem: 'item' has to be instance of BX.UI.Viewer.Item.");
+			}
+
+			var index = this.items.indexOf(item);
+			if (index === -1)
+			{
+				throw new Error("BX.UI.Viewer.Controller.reloadItem: there is no 'item' in items to reload.");
+			}
+
+			var newItem = null;
+			if (item.sourceNode)
+			{
+				newItem = BX.UI.Viewer.buildItemByNode(item.sourceNode);
+			}
+			else
+			{
+				newItem = new item.constructor(item.options);
+			}
+
+			newItem.setController(this);
+			newItem.applyReloadOptions(options);
+
+			this.items[index] = newItem;
+		},
+
+		show: function (index)
 		{
 			if (typeof index === 'undefined')
 			{
@@ -182,41 +397,38 @@
 				return;
 			}
 
-			var prevItem = this.getCurrentItem();
 			this.currentIndex = index;
 
 			this.hideErrorBlock();
-
-			if (prevItem)
-			{
-				this.hideCurrentItem();
-			}
-			this.actionPanel.removeItems();
-			this.actionPanel.addItems(
-				this.refineActions(this.getCurrentItem().getActions(), this.getCurrentItem())
-			);
-
+			this.hideCurrentItem();
 			this.showLoading();
 
-			var promise;
-			if (forceReload)
-			{
-				promise = item.reload();
-			}
-			else
-			{
-				promise = item.load();
-			}
-				promise.then(function (item) {
-					if (this.getCurrentItem() === item)
-					{
-						this.processShowItem.call(this, item);
-					}
-				}.bind(this))
-				.catch(function (reason) {
-					this.processError.call(this, reason, item);
-				}.bind(this))
-			;
+			this.actionPanel.removeItems();
+			this.actionPanel.addItems(
+				this.convertItemActionsToPanelItems(this.getCurrentItem())
+			);
+
+			item.load().then(function (loadedItem) {
+				if (this.getCurrentItem() === loadedItem)
+				{
+					console.log('show item');
+					this.processShowItem(loadedItem);
+				}
+			}.bind(this))
+			.catch(function (reason) {
+				var loadedItem = reason.item;
+
+				console.log('catch viewer');
+
+				BX.onCustomEvent('BX.UI.Viewer.Controller:onItemError', [this, reason, loadedItem]);
+
+				if (this.getCurrentItem() === loadedItem)
+				{
+					this.processError(reason, loadedItem);
+				}
+
+				BX.onCustomEvent('BX.UI.Viewer.Controller:onAfterProcessItemError', [this, reason, loadedItem]);
+			}.bind(this));
 
 			this.updateControls();
 
@@ -224,25 +436,38 @@
 			this.adjustViewerHeight();
 		},
 
-		reload: function (item)
+		/**
+		 * Reloads item and rerun show if item was as current item.
+		 * @param {BX.UI.Viewer.Item} item
+		 * @param {Object} options
+		 */
+		reload: function (item, options)
 		{
 			var isCurrentVisibleItem = this.getCurrentItem() === item;
+			this.reloadItem(item, options);
+
 			if (isCurrentVisibleItem)
 			{
-				this.show(this.currentIndex, true);
+				console.log('reload');
+				this.show(this.currentIndex);
 			}
 		},
 
-		reloadCurrentItem: function ()
+		/**
+		 * Reloads and show current item.
+		 * @param {?Object} options
+		 */
+		reloadCurrentItem: function (options)
 		{
-			return this.reload(this.getCurrentItem());
+			this.reload(this.getCurrentItem(), options || {});
 		},
 
+		/**
+		 * @param {BX.UI.Viewer.Item} item
+		 */
 		processShowItem: function(item)
 		{
-			BX.cleanNode(this.layout.items);
-			// this.actionPanel.addItems(this.getCurrentItem().getActions());
-
+			this.hideCurrentItem();
 			this.hideLoading();
 
 			var contentWrapper = BX.create('div', {
@@ -266,16 +491,57 @@
 			}
 
 			contentWrapper.appendChild(fragment);
-			this.layout.items.appendChild(contentWrapper);
+			this.layout.itemContainer.appendChild(contentWrapper);
 
 			item.afterRender();
 		},
 
+		/**
+		 * @param {Object} reason
+		 * @param {BX.UI.Viewer.Item} item
+		 */
 		processError: function(reason, item)
 		{
+			reason = reason || {};
+
+			var message = reason.message || null;
+			var description = reason.description || null;
+
+			if (BX.type.isArray(reason.errors) && reason.errors.length)
+			{
+				if (reason.errors[0].code === 1000 && !reason.message)
+				{
+					message = BX.message('JS_UI_VIEWER_ITEM_TRANSFORMATION_TIMEOUT');
+				}
+			}
+
 			this.hideCurrentItem();
 			this.hideLoading();
-			this.layout.container.appendChild(this.getErrorBlock());
+
+			var contentWrapper = BX.create('div', {
+				props: {
+					className: 'ui-viewer-inner-content-wrapper'
+				}
+			});
+
+			var title = item.getTitle();
+			if (title)
+			{
+				contentWrapper.appendChild(BX.create('div', {
+						props: {
+							className: 'viewer-inner-caption'
+						},
+						text: title
+					})
+				);
+			}
+
+			contentWrapper.appendChild(this.getErrorBlock({
+				title: message,
+				description: description
+			}));
+			
+			this.layout.itemContainer.appendChild(contentWrapper);
 		},
 
 		hideErrorBlock: function()
@@ -288,6 +554,8 @@
 
 		getErrorBlock: function(options)
 		{
+			this.hideErrorBlock();
+
 			options = options || {};
 
 			var title = options.title || BX.message('JS_UI_VIEWER_DEFAULT_ERROR_TITLE');
@@ -296,6 +564,9 @@
 			this.layout.error =  BX.create('div', {
 				props: {
 					className: 'ui-viewer-error'
+				},
+				style: {
+					maxWidth: description? '440px' : null
 				},
 				children: [
 					BX.create('div', {
@@ -308,7 +579,7 @@
 						props: {
 							className: 'ui-viewer-error-text'
 						},
-						text: description
+						html: description || ''
 					})
 				]
 			});
@@ -316,7 +587,28 @@
 			return this.layout.error;
 		},
 
-		refineActions: function (actions, item)
+		/**
+		 * @param {BX.UI.Viewer.Item} item
+		 */
+		convertItemActionsToPanelItems: function (item)
+		{
+			return item.getActions().map(function(action) {
+				if (BX.type.isFunction(action.action))
+				{
+					var fn = action.action;
+					action.onclick = function(event, panelItem) {
+						fn.call(this, item);
+					}.bind(this);
+				}
+
+				return action;
+			}, this);
+		},
+
+		/**
+		 * @param {BX.UI.Viewer.Item} item
+		 */
+		refineItemActions: function (item)
 		{
 			var defaultActions = {
 				download: {
@@ -352,18 +644,50 @@
 				}
 			};
 
-			return actions.map(function(action) {
+			return item.getNakedActions().map(function(action) {
 				if (defaultActions[action.type])
 				{
 					action = BX.mergeEx(defaultActions[action.type], action)
 				}
 
-				if (BX.type.isString(action.action) && (typeof eval(action.action) === 'function'))
+				if (!action.id)
 				{
-					var fn = eval(action.action);
-					action.onclick = function(event, panelItem) {
-						fn.call(this, item, panelItem);
+					action.id = action.type;
+				}
+
+				if (!action.action && action.href)
+				{
+					action.action = function () {
+						document.location = action.href;
 					};
+				}
+
+				if (BX.type.isArray(action.items))
+				{
+					action.items.forEach(function (item) {
+						if (BX.type.isString(item.onclick))
+						{
+							item.onclick = new Function('event', 'popupItem', item.onclick);
+						}
+					})
+				}
+
+				if (BX.type.isString(action.action))
+				{
+					var params = action.params || {};
+					var actionString = action.action;
+
+					action.action = function(item, additionalParams) {
+						try
+						{
+							var fn = eval(actionString);
+							fn.call(this, item, params, additionalParams);
+						}
+						catch(e)
+						{
+							console.log(e);
+						}
+					}.bind(this);
 				}
 
 				return action;
@@ -378,13 +702,16 @@
 					props: {
 						className: 'ui-viewer-loader'
 					},
+					style: {
+						zIndex: -1
+					},
 					children: [
 						this.layout.loaderContainer = BX.create('div', {
 							props: {
 								className: 'ui-viewer-loader-container'
 							}
 						}),
-						BX.create('div', {
+						this.layout.loaderText = BX.create('div', {
 							props: {
 								className: 'ui-viewer-loader-text'
 							},
@@ -450,6 +777,8 @@
 
 		open: function(index)
 		{
+			this.adjustZindex();
+
 			document.body.appendChild(this.getViewerContainer());
 			this.show(index);
 			this.showPanel();
@@ -477,7 +806,6 @@
 		{
 			this.actionPanel.layout.container.style.zIndex = '9999999';
 			this.actionPanel.layout.container.style.background = 'none';
-			this.actionPanel.layout.container.style.maxWidth = this.layout.inner.offsetWidth + 'px';
 
 			this.actionPanel.draw();
 			this.actionPanel.showPanel();
@@ -485,12 +813,12 @@
 
 		hideCurrentItem: function()
 		{
-			BX.cleanNode(this.layout.items);
+			BX.cleanNode(this.layout.itemContainer);
 		},
 
 		updateControls: function()
 		{
-			if (this.currentIndex + 1 >= this.items.length)
+			if (!this.allowToUseCycleMode() && this.currentIndex + 1 >= this.items.length)
 			{
 				BX.addClass(this.getNextButton(), 'ui-viewer-navigation-hide');
 			}
@@ -499,7 +827,7 @@
 				BX.removeClass(this.getNextButton(), 'ui-viewer-navigation-hide');
 			}
 
-			if (this.currentIndex === 0)
+			if (!this.allowToUseCycleMode() && this.currentIndex === 0)
 			{
 				BX.addClass(this.getPrevButton(), 'ui-viewer-navigation-hide');
 			}
@@ -515,6 +843,23 @@
 		getCurrentItem: function ()
 		{
 			return this.getItemByIndex(this.currentIndex);
+		},
+
+		/**
+		 * @param {HTMLElement} node
+		 * @return {int}
+		 */
+		getIndexByNode: function (node)
+		{
+			var nodeIndex = null;
+			this.items.forEach(function (item, index) {
+				if (item.sourceNode === node)
+				{
+					nodeIndex = index;
+				}
+			});
+
+			return nodeIndex;
 		},
 
 		/**
@@ -536,14 +881,46 @@
 			return this.items[index];
 		},
 
+		handleClickOnItemContainer: function (event)
+		{
+			if (this.getCurrentItem() instanceof BX.UI.Viewer.Image)
+			{
+				this.showNext();
+			}
+		},
+
+		allowToUseCycleMode: function ()
+		{
+			var cycleMode = this.cycleMode;
+			var groupBy = this.getCurrentItem().getGroupBy();
+			if (this.optionsByGroup[groupBy] && this.optionsByGroup[groupBy].hasOwnProperty('cycleMode'))
+			{
+				cycleMode = this.optionsByGroup[groupBy].cycleMode;
+			}
+
+			return this.items.length > 1 && cycleMode;
+		},
+
 		showNext: function ()
 		{
-			this.show(this.currentIndex + 1);
+			var index = this.currentIndex + 1;
+			if (this.allowToUseCycleMode() && index >= this.items.length)
+			{
+				index = 0;
+			}
+
+			this.show(index);
 		},
 
 		showPrev: function ()
 		{
-			this.show(this.currentIndex - 1);
+			var index = this.currentIndex - 1;
+			if (this.allowToUseCycleMode() && index === -1)
+			{
+				index = this.items.length - 1;
+			}
+
+			this.show(index);
 		},
 
 		close: function ()
@@ -552,10 +929,17 @@
 
 			BX.onCustomEvent('BX.UI.Viewer.Controller:onClose', [this]);
 
-			this.layout.container.parentNode.removeChild(this.layout.container);
-			this.actionPanel.hidePanel();
-			this.unLockScroll();
-			this.unbindEvents();
+			BX.addClass(this.layout.container, 'ui-viewer-hide');
+
+			BX.bind(this.layout.container, 'transitionend', function()
+			{
+				BX.remove(this.layout.container);
+				BX.removeClass(this.layout.container, 'ui-viewer-hide');
+				BX.unbindAll(this.layout.container);
+				this.actionPanel.hidePanel();
+				this.unLockScroll();
+				this.unbindEvents();
+			}.bind(this));
 
 			// this.items = null;
 			// this.currentIndex = null;
@@ -563,9 +947,17 @@
 			// this.layout.close = null;
 		},
 
-		showLoading: function ()
+		showLoading: function (options)
 		{
+			options = options || {};
+
 			this.layout.inner.appendChild(this.getLoader());
+			this.setTextOnLoading(options.text || '');
+		},
+
+		setTextOnLoading: function (text)
+		{
+			this.layout.loaderText.textContent = text;
 		},
 
 		hideLoading: function ()
@@ -575,12 +967,12 @@
 
 		lockScroll: function()
 		{
-			document.body.style.overflow = 'hidden';
+			BX.addClass(document.body, 'ui-viewer-lock-body');
 		},
 
 		unLockScroll: function()
 		{
-			document.body.style.overflow = null;
+			BX.removeClass(document.body, 'ui-viewer-lock-body');
 		},
 
 		adjustViewerHeight: function()
@@ -609,7 +1001,7 @@
 								className: 'ui-viewer-inner'
 							},
 							children: [
-								this.getItemListNode()
+								this.getItemContainer()
 							]
 						}),
 						this.getCloseButton(),
@@ -623,18 +1015,18 @@
 			return this.layout.container;
 		},
 
-		getItemListNode: function()
+		getItemContainer: function()
 		{
-			if (!this.layout.items)
+			if (!this.layout.itemContainer)
 			{
-				this.layout.items = BX.create('div', {
+				this.layout.itemContainer = BX.create('div', {
 					props: {
 						className: 'ui-viewer-inner-content'
 					}
 				});
 			}
 
-			return this.layout.items
+			return this.layout.itemContainer
 		},
 
 		handleTouchStart: function(event)
@@ -685,8 +1077,28 @@
 			event.preventDefault();
 		},
 
+		isOnTop: function ()
+		{
+			if (!this.isOpen())
+			{
+				return false;
+			}
+
+			if (!BX.getClass('BX.SidePanel.Instance') || !BX.SidePanel.Instance.getTopSlider())
+			{
+				return true;
+			}
+
+			return this.getZindex() > BX.SidePanel.Instance.getTopSlider().getZindex();
+		},
+
 		handleKeyPress: function (event)
 		{
+			if (!this.isOnTop())
+			{
+				return;
+			}
+
 			switch (event.code)
 			{
 				case 'Space':
@@ -695,6 +1107,7 @@
 				case 'ArrowDown':
 					this.showNext();
 					event.preventDefault();
+					event.stopPropagation();
 
 					break;
 				case 'ArrowLeft':
@@ -702,6 +1115,7 @@
 				case 'ArrowUp':
 					this.showPrev();
 					event.preventDefault();
+					event.stopPropagation();
 
 					break;
 				case 'Escape':
@@ -710,6 +1124,13 @@
 
 					break;
 			}
+		},
+
+		setOptionsByGroup: function (groupBy, options)
+		{
+			this.optionsByGroup[groupBy] = options;
+
+			return this;
 		}
 	};
 
@@ -721,8 +1142,15 @@
 	BX.UI.Viewer.buildItemByTypeAndNode = function (type, node)
 	{
 		var item = new type();
+
+		if (!(item instanceof BX.UI.Viewer.Item))
+		{
+			throw new Error("BX.UI.Viewer.buildItemByTypeAndNode: 'item' has to be instance of BX.UI.Viewer.Item.");
+		}
+
 		item.setPropertiesByNode(node);
 		item.bindSourceNode(node);
+		item.setActions(BX.UI.Viewer.Instance.refineItemActions(item));
 
 		return item;
 	};
@@ -739,12 +1167,9 @@
 		}
 
 		var typeCode = node.dataset.viewerType;
-		if (!typeCode)
+		if (!typeCode && node.tagName.toLowerCase() === 'img')
 		{
-			if (node.tagName.toLowerCase() === 'img')
-			{
-				typeCode = 'image';
-			}
+			typeCode = 'image';
 		}
 
 		switch (typeCode)
@@ -760,6 +1185,18 @@
 			case 'document':
 				return BX.UI.Viewer.buildItemByTypeAndNode(BX.UI.Viewer.Document, node);
 		}
+
+		if (!node.dataset.viewerTypeClass)
+		{
+			throw new Error("BX.UI.Viewer.buildItemByNode: there is no data-viewer-type or data-viewer-type-class");
+		}
+
+		if (!BX.getClass(node.dataset.viewerTypeClass))
+		{
+			throw new Error("BX.UI.Viewer.buildItemByNode: could not find class " + node.dataset.viewerTypeClass);
+		}
+
+		return BX.UI.Viewer.buildItemByTypeAndNode(BX.getClass(node.dataset.viewerTypeClass), node);
 	};
 
 	/**
@@ -781,7 +1218,6 @@
 		}
 
 		BX.bindDelegate(container, 'click', filter, function(event) {
-			var viewer = new BX.UI.Viewer.Controller({});
 			var nodes = BX.findChildren(container, filter, true);
 			var indexToShow = 0;
 			var targetNode = BX.getEventTarget(event);
@@ -794,8 +1230,9 @@
 				return BX.UI.Viewer.buildItemByNode(node);
 			});
 
-			viewer.setItems(items);
-			viewer.open(indexToShow);
+			BX.UI.Viewer.Instance.setItems(items).then(function () {
+				BX.UI.Viewer.Instance.open(indexToShow);
+			});
 
 			event.preventDefault();
 		});
@@ -828,10 +1265,10 @@
 		}
 	});
 
-	window.document.addEventListener('click', function(event){
+	window.document.addEventListener('click', function(event) {
 		if (window.top !== window && !BX.getClass('window.top.BX.UI.Viewer.Instance'))
 		{
-			window.top.BX.loadExt('ui.viewer').then(function () {
+			top.BX.loadExt('ui.viewer').then(function () {
 				top.BX.UI.Viewer.Instance.handleDocumentClick(event);
 			});
 		}
@@ -841,9 +1278,10 @@
 		}
 	}, true);
 
-	//try to load ui.viewer to the top window if there is no viewer.
+	//We have to show viewer only in top window not in iframe.
+	//So we try to load ui.viewer to the top window if there is no viewer.
 	if (window.top !== window && !BX.getClass('window.top.BX.UI.Viewer.Instance'))
 	{
-		window.top.BX.loadExt('ui.viewer');
+		top.BX.loadExt('ui.viewer');
 	}
 })();

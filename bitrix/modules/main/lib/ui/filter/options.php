@@ -394,6 +394,7 @@ class Options
 			$quarterId = $id."_quarter";
 			$yearId = $id."_year";
 			$monthId = $id."_month";
+			$daysId = $id."_days";
 			$nameId = $id."_name";
 			$labelId = $id."_label";
 			$valueId = $id."_value";
@@ -407,6 +408,7 @@ class Options
 						$request[$toId] !== null ||
 						$request[$quarterId] !== null ||
 						$request[$yearId] !== null ||
+						$request[$daysId] !== null ||
 						$request[$monthId] !== null))
 				{
 					$result["fields"][$dateselId] = $request[$dateselId];
@@ -414,6 +416,7 @@ class Options
 					$result["fields"][$toId] = $request[$toId] !== null ? $request[$toId] : "";
 					$result["fields"][$yearId] = $request[$yearId] !== null ? $request[$yearId] : "";
 					$result["fields"][$monthId] = $request[$monthId] !== null ? $request[$monthId] : "";
+					$result["fields"][$daysId] = $request[$daysId] !== null ? $request[$daysId] : "";
 					$result["rows"][] = $id;
 				}
 			}
@@ -433,6 +436,7 @@ class Options
 				{
 					$result["fields"][$valueId] = $request[$valueId];
 					$result["fields"][$labelId] = $request[$nameId] !== null ? $request[$nameId] : $request[$labelId];
+					$result["fields"][$id] = $request[$id];
 					$result["rows"][] = $id;
 				}
 			}
@@ -1003,9 +1007,21 @@ class Options
 			if ($currentPreset)
 			{
 				$request = $this->getRequest();
-				$isApplyFilter = (strtoupper($request->get("apply_filter")) == "Y");
-				$isClearFilter = (strtoupper($request->get("clear_filter")) == "Y");
-				$isWithPreset = (strtoupper($request->get("with_preset")) == "Y");
+				$params = $request->getPost('params');
+				$params = is_array($params) ? $params : [];
+
+				$isApplyFilter = (
+					(strtoupper($request->get("apply_filter")) == "Y") ||
+					(strtoupper($params["apply_filter"]) == "Y")
+				);
+				$isClearFilter = (
+					(strtoupper($request->get("clear_filter")) == "Y") ||
+					(strtoupper($params["clear_filter"]) == "Y")
+				);
+				$isWithPreset = (
+					(strtoupper($request->get("with_preset")) == "Y") ||
+					(strtoupper($params["with_preset"]) == "Y")
+				);
 
 				if (($useRequest && ($isApplyFilter || $isClearFilter) && !$isWithPreset) || $useRequest === false)
 				{

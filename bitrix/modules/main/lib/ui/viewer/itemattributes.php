@@ -54,16 +54,18 @@ class ItemAttributes
 
 	protected function setDefaultAttributes()
 	{
-		$this->attributes[] = 'data-viewer';
-		$this->attributes['data-viewer-type'] = static::getViewerTypeByFile($this->fileData);
-		$this->attributes['data-src'] = $this->sourceUri;
+		$this
+			->setAttribute('data-viewer')
+			->setAttribute('data-viewer-type', static::getViewerTypeByFile($this->fileData))
+			->setAttribute('data-src', $this->sourceUri)
+		;
 	}
 
 	/**
 	 * @param $fileId
 	 * @param $sourceUri
 	 *
-	 * @return ItemAttributes
+	 * @return static
 	 * @throws ArgumentException
 	 */
 	public static function buildByFileId($fileId, $sourceUri)
@@ -81,7 +83,7 @@ class ItemAttributes
 	 * @param array $fileData
 	 * @param $sourceUri
 	 *
-	 * @return ItemAttributes
+	 * @return static
 	 * @throws ArgumentException
 	 */
 	public static function buildByFileData(array $fileData, $sourceUri)
@@ -91,7 +93,22 @@ class ItemAttributes
 			throw new ArgumentException('Invalid file data');
 		}
 
-		return new static($fileData['ID'], $sourceUri);
+		return new static($fileData, $sourceUri);
+	}
+
+	/**
+	 * @param $sourceUri
+	 *
+	 * @return static
+	 */
+	public static function buildAsUnknownType($sourceUri)
+	{
+		$fakeFileData = [
+			'ID' => -1,
+			'CONTENT_TYPE' => 'application/octet-stream',
+		];
+
+		return new static($fakeFileData, $sourceUri);
 	}
 
 	/**
@@ -101,9 +118,7 @@ class ItemAttributes
 	 */
 	public function setTitle($title)
 	{
-		$this->attributes['data-title'] = htmlspecialcharsbx($title);
-
-		return $this;
+		return $this->setAttribute('data-title', htmlspecialcharsbx($title));
 	}
 
 	/**
@@ -113,9 +128,23 @@ class ItemAttributes
 	 */
 	public function setGroupBy($id)
 	{
-		$this->attributes['data-viewer-group-by'] = htmlspecialcharsbx($id);
+		return $this->setAttribute('data-viewer-group-by', htmlspecialcharsbx($id));
+	}
 
-		return $this;
+	/**
+	 * @return $this
+	 */
+	public function unsetGroupBy()
+	{
+		return $this->unsetAttribute('data-viewer-group-by');
+	}
+
+	/**
+	 * @return string|null
+	 */
+	public function getGroupBy()
+	{
+		return $this->getAttribute('data-viewer-group-by');
 	}
 
 	/**
@@ -145,7 +174,7 @@ class ItemAttributes
 	{
 		if (!$this->issetAttribute('data-viewer-type'))
 		{
-			$this->attributes['data-viewer-type'] = static::getViewerTypeByFile($this->fileData);
+			$this->setAttribute('data-viewer-type', static::getViewerTypeByFile($this->fileData));
 		}
 
 		return $this->getAttribute('data-viewer-type');
@@ -157,9 +186,21 @@ class ItemAttributes
 	 *
 	 * @return $this
 	 */
-	public function setAttribute($name, $value)
+	public function setAttribute($name, $value = null)
 	{
 		$this->attributes[$name] = $value;
+
+		return $this;
+	}
+
+	/**
+	 * @param $name
+	 *
+	 * @return $this
+	 */
+	public function unsetAttribute($name)
+	{
+		unset($this->attributes[$name]);
 
 		return $this;
 	}

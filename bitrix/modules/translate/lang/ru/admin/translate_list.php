@@ -39,4 +39,10 @@ $MESS["TR_NEW_SEARCH"] = "Новый поиск";
 $MESS["TR_SEARCH"] = "Поиск";
 $MESS["TR_SEARCH_TITLE"] = "Поиск";
 $MESS["CONFRIM_REWRITE_LANG_FILES"] = "Внимание! Будут удалены фразы, которых нет в импортируемом файле. Вы уверены, что хотите полностью заменить языковые файлы?";
+$MESS["BX_TRANSLATE_GROUP_ACTION_REMOVE_LANG_PHRASES"] = "очистка файлов";
+$MESS["BX_TRANSLATE_REMOVE_LANG_PHRASES"] = "удалить фразы, которых нет на языке";
+$MESS["BX_TRANSLATE_PHRASE_LANG_EMPTY"] = "...";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_LANGUAGE_ABSENT"] = "не выбран язык";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_CREATE_BACKUP_LANG_FILE"] = "Не удалось создать бэкап файла #FILEPATH#";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_REWRITE_LANG_FILE"] = "Не удалось перезаписать файл #FILEPATH#";
 ?>

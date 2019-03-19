@@ -67,14 +67,13 @@ class rest extends CModule
 		$eventManager->registerEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Event', 'onRestServiceBuildDescription');
 		$eventManager->registerEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\UserFieldType', 'onRestServiceBuildDescription');
 
+		$eventManager->registerEventHandler("rest","onFindMethodDescription", "rest","\\Bitrix\\Rest\\Engine\\RestManager","onFindMethodDescription");
 
 		$eventManager->registerEventHandler("main", "OnApplicationsBuildList", "main", '\Bitrix\Rest\APAuth\Application', "onApplicationsBuildList", 100, "modules/rest/lib/apauth/application.php");
 
 		$eventManager->registerEventHandler("im", "OnAfterConfirmNotify", "rest", "\\Bitrix\\Rest\\NotifyIm", "receive");
 
 		$eventManager->registerEventHandler("rest", "\\Bitrix\\Rest\\APAuth\\Password::OnDelete", "rest", "\\Bitrix\\Rest\\APAuth\\PermissionTable", "onPasswordDelete");
-
-		$eventManager->registerEventHandler("rest", "OnRestServiceBuildDescription", "rest", "\\Bitrix\\Rest\\Engine\\RestManager", "OnRestServiceBuildDescription");
 
 		if(CModule::IncludeModule('iblock'))
 		{
@@ -112,6 +111,8 @@ class rest extends CModule
 
 		\CAgent::AddAgent("Bitrix\\Rest\\Marketplace\\Client::getNumUpdates();", "rest", "N", 86400);
 		\CAgent::AddAgent("Bitrix\\Rest\\EventOfflineTable::cleanProcessAgent();", "rest", "N", 86400);
+		\CAgent::AddAgent("\\Bitrix\\Rest\\StatTable::cleanUpAgent();", "rest", "N", 86400);
+
 
 		return true;
 	}
@@ -142,6 +143,8 @@ class rest extends CModule
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Placement', 'onRestServiceBuildDescription');
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Event', 'onRestServiceBuildDescription');
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\UserFieldType', 'onRestServiceBuildDescription');
+
+		$eventManager->unRegisterEventHandler("rest","onFindMethodDescription", "rest","\\Bitrix\\Rest\\Engine\\RestManager","onFindMethodDescription");
 
 		$eventManager->unRegisterEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\OAuth\\Auth", "onRestCheckAuth");
 

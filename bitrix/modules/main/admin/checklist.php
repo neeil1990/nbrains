@@ -404,7 +404,7 @@ if ((($res = CCheckListResult::GetList(Array(),Array("REPORT"=>"N"))->Fetch()) |
 		var arFailedCount = <?=$arStat["FAILED"];?>;
 		var CanClose = "<?=$arCanClose;?>";
 		var arAutoCheck = new Array('<?=implode("','",$arAutoCheck["ID"]);?>');
-		var arAutoCheckName = new Array('<?=implode("','",$arAutoCheck["NAME"]);?>');
+		var arAutoCheckName = new Array('<?=implode("','", array_map('CUtil::JSEscape', $arAutoCheck["NAME"]));?>');
 		var arTestResult = {"total":0,"success":0,"failed":0};
 		var start = "<?=$isFisrtTime;?>";
 		var showHiddenReports = "<?=$showHiddenReports?>";

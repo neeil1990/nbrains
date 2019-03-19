@@ -6,7 +6,7 @@ use Bitrix\Main,
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/translate/prolog.php");
 $TRANS_RIGHT = $APPLICATION->GetGroupRight("translate");
-if ($TRANS_RIGHT=="D")
+if ($TRANS_RIGHT == "D")
 	$APPLICATION->AuthForm(GetMessage("ACCESS_DENIED"));
 Loader::includeModule('translate');
 IncludeModuleLangFile(__FILE__);
@@ -128,10 +128,11 @@ function GetPhraseCounters($arCommon, $path, $key)
 $request = Main\Context::getCurrent()->getRequest();
 
 $arCSVMessage = false;
-$arSearchParam = false;
+$useSearch = false;
+$arSearchParam = [];
 if ($request->isPost() && check_bitrix_sessid())
 {
-	if (array_key_exists('upload_csv', $_POST))
+	if ($request->getPost('upload_csv') !== null)
 	{
 		if (SaveTCSVFile())
 		{
@@ -143,58 +144,68 @@ if ($request->isPost() && check_bitrix_sessid())
 			$arCSVMessage = array('TYPE' => 'ERROR', 'MESSAGE' => $ex->GetString());
 		}
 	}
-	elseif (array_key_exists('tr_search', $_REQUEST))
+	elseif ($request->get('tr_search') !== null)
 	{
-		if (isset($_REQUEST['replace_oper']) && $_REQUEST['replace_oper'] == 'Y')
+		if ($request->get('replace_oper') === 'Y')
 		{
-			$arSearchParam['is_replace'] = true;
-			$arSearchParam['search'] = trim($_REQUEST['search_phrase2']);
-			$arSearchParam['replace'] = trim($_REQUEST['replace_phrase2']);
-			$arSearchParam['bSubFolders'] = isset($_REQUEST['search_subfolders2']) && $_REQUEST['search_subfolders2'] == 'Y';
-			$arSearchParam['bSearchMessage'] = isset($_REQUEST['search_message2']) && $_REQUEST['search_message2'] == 'Y';
-			$arSearchParam['bSearchMnemonic'] = isset($_REQUEST['search_mnemonic2']) && $_REQUEST['search_mnemonic2'] == 'Y';
-			$arSearchParam['bCaseSens'] = isset($_REQUEST['search_case_sens2']) && $_REQUEST['search_case_sens2'] == 'Y';
+			$arSearchParam = [
+				'is_replace' => true,
+				'search' => trim((string)$request->get('search_phrase2')),
+				'replace' => trim((string)$request->get('replace_phrase2')),
+				'bSubFolders' => ($request->get('search_subfolders2') === 'Y'),
+				'bSearchMessage' => ($request->get('search_message2') === 'Y'),
+				'bSearchMnemonic' => ($request->get('search_mnemonic2') === 'Y'),
+				'bCaseSens' => ($request->get('search_case_sens2') === 'Y')
+			];
 		}
 		else
 		{
-			$arSearchParam['is_replace'] = false;
-			$arSearchParam['search'] = trim($_REQUEST['search_phrase']);
-			$arSearchParam['replace'] = '';
-			$arSearchParam['bSubFolders'] = isset($_REQUEST['search_subfolders']) && $_REQUEST['search_subfolders'] == 'Y';
-			$arSearchParam['bSearchMessage'] = isset($_REQUEST['search_message']) && $_REQUEST['search_message'] == 'Y';
-			$arSearchParam['bSearchMnemonic'] = isset($_REQUEST['search_mnemonic']) && $_REQUEST['search_mnemonic'] == 'Y';
-			$arSearchParam['bCaseSens'] = isset($_REQUEST['search_case_sens']) && $_REQUEST['search_case_sens'] == 'Y';
+			$arSearchParam = [
+				'is_replace' => false,
+				'search' => trim((string)$request->get('search_phrase')),
+				'replace' => '',
+				'bSubFolders' => ($request->get('search_subfolders') === 'Y'),
+				'bSearchMessage' => ($request->get('search_message') === 'Y'),
+				'bSearchMnemonic' => ($request->get('search_mnemonic') === 'Y'),
+				'bCaseSens' => ($request->get('search_case_sens') === 'Y')
+			];
 		}
-		if (empty($arSearchParam['search']))
-			$arSearchParam = false;
+		if ($arSearchParam['search'] !== '')
+			$useSearch = true;
+		else
+			$arSearchParam = [];
 	}
 }
 
-$SHOW_DIFF_GET = false;
-$AUTO_CALCULATE = (string)Main\Config\Option::get('translate', 'AUTO_CALCULATE') == 'Y';
-if (!$AUTO_CALCULATE && isset($_GET['SHOW_DIFF']))
-{
-	$SHOW_DIFF_GET = ($_GET['SHOW_DIFF'] == 'Y');
-	$_SESSION['BX_SHOW_LANG_DIFF'] = $SHOW_DIFF_GET;
-}
+$arTLangs = [];
+$iterator = Main\Localization\LanguageTable::getList([
+	'select' => ['ID', 'SORT'],
+	'filter' => ['=ACTIVE' => 'Y'],
+	'order' => ['SORT' => 'ASC']
+]);
+while ($row = $iterator->fetch())
+	$arTLangs[$row['ID']] = $row['ID'];
+unset($row, $iterator);
 
-$SHOW_LANG_DIFF = $AUTO_CALCULATE || $SHOW_DIFF_GET || (isset($_SESSION['BX_SHOW_LANG_DIFF']) && $_SESSION['BX_SHOW_LANG_DIFF']);
-$GET_SUBFOLRERS = $SHOW_LANG_DIFF || ($arSearchParam && $arSearchParam['bSubFolders']);
-if ($arSearchParam)
-{
-	$AUTO_CALCULATE = false;
-	$SHOW_LANG_DIFF = false;
-}
-$arLangCounters = array();
-$arCommonCounter = array();
-//$arTLangs = GetTLangList();
-$arTLangs = array();
-$ln = CLanguage::GetList($o, $b, Array("ACTIVE"=>"Y"));
-while($lnr = $ln->Fetch())
-	$arTLangs[$lnr["LID"]] = $lnr["LID"];
+$actionLanguageList = [];
+$iterator = Main\Localization\LanguageTable::getList([
+	'select' => ['ID', 'SORT', 'DEF', 'NAME'],
+	'filter' => [
+		[
+			'LOGIC' => 'OR',
+			'@ID' => ['de', 'en', 'ru'],
+			'=DEF' => 'Y'
+		],
+		'=ACTIVE' => 'Y'
+	],
+	'order' => ['DEF' => 'DESC', 'SORT' => 'ASC']
+]);
+while ($row = $iterator->fetch())
+	$actionLanguageList[$row['ID']] = $row['NAME'];
+unset($row, $iterator);
 
-$path = $_REQUEST["path"];
-$go_path = $_REQUEST["go_path"];
+$path = $request->get('path');
+$go_path = $request->get('go_path');
 
 //button going
 if(strlen($go_path)>0 && !preg_match("#\.\.[\\/]#".BX_UTF_PCRE_MODIFIER, $path))
@@ -209,6 +220,48 @@ if (strlen($path)<=0)
 $path = Rel2Abs("/", "/".$path."/");
 if (!isAllowPath($path))
 	$path = TRANSLATE_DEFAULT_PATH;
+
+$SHOW_DIFF_GET = false;
+$AUTO_CALCULATE = (string)Main\Config\Option::get('translate', 'AUTO_CALCULATE') == 'Y';
+if (!$AUTO_CALCULATE)
+{
+	$showDifference = $request->get('SHOW_DIFF');
+	if ($showDifference !== null)
+	{
+		$SHOW_DIFF_GET = $showDifference == 'Y';
+		if ($path == TRANSLATE_DEFAULT_PATH)
+			$SHOW_DIFF_GET = false;
+		$_SESSION['BX_SHOW_LANG_DIFF'] = $SHOW_DIFF_GET;
+		if ($SHOW_DIFF_GET)
+		{
+			$_SESSION['BX_SHOW_LANG_DIFF_PATH'] = $path;
+		}
+		else
+		{
+			if (array_key_exists('BX_SHOW_LANG_DIFF_PATH', $_SESSION))
+				unset($_SESSION['BX_SHOW_LANG_DIFF_PATH']);
+		}
+	}
+	unset($showDifference);
+}
+if (isset($_SESSION['BX_SHOW_LANG_DIFF']) && $_SESSION['BX_SHOW_LANG_DIFF'])
+{
+	if (substr($path, 0, strlen($_SESSION['BX_SHOW_LANG_DIFF_PATH'])) !== $_SESSION['BX_SHOW_LANG_DIFF_PATH'])
+	{
+		$_SESSION['BX_SHOW_LANG_DIFF'] = false;
+		unset($_SESSION['BX_SHOW_LANG_DIFF_PATH']);
+	}
+}
+
+$SHOW_LANG_DIFF = $AUTO_CALCULATE || $SHOW_DIFF_GET || (isset($_SESSION['BX_SHOW_LANG_DIFF']) && $_SESSION['BX_SHOW_LANG_DIFF']);
+$GET_SUBFOLRERS = $SHOW_LANG_DIFF || ($useSearch && $arSearchParam['bSubFolders']);
+if ($useSearch)
+{
+	$AUTO_CALCULATE = false;
+	$SHOW_LANG_DIFF = false;
+}
+$arLangCounters = array();
+$arCommonCounter = array();
 
 $arLangDirFiles = array();
 $arFiles = array();
@@ -244,7 +297,8 @@ if (is_array($arr))
 	{
 		$arrP[] = $d;
 		$p = prepare_path("/".implode("/",$arrP)."/");
-		if (remove_lang_id($path, $arTLangs)==$p) $p="";
+		if (remove_lang_id($path, $arTLangs) == $p)
+			$p = "";
 		$arrChain[] = array("NAME" => $d, "PATH" => $p);
 	}
 }
@@ -257,7 +311,7 @@ GetLangDirs($arDirs, $SHOW_LANG_DIFF);
 $arLangDirFiles = array_merge($arLangDirs, $arFiles);
 
 // find
-if ($arSearchParam)
+if ($useSearch)
 {
 	$_arLangDirFiles = $arLangDirFiles;
 	$arLangDirFiles = array();
@@ -277,44 +331,189 @@ if ($arSearchParam)
 	}
 }
 
+$listIds = $lAdmin->GroupAction();
+if (!empty($listIds))
+{
+	$action = $request->get('action');
+	$actionButton = $request->get('action_button');
+	if (!empty($actionButton))
+		$action = $actionButton;
+	unset($actionButton);
+
+	switch ($action)
+	{
+		case 'remove_phrase':
+			$masterLanguage = (string)$request->get('remove_phrase_lang');
+			if (
+				$masterLanguage === ''
+				|| !isset($actionLanguageList[$masterLanguage])
+			)
+			{
+				$lAdmin->AddGroupError(GetMessage('BX_TRANSLATE_LIST_GROUP_ERR_LANGUAGE_ABSENT'));
+			}
+			else
+			{
+				if (!empty($arFiles))
+				{
+					$currentFileList = [];
+					$masterFileList = [];
+					foreach ($arFiles as $row)
+					{
+						if (!$row['IS_LANG'])
+							continue;
+						$file = $row['FILE'];
+						if (!isset($currentFileList[$file]))
+							$currentFileList[$file] = [];
+						$currentFileList[$file][$row['LANG']] = $row['PATH'];
+						if ($row['LANG'] == $masterLanguage)
+							$masterFileList[$file] = true;
+					}
+					unset($file, $row);
+
+					if (!empty($masterFileList))
+					{
+						foreach ($listIds as $file)
+						{
+							$founded = false;
+							$mask = [];
+							if (isset($masterFileList[$file]))
+							{
+								$MESS_tmp = $MESS;
+								$MESS = [];
+								if (file_exists($_SERVER["DOCUMENT_ROOT"].$currentFileList[$file][$masterLanguage]))
+								{
+									$founded = true;
+									/** @noinspection PhpIncludeInspection */
+									include($_SERVER["DOCUMENT_ROOT"].$currentFileList[$file][$masterLanguage]);
+								}
+								if (!empty($MESS))
+									$mask = array_fill_keys(array_keys($MESS), true);
+								$MESS = $MESS_tmp;
+								unset($MESS_tmp);
+							}
+							if ($founded && !empty($mask))
+							{
+								$newList = [];
+								foreach ($currentFileList[$file] as $phraseLanguage => $phrasePath)
+								{
+									if ($phraseLanguage == $masterLanguage)
+										continue;
+									$MESS_tmp = $MESS;
+									$MESS = [];
+									if (file_exists($_SERVER["DOCUMENT_ROOT"].$phrasePath))
+									{
+										$founded = true;
+										/** @noinspection PhpIncludeInspection */
+										include($_SERVER["DOCUMENT_ROOT"].$phrasePath);
+									}
+									if (!empty($MESS))
+										$MESS = array_intersect_key($MESS, $mask);
+									$newList[$phrasePath] = $MESS;
+									$MESS = $MESS_tmp;
+									unset($MESS_tmp);
+								}
+								unset($phrasePath);
+								if (!empty($newList))
+								{
+									foreach ($newList as $phrasePath => $rows)
+									{
+										$content = '';
+										foreach ($rows as $phraseId => $phraseText)
+										{
+											$content .= "\n\$MESS[\"".EscapePHPString($phraseId)."\"] = \"".
+												EscapePHPString(str_replace("\r", "", $phraseText))."\";";
+										}
+										unset($phraseId, $phraseText);
+										if (!TR_BACKUP($phrasePath))
+										{
+											$lAdmin->AddGroupError(GetMessage(
+												'BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_CREATE_BACKUP_LANG_FILE',
+												['#FILEPATH#' => $phrasePath]
+											));
+										}
+										else
+										{
+											if (!RewriteFile($_SERVER["DOCUMENT_ROOT"].$phrasePath, "<?".$content."\n?".">"))
+											{
+												$lAdmin->AddGroupError(GetMessage(
+													'BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_REWRITE_LANG_FILE',
+													['#FILEPATH#' => $phrasePath]
+												));
+											}
+										}
+										unset($content);
+									}
+									unset($phrasePath, $rows);
+								}
+								unset($newList);
+							}
+						}
+						unset($file);
+					}
+					unset($masterFileList, $currentFileList);
+				}
+			}
+			break;
+	}
+}
+
 $lAdmin->BeginPrologContent();
-?>
-<p><?
-if (!$arSearchParam)
+?><p><?
+if (!$useSearch)
 {
 	$last_path = "";
-	for ($i=0; $i<=sizeof($arrChain)-1; $i++) :
-		echo " / ";
-		if (strlen($arrChain[$i]["PATH"])>0):
-			$last_path = $arrChain[$i]["PATH"];
-			?><a href="?lang=<?=LANGUAGE_ID; ?>&path=<?=urlencode($last_path)?>" title="<?=GetMessage("TR_FOLDER_TITLE")?>"><?=htmlspecialcharsbx($arrChain[$i]["NAME"])?></a><?
-		else:
-			?><?=htmlspecialcharsbx($arrChain[$i]["NAME"])?><?
-		endif;
-	endfor;
+	foreach ($arrChain as $row)
+	{
+		echo ' / ';
+		if ($row['PATH'] !== '')
+		{
+			$last_path = $row['PATH'];
+			?><a href="?lang=<?=LANGUAGE_ID; ?>&path=<?=urlencode($last_path); ?>" title="<?=GetMessage('TR_FOLDER_TITLE'); ?>"><?=htmlspecialcharsbx($row['NAME']); ?></a><?
+		}
+		else
+		{
+			?><?=htmlspecialcharsbx($row['NAME']); ?><?
+		}
+	}
 }
-?></p>
-<?
+?></p><?
 $lAdmin->EndPrologContent();
 
 $header = array();
-$header[] = array("id"=>"TRANS_FILE_NAME", "content"=>GetMessage("TRANS_FILE_NAME"),	"default"=>true, "align"=>"left");
+$header[] = array(
+	"id" => "TRANS_FILE_NAME",
+	"content" => GetMessage("TRANS_FILE_NAME"),
+	"default" => true,
+	"align" => "left"
+);
 if ($AUTO_CALCULATE || $SHOW_LANG_DIFF)
 {
-	$header[] = array("id"=>"TRANS_TOTAL_MESSAGES", "content"=>GetMessage("TRANS_TOTAL_MESSAGES"), "default"=>true, "align"=>"right");
+	$header[] = array(
+		"id" => "TRANS_TOTAL_MESSAGES",
+		"content" => GetMessage("TRANS_TOTAL_MESSAGES"),
+		"default" => true,
+		"align" => "right"
+	);
 
 	foreach($arTLangs as $vlang)
-		$header[] = array("id"=>$vlang, "content"=>$vlang, "default"=>true, "align"=>"left");
+	{
+		$header[] = array(
+			"id" => $vlang,
+			"content" => $vlang,
+			"default" => true,
+			"align" => "left"
+		);
+	}
 }
 $lAdmin->AddHeaders($header);
 
-
-if (strlen($path)>0 && !$arSearchParam)
+if (strlen($path)>0 && !$useSearch)
 {
-	$row =& $lAdmin->AddRow("0", Array());
+	$row =& $lAdmin->AddRow('.', []);
 	$row->AddViewField("TRANS_FILE_NAME", '<a href="?lang='.LANGUAGE_ID.'&path='.urlencode($last_path).'" title="'.GetMessage("TR_UP_TITLE").'">
 			<img src="/bitrix/images/translate/up.gif" width="11" height="13" border=0 alt=""></a>'.
 			'&nbsp;<a href="?lang='.LANGUAGE_ID.'&path='.urlencode($last_path).'" title="'.GetMessage("TR_UP_TITLE").'">..</a>');
+	$row->bReadOnly = true;
 	if ($AUTO_CALCULATE || $SHOW_LANG_DIFF)
 	{
 		$row->AddViewField("TRANS_TOTAL_MESSAGES", "&nbsp;");
@@ -325,12 +524,12 @@ if (strlen($path)>0 && !$arSearchParam)
 
 $ORIGINAL_MESS = $MESS;
 
-if (is_array($arLangDirFiles)) :
+$showGroupActions = false;
 
+if (is_array($arLangDirFiles))
+{
 	if ($IS_LANG_DIR)
-	{
 		$arPath[] = add_lang_id($path, LANGUAGE_ID, $arTLangs);
-	}
 	else
 		$arPath[] = $path;
 
@@ -340,16 +539,18 @@ if (is_array($arLangDirFiles)) :
 	$TOTAL_MESS = 0;
 	$i = 0;
 
-	foreach($arLangDirFiles as $key => $ar) :
+	foreach($arLangDirFiles as $key => $ar)
+	{
 		$i++;
-		if (in_array($ar["PARENT"],$arPath) || $arSearchParam) :
-			if ($arSearchParam && $ar['IS_DIR'] == 'Y')
-				continue ;
+		if (in_array($ar["PARENT"], $arPath) || $useSearch)
+		{
+			if ($useSearch && $ar['IS_DIR'] == 'Y')
+				continue;
 
 			$is_dir = $ar["IS_DIR"];
 			$fpath = $ar["PATH"];
 			$fparent = $ar["PARENT"];
-			$ftitle = $arSearchParam ? $ar["PATH"]: $ar["FILE"];
+			$ftitle = $useSearch ? $ar["PATH"] : $ar["FILE"];
 
 			if ($IS_LANG_DIR)
 			{
@@ -364,81 +565,115 @@ if (is_array($arLangDirFiles)) :
 			{
 				GetPhraseCounters($arLangDirFiles, $fpath, $fkey);
 			}
-			if ($is_dir=="Y") :
-				$row =& $lAdmin->AddRow($i, Array(), "translate_list.php?lang=".LANGUAGE_ID."&path=".$fpath, GetMessage("TR_FOLDER_TITLE"));
-				$row->AddViewField("TRANS_FILE_NAME", '<a href="?lang='.LANGUAGE_ID.'&path='.$fpath.'" title="'.GetMessage("TR_FOLDER_TITLE").'"><img src="/bitrix/images/translate/folder.gif" width="16" height="16" border=0 alt=""></a>'.'&nbsp;<a href="?lang='.LANGUAGE_ID.'&path='.$fpath.'" title="'.GetMessage("TR_FOLDER_TITLE").'">'.$ftitle.'</a>');
-			else :
-				$row =& $lAdmin->AddRow($i, Array(), "translate_edit.php?lang=".LANGUAGE_ID."&file=".$fpath."&show_error=".$show_error, GetMessage("TR_FILE_TITLE"));
-				$arAction = array(array('TEXT'=>GetMessage("TR_MESSAGE_EDIT"), 'ACTION'=> $lAdmin->ActionRedirect('translate_edit.php?lang='.LANGUAGE_ID.'&file='.$fpath.'&show_error='.$show_error),
-					'DEFAULT'=>true, 'ICON'=>''),
-					array('TEXT'=>GetMessage("TR_FILE_EDIT"), 'ACTION'=> $lAdmin->ActionRedirect('translate_edit_php.php?lang='.LANGUAGE_ID.'&file='.$fpath),
-					'DEFAULT'=>false, 'ICON'=>'edit'),
-					array('TEXT'=>GetMessage("TR_FILE_SHOW"), 'ACTION' => $lAdmin->ActionRedirect('translate_show_php.php?lang='.LANGUAGE_ID.'&file='.$fpath),
-					'DEFAULT'=>false, 'ICON'=>'view')
-					);
-				if ($arSearchParam)
+			if ($is_dir == "Y")
+			{
+				$row =& $lAdmin->AddRow($ar['FILE'], [], "translate_list.php?lang=".LANGUAGE_ID."&path=".$fpath, GetMessage("TR_FOLDER_TITLE"));
+				$row->AddViewField(
+					"TRANS_FILE_NAME",
+					'<a href="?lang='.LANGUAGE_ID.'&path='.$fpath.'" title="'.GetMessage("TR_FOLDER_TITLE").'"><img src="/bitrix/images/translate/folder.gif" width="16" height="16" border=0 alt=""></a>'.'&nbsp;<a href="?lang='.LANGUAGE_ID.'&path='.$fpath.'" title="'.GetMessage("TR_FOLDER_TITLE").'">'.$ftitle.'</a>'
+				);
+				$row->bReadOnly = true;
+			}
+			else
+			{
+				$showGroupActions = true;
+				$row =& $lAdmin->AddRow($ar['FILE'], [], "translate_edit.php?lang=".LANGUAGE_ID."&file=".$fpath."&show_error=".$show_error, GetMessage("TR_FILE_TITLE"));
+				$arAction = [
+					[
+						'TEXT' => GetMessage("TR_MESSAGE_EDIT"),
+						'ACTION' => $lAdmin->ActionRedirect('translate_edit.php?lang='.LANGUAGE_ID.'&file='.$fpath.'&show_error='.$show_error),
+						'DEFAULT' => true,
+						'ICON' => ''
+					],
+					[
+						'TEXT' => GetMessage("TR_FILE_EDIT"),
+						'ACTION' => $lAdmin->ActionRedirect('translate_edit_php.php?lang='.LANGUAGE_ID.'&file='.$fpath),
+						'DEFAULT' => false,
+						'ICON' => 'edit'
+					],
+					[
+						'TEXT' => GetMessage("TR_FILE_SHOW"),
+						'ACTION' => $lAdmin->ActionRedirect('translate_show_php.php?lang='.LANGUAGE_ID.'&file='.$fpath),
+						'DEFAULT' => false,
+						'ICON' => 'view'
+					]
+				];
+				if ($useSearch)
 				{
-					$arAction[] = array('SEPARATOR' => true);
-					$arAction[] = array('TEXT'=>GetMessage("TR_PATH_GO"), 'ACTION' => $lAdmin->ActionRedirect('translate_list.php?lang='.LANGUAGE_ID.'&path='.$fparent),
-					'DEFAULT'=>false, 'ICON'=>'go');
+					$arAction[] = ['SEPARATOR' => true];
+					$arAction[] = [
+						'TEXT' => GetMessage("TR_PATH_GO"),
+						'ACTION' => $lAdmin->ActionRedirect('translate_list.php?lang='.LANGUAGE_ID.'&path='.$fparent),
+						'DEFAULT' => false,
+						'ICON' => 'go'
+					];
 				}
 				$row->AddActions($arAction);
 				$row->AddViewField("TRANS_FILE_NAME", '<a href="translate_edit.php?lang='.LANGUAGE_ID.'&file='.$fpath.'&show_error='.$show_error.'" title="'.GetMessage("TR_FILE_TITLE").'"><img src="/bitrix/images/translate/file.gif" width="16" height="16" border=0 alt=""></a>'.
-					'&nbsp;<a href="translate_edit.php?lang='.LANGUAGE_ID.'&file='.$fpath.'&show_error='.$show_error.'" title="'.GetMessage("TR_FILE_TITLE").'">'.$ftitle.'</a>'.($arSearchParam ? ' ('.$ar["COINCIDENCE"].')' : ''));
-			endif;
+					'&nbsp;<a href="translate_edit.php?lang='.LANGUAGE_ID.'&file='.$fpath.'&show_error='.$show_error.'" title="'.GetMessage("TR_FILE_TITLE").'">'.$ftitle.'</a>'.($useSearch ? ' ('.$ar["COINCIDENCE"].')' : ''));
+			}
 			if ($AUTO_CALCULATE || $SHOW_LANG_DIFF)
 			{
-			$arr = array();
-			foreach($arTLangs as $vlang)
-			{
-				$total_sum = 0;
-				if(is_array($arCommonCounter[$fkey][$vlang]))
-					foreach ($arCommonCounter[$fkey][$vlang] as $fileName => $fileCounter)
-						$total_sum += intval($fileCounter["TOTAL"]);
-
-				$arr[] = $total_sum;
-			}
-
-			$total_messages = max($arr);
-			$TOTAL_MESS += $total_messages;
-			$row->AddViewField("TRANS_TOTAL_MESSAGES", $total_messages);
-
-			foreach($arTLangs as $vlang):
-				$arFilesDiff = array();
-				$arFilesTotal = array();
-				$lang_not_translated = 0;
-				$lang_total = 0;
-				if(is_array($arCommonCounter[$fkey][$vlang]))
+				$arr = array();
+				foreach ($arTLangs as $vlang)
 				{
-					foreach ($arCommonCounter[$fkey][$vlang] as $file => $fileCounter)
+					$total_sum = 0;
+					if (is_array($arCommonCounter[$fkey][$vlang]))
+						foreach ($arCommonCounter[$fkey][$vlang] as $fileName => $fileCounter)
+							$total_sum += intval($fileCounter["TOTAL"]);
+
+					$arr[] = $total_sum;
+				}
+
+				$total_messages = max($arr);
+				$TOTAL_MESS += $total_messages;
+				$row->AddViewField("TRANS_TOTAL_MESSAGES", $total_messages);
+
+				foreach ($arTLangs as $vlang)
+				{
+					$arFilesDiff = array();
+					$arFilesTotal = array();
+					$lang_not_translated = 0;
+					$lang_total = 0;
+					if (is_array($arCommonCounter[$fkey][$vlang]))
 					{
-						if (intval($fileCounter["DIFF"]) > 0) $arFilesDiff[$file] = intval($fileCounter["DIFF"]);
-						if (intval($fileCounter["TOTAL"]) > 0) $arFilesTotal[$file] = intval($fileCounter["TOTAL"]);
-						$lang_not_translated += intval($fileCounter["DIFF"]);
-						$lang_total += intval($fileCounter["TOTAL"]);
+						foreach ($arCommonCounter[$fkey][$vlang] as $file => $fileCounter)
+						{
+							if (intval($fileCounter["DIFF"]) > 0)
+								$arFilesDiff[$file] = intval($fileCounter["DIFF"]);
+							if (intval($fileCounter["TOTAL"]) > 0)
+								$arFilesTotal[$file] = intval($fileCounter["TOTAL"]);
+							$lang_not_translated += intval($fileCounter["DIFF"]);
+							$lang_total += intval($fileCounter["TOTAL"]);
+						}
+					}
+					$diff_total = $total_messages - $lang_total;
+					if (intval($lang_not_translated) > 0)
+					{
+						foreach ($arFilesDiff as $fileName => $counter)
+						{
+							$arFilesDiff[$fileName] = '<a href="translate_edit.php?lang='.LANGUAGE_ID.'&file='.urlencode($fileName).'&show_error=Y" title="'.$fileName.'">'.$counter.'</a>';
+						}
+						$sStr = '<span class="required">'.$lang_not_translated.'</span>: '.implode(', ', $arFilesDiff);
+						$arrTOTAL_NOT_TRANSLATED[$vlang] += $lang_not_translated;
+						$row->AddViewField($vlang, $sStr);
+					}
+					elseif (intval($diff_total) > 0)
+					{
+						$sStr = '<span class="required">'.$lang_total.'</span>: '.implode(', ', $arFilesTotal);
+						$arrTOTAL_NOT_TRANSLATED[$vlang] += $diff_total;
+						$row->AddViewField($vlang, $sStr);
+					}
+					else
+					{
+						$row->AddViewField($vlang, "&nbsp;");
 					}
 				}
-				$diff_total = $total_messages - $lang_total;
-				if (intval($lang_not_translated)>0):
-					foreach ($arFilesDiff as $fileName => $counter)
-					{
-						$arFilesDiff[$fileName] = '<a href="translate_edit.php?lang='.LANGUAGE_ID.'&file='.urlencode($fileName).'&show_error=Y" title="'.$fileName.'">'.$counter.'</a>';
-					}
-					$sStr = '<span class="required">'.$lang_not_translated.'</span>: '.implode(', ', $arFilesDiff);
-					$arrTOTAL_NOT_TRANSLATED[$vlang] += $lang_not_translated;
-					$row->AddViewField($vlang, $sStr);
-				elseif (intval($diff_total)>0):
-					$sStr = '<span class="required">'.$lang_total.'</span>: '.implode(', ', $arFilesTotal);
-					$arrTOTAL_NOT_TRANSLATED[$vlang] += $diff_total;
-					$row->AddViewField($vlang, $sStr);
-				else:
-					$row->AddViewField($vlang, "&nbsp;");
-				endif;
-			endforeach;
 			}
-		endif;
-	endforeach;
-endif;
+		}
+	}
+	unset($row);
+}
 
 $i = 0;
 $MESS = $ORIGINAL_MESS;
@@ -453,10 +688,43 @@ if ($AUTO_CALCULATE || $SHOW_LANG_DIFF)
 			$row->AddViewField($vlang, "<b>".$arrTOTAL_NOT_TRANSLATED[$vlang]."</b>");
 		}
 	endforeach;
+	unset($row);
 }
 
+if ($showGroupActions)
+{
+	$actionList = [];
+	$actionListParams = [];
 
-//$rsData = CDBResult::InitFromArray();
+	if (!empty($actionLanguageList))
+	{
+		$chooser = '<div id="remove_phrase_lang_choose" style="display:none;">&nbsp;'.GetMessage('BX_TRANSLATE_REMOVE_LANG_PHRASES');
+		$chooser .= '<select name="remove_phrase_lang">';
+		$chooser .= '<option value="">'.GetMessage('BX_TRANSLATE_PHRASE_LANG_EMPTY').'</option>';
+
+		foreach ($actionLanguageList as $languageId => $languageName)
+		{
+			$chooser .= '<option value="'.htmlspecialcharsbx($languageId).'">'.htmlspecialcharsbx($languageName).'</option>';
+		}
+		unset($languageId, $languageName);
+
+		$chooser .= '</select></div>';
+
+		$actionList['remove_phrase'] = GetMessage('BX_TRANSLATE_GROUP_ACTION_REMOVE_LANG_PHRASES');
+		$actionList['remove_phrase_chooser'] = [
+			'type' => 'html',
+			'value' => $chooser
+		];
+
+		$actionListParams['select_onchange'] = "BX('remove_phrase_lang_choose').style.display = (this.value === 'remove_phrase' ? 'block' : 'none');";
+	}
+	$actionListParams['disable_action_target'] = true;
+
+	if (!empty($actionList))
+		$lAdmin->AddGroupActionTable($actionList, $actionListParams);
+	unset($actionListParams, $actionList);
+}
+
 $lAdmin->BeginEpilogContent();
 ?>
 	<input type="hidden" name="go_path" id="go_path" value="">
@@ -494,7 +762,7 @@ $url = $APPLICATION->GetPopupLink(
 					)
 				);
 $aContext[] = array(
-	"TEXT" => $arSearchParam ? GetMessage("TR_NEW_SEARCH") : GetMessage("TR_SEARCH"),
+	"TEXT" => $useSearch ? GetMessage("TR_NEW_SEARCH") : GetMessage("TR_SEARCH"),
 	"ICON" => "btn_fileman_search",
 	"LINK" => 'javascript:'.$url,
 	"TITLE" => GetMessage("TR_SEARCH_TITLE")
@@ -619,7 +887,7 @@ if ($TRANS_RIGHT == 'W')
 	});
 	BX.bind(BX('tr_submit'), 'click', function ()
 	{
-		if (BX('tabControl_active_tab').value == 'fileupl1') {
+		if (BX('tabControl_active_tab').value === 'fileupl1') {
 			document.forms['form3'].submit();
 		} else {
 		document.forms['form4'].submit();

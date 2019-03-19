@@ -606,7 +606,8 @@ HTML;
 		if (is_array($res["UF"]))
 		{
 			ob_start();
-			foreach ($res["UF"] as $arPostField)
+			$uf = (isset($res["WEB"]['UF']) ? $res["WEB"]['UF'] : $res['UF']);
+			foreach ($uf as $arPostField)
 			{
 				if(!empty($arPostField["VALUE"]))
 				{
@@ -628,7 +629,8 @@ HTML;
 
 			ob_start();
 
-			foreach ($res["UF"] as $arPostField)
+			$uf = (isset($res["MOBILE"]['UF']) ? $res["MOBILE"]['UF'] : $res['UF']);
+			foreach ($uf as $arPostField)
 			{
 				if(!empty($arPostField["VALUE"]))
 				{
@@ -831,7 +833,10 @@ HTML;
 			"#AUTHOR_TOOLTIP_PARAMS#" => htmlspecialcharsbx(\Bitrix\Main\Web\Json::encode($authorTooltipParams)),
 			"#SHOW_POST_FORM#" =>
 				$arParams["SHOW_POST_FORM"],
-			"#AUTHOR_EXTRANET_STYLE#" => $authorStyle,
+			"#AUTHOR_EXTRANET_STYLE#" =>
+				$authorStyle,
+			"#RATING_NONEMPTY_CLASS#" =>
+				(!empty($res['RATING']) && !empty($res['RATING']['TOTAL_VOTES']) && $res['RATING']['TOTAL_VOTES'] > 0 ? 'comment-block-rating-nonempty' : ''),
 			"background:url('') no-repeat center;" =>
 				""
 		);
@@ -1063,7 +1068,11 @@ HTML;
 			$messageList = $SHParser->getInnerHTML('<!--LOAD_SCRIPT-->', '<!--END_LOAD_SCRIPT-->').
 				$FHParser->getInnerHTML('<!--RCRDLIST_'.$arParams["ENTITY_XML_ID"].'-->', '<!--RCRDLIST_END_'.$arParams["ENTITY_XML_ID"].'-->');
 
-			$messageNavigation = $FHParser->getTagHTML('a[class=feed-com-all]');
+			$messageNavigation = $FHParser->getTagHTML(
+					$this->scope == self::STATUS_SCOPE_MOBILE
+						? 'a[class=post-comments-link]'
+						: 'a[class=feed-com-all]'
+			);
 
 			$JSResult += array(
 				'status' => "success",
@@ -1087,7 +1096,6 @@ HTML;
 				$res = array_merge($arParams["~RECORDS"][$record], $res, ($this->isWeb() ? $res["WEB"] : $res["MOBILE"]));
 				unset($res["WEB"]);
 				unset($res["MOBILE"]);
-
 
 				if (!!$res["FILES"] && (
 						$this->arParams["RIGHTS"]["EDIT"] == "ALL" ||

@@ -4,458 +4,456 @@ $APPLICATION->SetTitle('Главная');
 ?>
 
         <!-- Swiper-->
-        <section class="section swiper-container swiper-slider swiper_style-1 swiper_height-1 swiper-controls-classic" data-loop="true" data-autoplay="false" data-simulate-touch="false">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide bg-image-dark" data-slide-bg="images/slider-classic-slide-1-1920x710.jpg">
-                    <div class="swiper-slide-caption">
-                        <div class="container text-left">
-                            <div class="row justify-content-center">
-                                <div class="col-md-10 col-sm-12">
-                                    <h1 data-caption-animate="fadeInUpSmall">Welcome to TechSoft</h1>
-                                    <p class="quote-classic__text call-subtitle_text" data-caption-animate="fadeInUpSmall" data-caption-delay="200">Since our establishment, we have been delivering high-quality and <br>sustainable software solutions for corporate business purposes.<span class="group-item"></span></p><a class="button button-lg button-primary" href="hosting.html" data-caption-animate="fadeInUpSmall" data-caption-delay="250">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide bg-image-dark" data-slide-bg="images/slider-classic-slide-2-1920x710.jpg">
-                    <div class="swiper-slide-caption">
-                        <div class="container text-left">
-                            <div class="row justify-content-center">
-                                <div class="col-md-10 col-sm-12">
-                                    <h1 data-caption-animate="fadeInUpSmall">Award-Winning Software</h1>
-                                    <p class="quote-classic__text call-subtitle_text" data-caption-animate="fadeInUpSmall" data-caption-delay="200">The software solutions developed by our company have been<br>numerously awarded for usability and innovative features.<span class="group-item"></span></p><a class="button button-lg button-primary" href="hosting.html" data-caption-animate="fadeInUpSmall" data-caption-delay="250">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-        </section>
+        <?$APPLICATION->IncludeComponent(
+            "bitrix:news.line",
+            ".main.slider",
+            Array(
+                "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                "CACHE_GROUPS" => "Y",
+                "CACHE_TIME" => "300",
+                "CACHE_TYPE" => "A",
+                "DETAIL_URL" => "",
+                "FIELD_CODE" => array("CODE","NAME","PREVIEW_TEXT","PREVIEW_PICTURE"),
+                "IBLOCKS" => array("1"),
+                "IBLOCK_TYPE" => "sliders",
+                "NEWS_COUNT" => "20",
+                "SORT_BY1" => "SORT",
+                "SORT_BY2" => "ACTIVE_FROM",
+                "SORT_ORDER1" => "ASC",
+                "SORT_ORDER2" => "DESC"
+            )
+        );?>
+
         <!-- Our service-->
-        <section class="section section-lg bg-white text-center">
-            <div class="container">
-                <h2>Our Services</h2>
-                <div class="row row-30 justify-content-md-center">
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-window"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">Windows Applications</h4>
-                                <p>We design and develop a variety of applications for Windows including specialized and custom software.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-database-check"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">Database Management</h4>
-                                <p>TechSoft provides top-notch database management solutions for small and medium businesses worldwide.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-vector"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">UX & UI Design</h4>
-                                <p>Our team of UX designers creates easy-to-understand interfaces for all kinds of applications.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-desktop"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">iOS/MacOS Apps</h4>
-                                <p>Our company also develops multipurpose applications for iOS and MacOS systems and devices.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-bug"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">QA & Testing</h4>
-                                <p>We pay a lot of attention to QA and Testing procedures to ensure the best quality of our software.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Chloe-->
-                        <article class="box-chloe box-chloe_secondary">
-                            <div class="box-chloe__icon linearicons-tablet2"></div>
-                            <div class="box-chloe__main">
-                                <h4 class="box-chloe__title">Android Applications</h4>
-                                <p>Our Android apps are highly rated by media and our users as they offer great features on all Android devices.</p><a class="button button-sm button-default button-ujarak" href="hosting.html">View Details</a>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <?$APPLICATION->IncludeComponent("bitrix:news.list", ".our.service", Array(
+            "ACTIVE_DATE_FORMAT" => "d.m.Y",	// Формат показа даты
+            "ADD_SECTIONS_CHAIN" => "N",	// Включать раздел в цепочку навигации
+            "AJAX_MODE" => "N",	// Включить режим AJAX
+            "AJAX_OPTION_ADDITIONAL" => "",	// Дополнительный идентификатор
+            "AJAX_OPTION_HISTORY" => "N",	// Включить эмуляцию навигации браузера
+            "AJAX_OPTION_JUMP" => "N",	// Включить прокрутку к началу компонента
+            "AJAX_OPTION_STYLE" => "N",	// Включить подгрузку стилей
+            "CACHE_FILTER" => "N",	// Кешировать при установленном фильтре
+            "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+            "CACHE_TIME" => "36000000",	// Время кеширования (сек.)
+            "CACHE_TYPE" => "A",	// Тип кеширования
+            "CHECK_DATES" => "Y",	// Показывать только активные на данный момент элементы
+            "DETAIL_URL" => "",	// URL страницы детального просмотра (по умолчанию - из настроек инфоблока)
+            "DISPLAY_BOTTOM_PAGER" => "N",	// Выводить под списком
+            "DISPLAY_DATE" => "N",	// Выводить дату элемента
+            "DISPLAY_NAME" => "Y",	// Выводить название элемента
+            "DISPLAY_PICTURE" => "N",	// Выводить изображение для анонса
+            "DISPLAY_PREVIEW_TEXT" => "Y",	// Выводить текст анонса
+            "DISPLAY_TOP_PAGER" => "N",	// Выводить над списком
+            "FIELD_CODE" => array(	// Поля
+                0 => "NAME",
+                1 => "PREVIEW_TEXT",
+                2 => "CODE",
+            ),
+            "FILTER_NAME" => "",	// Фильтр
+            "HIDE_LINK_WHEN_NO_DETAIL" => "N",	// Скрывать ссылку, если нет детального описания
+            "IBLOCK_ID" => "2",	// Код информационного блока
+            "IBLOCK_TYPE" => "contents",	// Тип информационного блока (используется только для проверки)
+            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",	// Включать инфоблок в цепочку навигации
+            "INCLUDE_SUBSECTIONS" => "N",	// Показывать элементы подразделов раздела
+            "MESSAGE_404" => "",	// Сообщение для показа (по умолчанию из компонента)
+            "NEWS_COUNT" => "20",	// Количество новостей на странице
+            "PAGER_BASE_LINK_ENABLE" => "N",	// Включить обработку ссылок
+            "PAGER_DESC_NUMBERING" => "N",	// Использовать обратную навигацию
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",	// Время кеширования страниц для обратной навигации
+            "PAGER_SHOW_ALL" => "N",	// Показывать ссылку "Все"
+            "PAGER_SHOW_ALWAYS" => "N",	// Выводить всегда
+            "PAGER_TEMPLATE" => ".default",	// Шаблон постраничной навигации
+            "PAGER_TITLE" => "Новости",	// Название категорий
+            "PARENT_SECTION" => "",	// ID раздела
+            "PARENT_SECTION_CODE" => "",	// Код раздела
+            "PREVIEW_TRUNCATE_LEN" => "",	// Максимальная длина анонса для вывода (только для типа текст)
+            "PROPERTY_CODE" => array(	// Свойства
+                0 => "ICON",
+                1 => "",
+            ),
+            "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
+            "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
+            "SET_META_DESCRIPTION" => "N",	// Устанавливать описание страницы
+            "SET_META_KEYWORDS" => "N",	// Устанавливать ключевые слова страницы
+            "SET_STATUS_404" => "N",	// Устанавливать статус 404
+            "SET_TITLE" => "N",	// Устанавливать заголовок страницы
+            "SHOW_404" => "N",	// Показ специальной страницы
+            "SORT_BY1" => "SORT",	// Поле для первой сортировки новостей
+            "SORT_BY2" => "ID",	// Поле для второй сортировки новостей
+            "SORT_ORDER1" => "ASC",	// Направление для первой сортировки новостей
+            "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+            "STRICT_SECTION_CHECK" => "N",	// Строгая проверка раздела для показа списка
+        ),
+            false
+        );?>
+
 
         <!-- Pricing Tables-->
-        <section class="section section-md bg-gray-2 text-center oh">
-            <div class="container wow fadeInUpSmall">
-                <h2>Pricing Plans</h2>
-                <div class="pricing-table pricing-table-classic">
-                    <!-- Pricing table item-->
-                    <article class="pricing-table__item pricing-table-classic__item">
-                        <div class="pricing-table__item-header">
-                            <p class="pricing-table__item-title">Basic</p>
-                        </div>
-                        <div class="pricing-table__item-price"><span class="pricing-table__item-price-currency">$</span><span class="pricing-table__item-price-value">399</span>
-                            <div class="pricing-table__item-price-aside"><span class="top">99</span></div>
-                        </div>
-                        <ul class="pricing-table__item-features">
-                            <li><span class="text-marked">Concept development<br>UI design</span></li>
-                            <li>Configuration management</li>
-                            <li>Software quality assurance</li>
-                            <li>App integration</li>
-                        </ul>
-                        <div class="pricing-table__item-control"><a class="button button-default button-ujarak" href="#">Order now</a></div>
-                    </article>
-                    <!-- Pricing table item-->
-                    <article class="pricing-table__item pricing-table-classic__item pricing-table-classic__item_prefered">
-                        <div class="pricing-table__item-header">
-                            <div class="pricing-table__item-label">Bestseller</div>
-                            <p class="pricing-table__item-title">Optimal</p>
-                        </div>
-                        <div class="pricing-table__item-price"><span class="pricing-table__item-price-currency">$</span><span class="pricing-table__item-price-value">599</span>
-                            <div class="pricing-table__item-price-aside"><span class="top">99</span></div>
-                        </div>
-                        <ul class="pricing-table__item-features">
-                            <li><span class="text-marked">Concept development<br>UI design</span></li>
-                            <li><span class="text-marked">Configuration management</span></li>
-                            <li><span class="text-marked">Software quality assurance</span></li>
-                            <li>App integration</li>
-                        </ul>
-                        <div class="pricing-table__item-control"><a class="button btn-primary" href="#">Order now</a></div>
-                    </article>
-                    <!-- Pricing table item-->
-                    <article class="pricing-table__item pricing-table-classic__item">
-                        <div class="pricing-table__item-header">
-                            <p class="pricing-table__item-title">Ultimate</p>
-                        </div>
-                        <div class="pricing-table__item-price"><span class="pricing-table__item-price-currency">$</span><span class="pricing-table__item-price-value">999</span>
-                            <div class="pricing-table__item-price-aside"><span class="top">99</span></div>
-                        </div>
-                        <ul class="pricing-table__item-features">
-                            <li><span class="text-marked">Concept development<br>UI design</span></li>
-                            <li><span class="text-marked">Configuration management</span></li>
-                            <li><span class="text-marked">Software quality assurance</span></li>
-                            <li><span class="text-marked">App integration</span></li>
-                        </ul>
-                        <div class="pricing-table__item-control"><a class="button button-default button-ujarak" href="#">Order now</a></div>
-                    </article>
-                </div>
-            </div>
-        </section>
+        <?$APPLICATION->IncludeComponent("bitrix:news.list", ".pricing", Array(
+            "ACTIVE_DATE_FORMAT" => "d.m.Y",	// Формат показа даты
+            "ADD_SECTIONS_CHAIN" => "N",	// Включать раздел в цепочку навигации
+            "AJAX_MODE" => "N",	// Включить режим AJAX
+            "AJAX_OPTION_ADDITIONAL" => "",	// Дополнительный идентификатор
+            "AJAX_OPTION_HISTORY" => "N",	// Включить эмуляцию навигации браузера
+            "AJAX_OPTION_JUMP" => "N",	// Включить прокрутку к началу компонента
+            "AJAX_OPTION_STYLE" => "N",	// Включить подгрузку стилей
+            "CACHE_FILTER" => "N",	// Кешировать при установленном фильтре
+            "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+            "CACHE_TIME" => "36000000",	// Время кеширования (сек.)
+            "CACHE_TYPE" => "A",	// Тип кеширования
+            "CHECK_DATES" => "Y",	// Показывать только активные на данный момент элементы
+            "DETAIL_URL" => "",	// URL страницы детального просмотра (по умолчанию - из настроек инфоблока)
+            "DISPLAY_BOTTOM_PAGER" => "N",	// Выводить под списком
+            "DISPLAY_DATE" => "N",	// Выводить дату элемента
+            "DISPLAY_NAME" => "Y",	// Выводить название элемента
+            "DISPLAY_PICTURE" => "N",	// Выводить изображение для анонса
+            "DISPLAY_PREVIEW_TEXT" => "Y",	// Выводить текст анонса
+            "DISPLAY_TOP_PAGER" => "N",	// Выводить над списком
+            "FIELD_CODE" => array(	// Поля
+                0 => "NAME",
+                1 => "CODE",
+            ),
+            "FILTER_NAME" => "",	// Фильтр
+            "HIDE_LINK_WHEN_NO_DETAIL" => "N",	// Скрывать ссылку, если нет детального описания
+            "IBLOCK_ID" => "3",	// Код информационного блока
+            "IBLOCK_TYPE" => "contents",	// Тип информационного блока (используется только для проверки)
+            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",	// Включать инфоблок в цепочку навигации
+            "INCLUDE_SUBSECTIONS" => "N",	// Показывать элементы подразделов раздела
+            "MESSAGE_404" => "",	// Сообщение для показа (по умолчанию из компонента)
+            "NEWS_COUNT" => "20",	// Количество новостей на странице
+            "PAGER_BASE_LINK_ENABLE" => "N",	// Включить обработку ссылок
+            "PAGER_DESC_NUMBERING" => "N",	// Использовать обратную навигацию
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",	// Время кеширования страниц для обратной навигации
+            "PAGER_SHOW_ALL" => "N",	// Показывать ссылку "Все"
+            "PAGER_SHOW_ALWAYS" => "N",	// Выводить всегда
+            "PAGER_TEMPLATE" => ".default",	// Шаблон постраничной навигации
+            "PAGER_TITLE" => "Новости",	// Название категорий
+            "PARENT_SECTION" => "",	// ID раздела
+            "PARENT_SECTION_CODE" => "",	// Код раздела
+            "PREVIEW_TRUNCATE_LEN" => "",	// Максимальная длина анонса для вывода (только для типа текст)
+            "PROPERTY_CODE" => array(	// Свойства
+                0 => "STICKER",
+                1 => "PRICE",
+                2 => "DESCRIPTION_BOLD",
+                3 => "DESCRIPTION",
+            ),
+            "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
+            "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
+            "SET_META_DESCRIPTION" => "N",	// Устанавливать описание страницы
+            "SET_META_KEYWORDS" => "N",	// Устанавливать ключевые слова страницы
+            "SET_STATUS_404" => "N",	// Устанавливать статус 404
+            "SET_TITLE" => "N",	// Устанавливать заголовок страницы
+            "SHOW_404" => "N",	// Показ специальной страницы
+            "SORT_BY1" => "SORT",	// Поле для первой сортировки новостей
+            "SORT_BY2" => "ID",	// Поле для второй сортировки новостей
+            "SORT_ORDER1" => "ASC",	// Направление для первой сортировки новостей
+            "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+            "STRICT_SECTION_CHECK" => "N",	// Строгая проверка раздела для показа списка
+        ),
+            false
+        );?>
 
         <!-- Why Choose Us-->
-        <section class="section section-sm bg-white text-center">
-            <div class="container">
-                <h2>Why Choose Us</h2>
-                <div class="row row-30 wow fadeIn">
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-cog"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">High Quality Hardware</h5>
-                                    <p>We use top-notch hardware to develop the most efficient apps for our customers.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-headset"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">Dedicated 24\7 Support</h5>
-                                    <p>You can rely on our 24/7 tech support that will gladly solve any app issue you may have.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-wallet"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">30-Day Money-back Guarantee</h5>
-                                    <p>If you are not satisfied with our apps, we will return your money in the first 30 days.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-rocket"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">Agile and Fast Working Style</h5>
-                                    <p>This type of approach to our work helps our specialists to quickly develop better apps.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-phone"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">Some Apps are Free</h5>
-                                    <p>We also develop free apps that can be downloaded online without any payments.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                    <div class="col-md-6 col-lg-4">
-                        <!-- Box Alice-->
-                        <article class="box-alice">
-                            <div class="box-alice__inner">
-                                <div class="box-alice__aside">
-                                    <div class="box-alice__icon-outer">
-                                        <div class="icon-figure">
-                                            <div class="box-triangle">
-                                                <svg x="0px" y="0px" width="80px" height="80px" viewBox="0 0 100 100" style="fill: #f7f7f7;">
-                                                    <path d="M20,93.301c-11,0-15.5-7.794-10-17.321l30-51.962c5.5-9.526,14.5-9.526,20,0l30,51.962 c5.5,9.526,1,17.321-10,17.321H20z"></path>
-                                                </svg>
-                                            </div><span class="box-alice__icon linearicons-thumbs-up"></span>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="box-alice__main">
-                                    <h5 class="box-alice__title">High Level of Usability</h5>
-                                    <p>All our products have high usability allowing users to easily operate the apps.</p>
-                                </div>
-                            </div>
-                        </article>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <?$APPLICATION->IncludeComponent("bitrix:news.list", ".why.us", Array(
+            "ACTIVE_DATE_FORMAT" => "d.m.Y",	// Формат показа даты
+            "ADD_SECTIONS_CHAIN" => "N",	// Включать раздел в цепочку навигации
+            "AJAX_MODE" => "N",	// Включить режим AJAX
+            "AJAX_OPTION_ADDITIONAL" => "",	// Дополнительный идентификатор
+            "AJAX_OPTION_HISTORY" => "N",	// Включить эмуляцию навигации браузера
+            "AJAX_OPTION_JUMP" => "N",	// Включить прокрутку к началу компонента
+            "AJAX_OPTION_STYLE" => "N",	// Включить подгрузку стилей
+            "CACHE_FILTER" => "N",	// Кешировать при установленном фильтре
+            "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+            "CACHE_TIME" => "36000000",	// Время кеширования (сек.)
+            "CACHE_TYPE" => "A",	// Тип кеширования
+            "CHECK_DATES" => "Y",	// Показывать только активные на данный момент элементы
+            "DETAIL_URL" => "",	// URL страницы детального просмотра (по умолчанию - из настроек инфоблока)
+            "DISPLAY_BOTTOM_PAGER" => "N",	// Выводить под списком
+            "DISPLAY_DATE" => "N",	// Выводить дату элемента
+            "DISPLAY_NAME" => "Y",	// Выводить название элемента
+            "DISPLAY_PICTURE" => "N",	// Выводить изображение для анонса
+            "DISPLAY_PREVIEW_TEXT" => "Y",	// Выводить текст анонса
+            "DISPLAY_TOP_PAGER" => "N",	// Выводить над списком
+            "FIELD_CODE" => array(	// Поля
+                0 => "NAME",
+                1 => "PREVIEW_TEXT",
+                2 => "CODE",
+            ),
+            "FILTER_NAME" => "",	// Фильтр
+            "HIDE_LINK_WHEN_NO_DETAIL" => "N",	// Скрывать ссылку, если нет детального описания
+            "IBLOCK_ID" => "4",	// Код информационного блока
+            "IBLOCK_TYPE" => "contents",	// Тип информационного блока (используется только для проверки)
+            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",	// Включать инфоблок в цепочку навигации
+            "INCLUDE_SUBSECTIONS" => "N",	// Показывать элементы подразделов раздела
+            "MESSAGE_404" => "",	// Сообщение для показа (по умолчанию из компонента)
+            "NEWS_COUNT" => "20",	// Количество новостей на странице
+            "PAGER_BASE_LINK_ENABLE" => "N",	// Включить обработку ссылок
+            "PAGER_DESC_NUMBERING" => "N",	// Использовать обратную навигацию
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",	// Время кеширования страниц для обратной навигации
+            "PAGER_SHOW_ALL" => "N",	// Показывать ссылку "Все"
+            "PAGER_SHOW_ALWAYS" => "N",	// Выводить всегда
+            "PAGER_TEMPLATE" => ".default",	// Шаблон постраничной навигации
+            "PAGER_TITLE" => "Новости",	// Название категорий
+            "PARENT_SECTION" => "",	// ID раздела
+            "PARENT_SECTION_CODE" => "",	// Код раздела
+            "PREVIEW_TRUNCATE_LEN" => "",	// Максимальная длина анонса для вывода (только для типа текст)
+            "PROPERTY_CODE" => array(	// Свойства
+                0 => "ICON",
+                1 => "",
+            ),
+            "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
+            "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
+            "SET_META_DESCRIPTION" => "N",	// Устанавливать описание страницы
+            "SET_META_KEYWORDS" => "N",	// Устанавливать ключевые слова страницы
+            "SET_STATUS_404" => "N",	// Устанавливать статус 404
+            "SET_TITLE" => "N",	// Устанавливать заголовок страницы
+            "SHOW_404" => "N",	// Показ специальной страницы
+            "SORT_BY1" => "SORT",	// Поле для первой сортировки новостей
+            "SORT_BY2" => "ID",	// Поле для второй сортировки новостей
+            "SORT_ORDER1" => "ASC",	// Направление для первой сортировки новостей
+            "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+            "STRICT_SECTION_CHECK" => "N",	// Строгая проверка раздела для показа списка
+        ),
+            false
+        );?>
 
         <!-- Facts-->
-        <section class="section parallax-container bg-gray-darker" data-parallax-img="images/bg-2-1920x545.jpg">
-            <div class="parallax-content">
-                <div class="section-lg text-center text-sm-left">
-                    <div class="container">
-                        <div class="row row-50 flex-md-row-reverse justify-content-md-between align-items-center align-items-lg-start">
-                            <div class="col-md-5 wow fadeInRightSmall">
-                                <div class="box-width-3 box-centered">
-                                    <h2>Some Facts About Us</h2>
-                                    <p class="text-style-1">More than 1000 applications developed</p><a class="button button-lg btn-primary button-ujarak" href="about.html">Read More</a>
-                                </div>
-                            </div>
-                            <div class="col-md-7 col-lg-6 wow fadeInLeftSmall">
-                                <div class="row row-style-1">
-                                    <div class="col-sm-6">
-                                        <div class="col-inner">
-                                            <!-- Box counter-->
-                                            <article class="box-counter box-counter_modern">
-                                                <div class="box-counter__main">
-                                                    <div class="box-counter__icon linearicons-outbox"></div><span>1.6</span><span class="small">k</span>
-                                                </div>
-                                                <p class="box-counter__title">Apps Installed</p>
-                                            </article>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="col-inner">
-                                            <!-- Box counter-->
-                                            <article class="box-counter box-counter_modern">
-                                                <div class="box-counter__main">
-                                                    <div class="box-counter__icon linearicons-diamond2"></div>
-                                                    <div class="counter">27</div>
-                                                </div>
-                                                <p class="box-counter__title">Awards Won</p>
-                                            </article>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="col-inner">
-                                            <!-- Box counter-->
-                                            <article class="box-counter box-counter_modern">
-                                                <div class="box-counter__main">
-                                                    <div class="box-counter__icon linearicons-user"></div>
-                                                    <div class="counter">45</div><span>+</span>
-                                                </div>
-                                                <p class="box-counter__title">Staff Members</p>
-                                            </article>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <div class="col-inner">
-                                            <!-- Box counter-->
-                                            <article class="box-counter box-counter_modern">
-                                                <div class="box-counter__main">
-                                                    <div class="box-counter__icon linearicons-heart"></div>
-                                                    <div class="counter">99</div><span class="small small_top">%</span>
-                                                </div>
-                                                <p class="box-counter__title">Satisfied Customers</p>
-                                            </article>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
+        <?$APPLICATION->IncludeComponent("bitrix:news.list", ".facts", Array(
+            "ACTIVE_DATE_FORMAT" => "d.m.Y",	// Формат показа даты
+            "ADD_SECTIONS_CHAIN" => "N",	// Включать раздел в цепочку навигации
+            "AJAX_MODE" => "N",	// Включить режим AJAX
+            "AJAX_OPTION_ADDITIONAL" => "",	// Дополнительный идентификатор
+            "AJAX_OPTION_HISTORY" => "N",	// Включить эмуляцию навигации браузера
+            "AJAX_OPTION_JUMP" => "N",	// Включить прокрутку к началу компонента
+            "AJAX_OPTION_STYLE" => "N",	// Включить подгрузку стилей
+            "CACHE_FILTER" => "N",	// Кешировать при установленном фильтре
+            "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+            "CACHE_TIME" => "36000000",	// Время кеширования (сек.)
+            "CACHE_TYPE" => "A",	// Тип кеширования
+            "CHECK_DATES" => "Y",	// Показывать только активные на данный момент элементы
+            "DETAIL_URL" => "",	// URL страницы детального просмотра (по умолчанию - из настроек инфоблока)
+            "DISPLAY_BOTTOM_PAGER" => "N",	// Выводить под списком
+            "DISPLAY_DATE" => "N",	// Выводить дату элемента
+            "DISPLAY_NAME" => "Y",	// Выводить название элемента
+            "DISPLAY_PICTURE" => "N",	// Выводить изображение для анонса
+            "DISPLAY_PREVIEW_TEXT" => "Y",	// Выводить текст анонса
+            "DISPLAY_TOP_PAGER" => "N",	// Выводить над списком
+            "FIELD_CODE" => array(	// Поля
+                0 => "NAME",
+                1 => "PREVIEW_TEXT",
+                2 => "CODE",
+            ),
+            "FILTER_NAME" => "",	// Фильтр
+            "HIDE_LINK_WHEN_NO_DETAIL" => "N",	// Скрывать ссылку, если нет детального описания
+            "IBLOCK_ID" => "5",	// Код информационного блока
+            "IBLOCK_TYPE" => "contents",	// Тип информационного блока (используется только для проверки)
+            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",	// Включать инфоблок в цепочку навигации
+            "INCLUDE_SUBSECTIONS" => "N",	// Показывать элементы подразделов раздела
+            "MESSAGE_404" => "",	// Сообщение для показа (по умолчанию из компонента)
+            "NEWS_COUNT" => "20",	// Количество новостей на странице
+            "PAGER_BASE_LINK_ENABLE" => "N",	// Включить обработку ссылок
+            "PAGER_DESC_NUMBERING" => "N",	// Использовать обратную навигацию
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",	// Время кеширования страниц для обратной навигации
+            "PAGER_SHOW_ALL" => "N",	// Показывать ссылку "Все"
+            "PAGER_SHOW_ALWAYS" => "N",	// Выводить всегда
+            "PAGER_TEMPLATE" => ".default",	// Шаблон постраничной навигации
+            "PAGER_TITLE" => "Новости",	// Название категорий
+            "PARENT_SECTION" => "",	// ID раздела
+            "PARENT_SECTION_CODE" => "",	// Код раздела
+            "PREVIEW_TRUNCATE_LEN" => "",	// Максимальная длина анонса для вывода (только для типа текст)
+            "PROPERTY_CODE" => array(	// Свойства
+                0 => "ICON",
+                1 => "COUNT",
+                2 => "PREFIX",
+                3 => "PREFIX_POSITION",
+            ),
+            "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
+            "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
+            "SET_META_DESCRIPTION" => "N",	// Устанавливать описание страницы
+            "SET_META_KEYWORDS" => "N",	// Устанавливать ключевые слова страницы
+            "SET_STATUS_404" => "N",	// Устанавливать статус 404
+            "SET_TITLE" => "N",	// Устанавливать заголовок страницы
+            "SHOW_404" => "N",	// Показ специальной страницы
+            "SORT_BY1" => "SORT",	// Поле для первой сортировки новостей
+            "SORT_BY2" => "ID",	// Поле для второй сортировки новостей
+            "SORT_ORDER1" => "ASC",	// Направление для первой сортировки новостей
+            "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+            "STRICT_SECTION_CHECK" => "N",	// Строгая проверка раздела для показа списка
+        ),
+            false
+        );?>
 
         <!-- Our Clients-->
-        <section class="section section-md bg-gray-light text-center">
-            <svg x="0px" y="0px" width="0" height="0">
-                <defs>
-                    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="0%">
-                        <stop offset="0%" stop-color="#00abfa"></stop>
-                        <stop offset="100%" stop-color="#00caad"></stop>
-                    </linearGradient>
-                </defs>
-            </svg>
-            <div class="container">
-                <h2>Our Clients</h2>
-                <!-- Owl Carousel-->
-                <div class="owl-outer-navigation-wrap owl-carousel_nav-modern wow fadeIn">
-                    <div class="owl-carousel quote-creative-carousel" data-items="1" data-lg-items="2" data-dots="true" data-nav="true" data-stage-padding="0" data-loop="true" data-margin="30" data-mouse-drag="false" data-navigation-container="#owl-carousel-nav" data-dots-each="1">
-                        <div class="item">
-                            <!-- Quote Creative-->
-                            <article class="quote-creative">
-                                <div class="quote-creative__header">
-                                    <div class="quote-creative__media"><img src="images/user-2-112x99.jpg" alt="" width="112" height="99"/>
-                                    </div>
-                                    <div class="quote-creative__info">
-                                        <p class="quote-creative__title">Michael Johnson</p>
-                                        <p class="quote-creative__subtitle">Regular Client</p>
-                                    </div>
-                                </div>
-                                <div class="quote-creative__main">
-                                    <div class="quote-creative__mark">
-                                        <svg x="0px" y="0px" width="39px" height="21px" viewbox="0 0 39 21">
-                                            <g fill="url(#grad1)">
-                                                <polyline points="8.955,21 0,14.031 0.002,0.001 15.984,0.001 15.984,13.984 8.969,14.016 "></polyline>
-                                                <polyline points="31.97,20.999 23.016,14.031 23.018,0.001 39,0.001 39,13.984 31.984,14.015 "></polyline>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    <div class="quote-creative__main-text">
-                                        <p>TechSoft offers a high caliber of resources skilled in Microsoft Azure .NET, mobile and Quality Assurance. They became our true business partners over the past three years of our cooperation.</p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                        <div class="item">
-                            <!-- Quote Creative-->
-                            <article class="quote-creative">
-                                <div class="quote-creative__header">
-                                    <div class="quote-creative__media"><img src="images/user-1-112x99.jpg" alt="" width="112" height="99"/>
-                                    </div>
-                                    <div class="quote-creative__info">
-                                        <p class="quote-creative__title">Rachel Adams</p>
-                                        <p class="quote-creative__subtitle">Regular Client</p>
-                                    </div>
-                                </div>
-                                <div class="quote-creative__main">
-                                    <div class="quote-creative__mark">
-                                        <svg x="0px" y="0px" width="39px" height="21px" viewbox="0 0 39 21">
-                                            <g fill="url(#grad1)">
-                                                <polyline points="8.955,21 0,14.031 0.002,0.001 15.984,0.001 15.984,13.984 8.969,14.016 "></polyline>
-                                                <polyline points="31.97,20.999 23.016,14.031 23.018,0.001 39,0.001 39,13.984 31.984,14.015 "></polyline>
-                                            </g>
-                                        </svg>
-                                    </div>
-                                    <div class="quote-creative__main-text">
-                                        <p>TechSoft is a highly skilled and uniquely capable firm with multitudes of talent on-board. We have collaborated on a number of diverse projects that have been a great success.</p>
-                                    </div>
-                                </div>
-                            </article>
-                        </div>
-                    </div>
-                    <div class="owl-outer-navigation" id="owl-carousel-nav"></div>
-                </div>
-            </div>
-        </section>
+        <?$APPLICATION->IncludeComponent(
+            "bitrix:news.line",
+            ".our.clients",
+            Array(
+                "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                "CACHE_GROUPS" => "Y",
+                "CACHE_TIME" => "300",
+                "CACHE_TYPE" => "A",
+                "DETAIL_URL" => "",
+                "FIELD_CODE" => array(
+                    0 => "NAME",
+                    1 => "PREVIEW_TEXT",
+                    2 => "DETAIL_TEXT",
+                    3 => "PREVIEW_PICTURE",
+                ),
+                "IBLOCKS" => array("6"),
+                "IBLOCK_TYPE" => "contents",
+                "NEWS_COUNT" => "20",
+                "SORT_BY1" => "SORT",
+                "SORT_BY2" => "ACTIVE_FROM",
+                "SORT_ORDER1" => "ASC",
+                "SORT_ORDER2" => "DESC"
+            )
+        );?>
+
         <!-- Partners-->
-        <section class="section section-md bg-white text-center">
-            <div class="container">
-                <div class="row row-50 align-items-sm-center">
-                    <div class="col-sm-6 col-md-3 wow fadeIn"><a class="link-image" href="#"><img src="images/brand-1-126x68.png" alt="" width="126" height="68"/></a></div>
-                    <div class="col-sm-6 col-md-3 wow fadeIn"><a class="link-image" href="#"><img src="images/brand-2-126x100.png" alt="" width="126" height="100"/></a></div>
-                    <div class="col-sm-6 col-md-3 wow fadeIn"><a class="link-image" href="#"><img src="images/brand-3-134x83.png" alt="" width="134" height="83"/></a></div>
-                    <div class="col-sm-6 col-md-3 wow fadeIn"><a class="link-image" href="#"><img src="images/brand-4-138x55.png" alt="" width="138" height="55"/></a></div>
-                </div>
-            </div>
-        </section>
+        <?$APPLICATION->IncludeComponent(
+            "bitrix:news.line",
+            ".partners",
+            Array(
+                "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                "CACHE_GROUPS" => "Y",
+                "CACHE_TIME" => "300",
+                "CACHE_TYPE" => "A",
+                "DETAIL_URL" => "",
+                "FIELD_CODE" => array(
+                    0 => "NAME",
+                    1 => "CODE",
+                    2 => "PREVIEW_PICTURE",
+                ),
+                "IBLOCKS" => array("7"),
+                "IBLOCK_TYPE" => "contents",
+                "NEWS_COUNT" => "20",
+                "SORT_BY1" => "SORT",
+                "SORT_BY2" => "ACTIVE_FROM",
+                "SORT_ORDER1" => "ASC",
+                "SORT_ORDER2" => "DESC"
+            )
+        );?>
+
+
+        <!-- Tabs -->
+        <?$APPLICATION->IncludeComponent(
+            "bitrix:news.line",
+            ".tabs.slider",
+            Array(
+                "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                "CACHE_GROUPS" => "Y",
+                "CACHE_TIME" => "300",
+                "CACHE_TYPE" => "A",
+                "DETAIL_URL" => "",
+                "FIELD_CODE" => array(
+                    0 => "NAME",
+                    1 => "PREVIEW_TEXT",
+                    2 => "DETAIL_TEXT",
+                ),
+                "IBLOCKS" => array("8"),
+                "IBLOCK_TYPE" => "sliders",
+                "NEWS_COUNT" => "20",
+                "SORT_BY1" => "SORT",
+                "SORT_BY2" => "ACTIVE_FROM",
+                "SORT_ORDER1" => "ASC",
+                "SORT_ORDER2" => "DESC"
+            )
+        );?>
+
+        <!-- Team-->
+        <?$APPLICATION->IncludeComponent(
+            "bitrix:news.line",
+            ".team",
+            Array(
+                "ACTIVE_DATE_FORMAT" => "d.m.Y",
+                "CACHE_GROUPS" => "Y",
+                "CACHE_TIME" => "300",
+                "CACHE_TYPE" => "A",
+                "DETAIL_URL" => "",
+                "FIELD_CODE" => array(
+                    0 => "NAME",
+                    1 => "PREVIEW_TEXT",
+                    2 => "PREVIEW_PICTURE",
+                ),
+                "IBLOCKS" => array("9"),
+                "IBLOCK_TYPE" => "contents",
+                "NEWS_COUNT" => "20",
+                "SORT_BY1" => "SORT",
+                "SORT_BY2" => "ACTIVE_FROM",
+                "SORT_ORDER1" => "ASC",
+                "SORT_ORDER2" => "DESC"
+            )
+        );?>
+
+        <!-- Facts-->
+        <?$APPLICATION->IncludeComponent("bitrix:news.list", ".facts.vertical", Array(
+            "ACTIVE_DATE_FORMAT" => "d.m.Y",	// Формат показа даты
+            "ADD_SECTIONS_CHAIN" => "N",	// Включать раздел в цепочку навигации
+            "AJAX_MODE" => "N",	// Включить режим AJAX
+            "AJAX_OPTION_ADDITIONAL" => "",	// Дополнительный идентификатор
+            "AJAX_OPTION_HISTORY" => "N",	// Включить эмуляцию навигации браузера
+            "AJAX_OPTION_JUMP" => "N",	// Включить прокрутку к началу компонента
+            "AJAX_OPTION_STYLE" => "N",	// Включить подгрузку стилей
+            "CACHE_FILTER" => "N",	// Кешировать при установленном фильтре
+            "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+            "CACHE_TIME" => "36000000",	// Время кеширования (сек.)
+            "CACHE_TYPE" => "A",	// Тип кеширования
+            "CHECK_DATES" => "Y",	// Показывать только активные на данный момент элементы
+            "DETAIL_URL" => "",	// URL страницы детального просмотра (по умолчанию - из настроек инфоблока)
+            "DISPLAY_BOTTOM_PAGER" => "N",	// Выводить под списком
+            "DISPLAY_DATE" => "N",	// Выводить дату элемента
+            "DISPLAY_NAME" => "Y",	// Выводить название элемента
+            "DISPLAY_PICTURE" => "N",	// Выводить изображение для анонса
+            "DISPLAY_PREVIEW_TEXT" => "Y",	// Выводить текст анонса
+            "DISPLAY_TOP_PAGER" => "N",	// Выводить над списком
+            "FIELD_CODE" => array(	// Поля
+                0 => "NAME",
+                1 => "PREVIEW_TEXT",
+                2 => "CODE",
+            ),
+            "FILTER_NAME" => "",	// Фильтр
+            "HIDE_LINK_WHEN_NO_DETAIL" => "N",	// Скрывать ссылку, если нет детального описания
+            "IBLOCK_ID" => "5",	// Код информационного блока
+            "IBLOCK_TYPE" => "contents",	// Тип информационного блока (используется только для проверки)
+            "INCLUDE_IBLOCK_INTO_CHAIN" => "N",	// Включать инфоблок в цепочку навигации
+            "INCLUDE_SUBSECTIONS" => "N",	// Показывать элементы подразделов раздела
+            "MESSAGE_404" => "",	// Сообщение для показа (по умолчанию из компонента)
+            "NEWS_COUNT" => "20",	// Количество новостей на странице
+            "PAGER_BASE_LINK_ENABLE" => "N",	// Включить обработку ссылок
+            "PAGER_DESC_NUMBERING" => "N",	// Использовать обратную навигацию
+            "PAGER_DESC_NUMBERING_CACHE_TIME" => "36000",	// Время кеширования страниц для обратной навигации
+            "PAGER_SHOW_ALL" => "N",	// Показывать ссылку "Все"
+            "PAGER_SHOW_ALWAYS" => "N",	// Выводить всегда
+            "PAGER_TEMPLATE" => ".default",	// Шаблон постраничной навигации
+            "PAGER_TITLE" => "Новости",	// Название категорий
+            "PARENT_SECTION" => "",	// ID раздела
+            "PARENT_SECTION_CODE" => "",	// Код раздела
+            "PREVIEW_TRUNCATE_LEN" => "",	// Максимальная длина анонса для вывода (только для типа текст)
+            "PROPERTY_CODE" => array(	// Свойства
+                0 => "ICON",
+                1 => "COUNT",
+                2 => "PREFIX",
+                3 => "PREFIX_POSITION",
+            ),
+            "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
+            "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
+            "SET_META_DESCRIPTION" => "N",	// Устанавливать описание страницы
+            "SET_META_KEYWORDS" => "N",	// Устанавливать ключевые слова страницы
+            "SET_STATUS_404" => "N",	// Устанавливать статус 404
+            "SET_TITLE" => "N",	// Устанавливать заголовок страницы
+            "SHOW_404" => "N",	// Показ специальной страницы
+            "SORT_BY1" => "SORT",	// Поле для первой сортировки новостей
+            "SORT_BY2" => "ID",	// Поле для второй сортировки новостей
+            "SORT_ORDER1" => "ASC",	// Направление для первой сортировки новостей
+            "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+            "STRICT_SECTION_CHECK" => "N",	// Строгая проверка раздела для показа списка
+        ),
+            false
+        );?>
+
+
+
 
 <?
 require($_SERVER['DOCUMENT_ROOT'].'/bitrix/footer.php');

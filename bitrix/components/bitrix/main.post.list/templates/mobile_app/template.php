@@ -18,7 +18,7 @@ ob_start();
 ?>
 <!--RCRD_#FULL_ID#-->
 <a id="com#ID#" name="com#ID#" bx-mpl-full-id="#FULL_ID#"></a>
-<div id="record-#FULL_ID#" class="post-comment-block post-comment-block-#NEW#" <?=($arResult["ajax_comment"] == $comment["ID"] ? ' data-send="Y"' : '')?> <?
+<div id="record-#FULL_ID#" class="post-comment-block post-comment-block-#NEW# post-comment-block-#APPROVED# #RATING_NONEMPTY_CLASS#" <?=($arResult["ajax_comment"] == $comment["ID"] ? ' data-send="Y"' : '')?> <?
 	?>bx-mpl-id="#FULL_ID#" <?
 	?>bx-mpl-reply-show="#SHOW_POST_FORM#" <?
 	?>bx-mpl-view-url="#VIEW_URL###ID#" bx-mpl-view-show="#VIEW_SHOW#" <?
@@ -46,12 +46,15 @@ ob_start();
 			<div class="post-comment-cont">
 				<a href="#AUTHOR_URL#" class="post-comment-author #AUTHOR_EXTRANET_STYLE#" id="record-#FULL_ID#-author" bx-mpl-author-id="#AUTHOR_ID#">#AUTHOR_NAME#</a>
 				<div class="post-comment-time">#DATE#</div>
+				#LIKE_REACT#
 			</div>
 			<!--/noindex-->
 			#AFTER_HEADER#
 			#BEFORE#
-			<div class="post-comment-wrap" bx-content-view-xml-id="#CONTENT_ID#" id="post-comment-wrap-#CONTENT_ID#" bx-content-view-save="N">
-				<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+			<div class="post-comment-wrap-outer">
+				<div class="post-comment-wrap" bx-content-view-xml-id="#CONTENT_ID#" id="post-comment-wrap-#CONTENT_ID#" bx-content-view-save="N">
+					<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+				</div>
 				<div class="post-comment-more" onclick="mobileExpand(this, event)"><div class="post-comment-more-but"></div></div>
 			</div>
 		</div>
@@ -73,7 +76,6 @@ ob_start();
 			?>
 		</div>
 	</div>
-	#LIKE_REACT#
 	#AFTER_RECORD#
 </div><? // post-comment-block
 $template = preg_replace("/[\t\n]/", "", ob_get_clean());
@@ -89,8 +91,10 @@ ob_start();
 				<div class="post-comment-time">#DATE#</div>
 			</div>
 			<!--/noindex-->
-			<div class="post-comment-wrap">
-				<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+			<div class="post-comment-wrap-outer">
+				<div class="post-comment-wrap">
+					<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+				</div>
 				<div class="post-comment-more" onclick="mobileExpand(this, event)"><div class="post-comment-more-but"></div></div>
 			</div>
 			<!--/noindex-->
@@ -150,8 +154,10 @@ ob_start();
 				<div class="post-comment-time">#DATE#</div>
 			</div>
 			<!--/noindex-->
-			<div class="post-comment-wrap">
-				<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+			<div class="post-comment-wrap-outer">
+				<div class="post-comment-wrap">
+					<div class="post-comment-text" id="record-#FULL_ID#-text">#TEXT#</div>
+				</div>
 				<div class="post-comment-more" onclick="mobileExpand(this, event)"><div class="post-comment-more-but"></div></div>
 			</div>
 			<div class="post-comment-files">

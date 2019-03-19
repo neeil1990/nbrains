@@ -10,6 +10,9 @@ use Bitrix\Main\Loader;
 use Bitrix\Main\ModuleManager;
 use Bitrix\Main\Result;
 use Bitrix\Main\SystemException;
+use Bitrix\Main\Type\DateTime;
+use Bitrix\Transformer\Command;
+use Bitrix\Transformer\FileTransformer;
 
 final class TransformerManager
 {
@@ -124,15 +127,31 @@ final class TransformerManager
 			return $result;
 		}
 
-		$result = $transformer->transform(
-			(int)$fileId,
-			[$transformation->getOutputExtension()],
-			'main',
-			CallbackHandler::class,
-			['id' => $fileId, 'fileId' => $fileId, 'queue' => 'disk_on_load']
-		);
+		$shouldSendPullTag = true;
+		$information = $this->getTransformationInformation($fileId);
+		if ($this->shouldSendToTransformation($information))
+		{
+			$result = $transformer->transform(
+				(int)$fileId,
+				[$transformation->getOutputExtension()],
+				'main',
+				CallbackHandler::class,
+				['id' => $fileId, 'fileId' => $fileId, 'queue' => 'disk_on_load']
+			);
 
-		if ($result->isSuccess())
+			if (!$result->isSuccess())
+			{
+				$shouldSendPullTag = false;
+			}
+		}
+
+		if (isset($information['status']) && $information['status'] == Command::STATUS_ERROR)
+		{
+			$shouldSendPullTag = false;
+			$result->addError(new Error('Could not transform file', Command::STATUS_ERROR));
+		}
+
+		if ($shouldSendPullTag)
 		{
 			$pullTag = $this->subscribeCurrentUserForTransformation($fileId);
 			$result->setData([
@@ -143,7 +162,35 @@ final class TransformerManager
 		return $result;
 	}
 
-	protected function subscribeCurrentUserForTransformation($fileId)
+	protected function shouldSendToTransformation($information)
+	{
+		if (!$information)
+		{
+			return true;
+		}
+
+		if (
+			isset($information['status']) &&
+			$information['status'] !== Command::STATUS_SUCCESS
+		)
+		{
+			/** @var DateTime $date */
+			$date = $information['time'];
+			if ($date && (time() - $date->getTimestamp()) > 24 * 3600)
+			{
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	protected function getTransformationInformation($fileId)
+	{
+		return FileTransformer::getTransformationInfoByFile((int)$fileId);
+	}
+
+	public function subscribeCurrentUserForTransformation($fileId)
 	{
 		if (!Loader::includeModule('pull'))
 		{
@@ -151,7 +198,7 @@ final class TransformerManager
 		}
 
 		$pullTag = self::getPullTag($fileId);
-		\CPullWatch::add(CurrentUser::get()->getId(), $pullTag, true);
+		\CPullWatch::add(CurrentUser::get()->getId(), $pullTag);
 
 		return $pullTag;
 	}

@@ -238,6 +238,7 @@ $renderField = function($htmlFormId, $field, $isExt = false)
 					'useFileDialogs' => false,
 					'useLinkStat' => false,
 					'uploadImagesFromClipboard' => false,
+					'autoLink' => false,
 					'controlsMap' => array(
 						array('id' => 'Bold', 'compact' => true, 'sort' => 10),
 						array('id' => 'Italic', 'compact' => true, 'sort' => 20),

@@ -8,17 +8,27 @@
 	{
 		options = options || {};
 
+		/**
+		 * @type {BX.UI.Viewer.Controller}
+		 */
 		this.controller = null;
 		this.title = options.title;
 		this.src = options.src;
+		this.nakedActions = options.nakedActions;
 		this.actions = options.actions;
 		this.contentType = options.contentType;
 		this.isLoaded = false;
 		this.isLoading = false;
 		this.sourceNode = null;
+		this.transformationPromise = null;
+		this.transformationTimeoutId = null;
+		this.viewerGroupBy = null;
+		this.transformationTimeout = options.transformationTimeout || 15000;
 		this.layout = {
 			container: null
 		};
+
+		this.options = options;
 
 		this.init();
 	};
@@ -42,7 +52,8 @@
 		{
 			this.title = node.dataset.title || node.title || node.alt;
 			this.src = node.dataset.src;
-			this.actions = node.dataset.actions? JSON.parse(node.dataset.actions) : undefined;
+			this.viewerGroupBy = node.dataset.viewerGroupBy;
+			this.nakedActions = node.dataset.actions? JSON.parse(node.dataset.actions) : undefined;
 		},
 
 		/**
@@ -53,16 +64,113 @@
 			this.sourceNode = node;
 		},
 
-		init: function ()
+		applyReloadOptions: function (options)
 		{},
 
-		reload: function ()
+		isPullConnected: function()
 		{
-			this.isLoaded = false;
-			this.isLoading = false;
+			if(top.BX.PULL)
+			{
+				// pull_v2
+				if(BX.type.isFunction(top.BX.PULL.isConnected))
+				{
+					return top.BX.PULL.isConnected();
+				}
+				else
+				{
+					var debugInfo = top.BX.PULL.getDebugInfoArray();
+					return debugInfo.connected;
+				}
+			}
 
-			return this.load();
+			return false;
 		},
+
+		registerTransformationHandler: function(pullTag)
+		{
+			if (this.isLoaded)
+			{
+				return;
+			}
+
+			this.controller.setTextOnLoading(BX.message('JS_UI_VIEWER_ITEM_TRANSFORMATION_IN_PROGRESS'));
+
+			if (this.isPullConnected())
+			{
+				BX.addCustomEvent('onPullEvent-main', function (command, params) {
+					if (command === 'transformationComplete' && this.transformationPromise)
+					{
+						this.loadData().then(function(){
+							this.transformationPromise.fulfill(this);
+						}.bind(this));
+					}
+				}.bind(this));
+
+				console.log('BX.PULL.extendWatch');
+				BX.PULL.extendWatch(pullTag);
+			}
+			else
+			{
+				setTimeout(function(){
+					BX.ajax.promise({
+						url: BX.util.add_url_param(this.src, {ts: 'bxviewer'}),
+						method: 'GET',
+						dataType: 'json',
+						headers: [{
+							name: 'BX-Viewer-check-transformation',
+							value: null
+						}]
+					}).then(function(response){
+						if (!response.data || !response.data.transformation)
+						{
+							this.registerTransformationHandler();
+						}
+						else
+						{
+							this.loadData().then(function(){
+								this.transformationPromise.fulfill(this);
+							}.bind(this));
+						}
+					}.bind(this));
+				}.bind(this), 5000);
+			}
+
+			this.transformationTimeoutId = setTimeout(function(){
+				if (!this.isLoaded)
+				{
+					console.log('Throw transformationTimeout');
+					if (this._loadPromise)
+					{
+						this._loadPromise.reject({
+							status: "timeout",
+							message: BX.message("JS_UI_VIEWER_ITEM_TRANSFORMATION_TIMEOUT"),
+							item: this
+						});
+
+						this.isLoading = false;
+					}
+				}
+				else
+				{
+					console.log('We don\'t have transformationTimeout :) ');
+				}
+
+				this.resetTransformationTimeout();
+			}.bind(this), this.transformationTimeout);
+		},
+
+		resetTransformationTimeout: function ()
+		{
+			if(this.transformationTimeoutId)
+			{
+				clearTimeout(this.transformationTimeoutId);
+			}
+
+			this.transformationTimeoutId = null;
+		},
+
+		init: function ()
+		{},
 
 		load: function ()
 		{
@@ -71,11 +179,14 @@
 			if (this.isLoaded)
 			{
 				promise.fulfill(this);
+				console.log('isLoaded');
 
 				return promise;
 			}
 			if (this.isLoading)
 			{
+				console.log('isLoading');
+
 				return this._loadPromise;
 			}
 
@@ -86,8 +197,14 @@
 
 				return item;
 			}.bind(this)).catch(function (reason) {
+				console.log('catch');
 				this.isLoaded = false;
 				this.isLoading = false;
+
+				if(!reason.item)
+				{
+					reason.item = this;
+				}
 
 				var promise = new BX.Promise();
 				promise.reject(reason);
@@ -95,7 +212,14 @@
 				return promise;
 			}.bind(this));
 
+			console.log('will load');
+
 			return this._loadPromise;
+		},
+
+		getSrc: function()
+		{
+			return this.src;
 		},
 
 		getTitle: function()
@@ -103,15 +227,30 @@
 			return this.title;
 		},
 
-		getActions: function()
+		getGroupBy: function()
 		{
-			if (typeof this.actions === 'undefined')
+			return this.viewerGroupBy;
+		},
+
+		getNakedActions: function()
+		{
+			if (typeof this.nakedActions === 'undefined')
 			{
 				return [{
 					type: 'download'
 				}];
 			}
 
+			return this.nakedActions;
+		},
+
+		setActions: function(actions)
+		{
+			this.actions = actions;
+		},
+
+		getActions: function()
+		{
 			return this.actions;
 		},
 
@@ -148,6 +287,9 @@
 		this.resizedSrc = options.resizedSrc;
 		this.width = options.width;
 		this.height = options.height;
+		/**
+		 * @type {HTMLImageElement}
+		 */
 		this.imageNode = null;
 		this.layout = {
 			container: null
@@ -166,7 +308,6 @@
 		{
 			BX.UI.Viewer.Item.prototype.setPropertiesByNode.apply(this, arguments);
 
-			this.resizedSrc = node.src;
 			this.src = node.dataset.src || node.src;
 			this.width = node.dataset.width;
 			this.height = node.dataset.height;
@@ -176,10 +317,14 @@
 		{
 			var promise = new BX.Promise();
 
+			if (!this.shouldRunLocalResize())
+			{
+				this.resizedSrc = this.src;
+			}
+
 			if (!this.resizedSrc)
 			{
 				var xhr = new XMLHttpRequest();
-				xhr.responseType = 'blob';
 				xhr.onreadystatechange = function () {
 					if(xhr.readyState !== XMLHttpRequest.DONE)
 					{
@@ -187,11 +332,13 @@
 					}
 					if ((xhr.status === 200 || xhr.status === 0) && xhr.response)
 					{
+						console.log('resize image');
 						this.resizedSrc = URL.createObjectURL(xhr.response);
 						this.imageNode = new Image();
 						this.imageNode.src = this.resizedSrc;
-
-						promise.fulfill(this);
+						this.imageNode.onload = function () {
+							promise.fulfill(this);
+						}.bind(this);
 					}
 					else
 					{
@@ -203,6 +350,7 @@
 
 				}.bind(this);
 				xhr.open('GET', BX.util.add_url_param(this.src, {ts: 'bxviewer'}), true);
+				xhr.responseType = 'blob';
 				xhr.setRequestHeader('BX-Viewer-image', 'x');
 				xhr.send();
 			}
@@ -213,6 +361,7 @@
 					promise.fulfill(this);
 				}.bind(this);
 				this.imageNode.onerror = this.imageNode.onabort = function (event) {
+					console.log('reject');
 					promise.reject({
 						item: this,
 						type: 'error'
@@ -223,6 +372,29 @@
 			}
 
 			return promise;
+		},
+
+		shouldRunLocalResize: function ()
+		{
+			var isAbsoluteLink = new RegExp('^([a-z]+://|//)', 'i');
+			if (!isAbsoluteLink.test(this.src))
+			{
+				return true;
+			}
+
+			if (!BX.getClass('URL'))
+			{
+				return this.src.indexOf(location.hostname) !== -1;
+			}
+
+			try
+			{
+				return (new URL(this.src)).hostname === location.hostname;
+			}
+			catch(e)
+			{}
+
+			return false;
 		},
 
 		render: function ()
@@ -252,6 +424,18 @@
 			this.imageNode.alt = this.title;
 
 			return item;
+		},
+
+		afterRender: function ()
+		{
+			//it's a dirty hack for IE11 and working with Image and blob content to prevent unexpected width&height attributes
+			if (!window.chrome)
+			{
+				setTimeout(function () {
+					this.imageNode.removeAttribute('width');
+					this.imageNode.removeAttribute('height');
+				}.bind(this), 200);
+			}
 		}
 	};
 
@@ -299,30 +483,35 @@
 	};
 
 	/**
-	 * @extends {BX.UI.Viewer.PlainText}
+	 * @extends {BX.UI.Viewer.Item}
 	 * @param options
 	 * @constructor
 	 */
 	BX.UI.Viewer.Unknown = function (options)
 	{
-		options = options || {};
-
 		BX.UI.Viewer.Item.apply(this, arguments);
 	};
 
 	BX.UI.Viewer.Unknown.prototype =
 	{
-		__proto__: BX.UI.Viewer.PlainText.prototype,
-		constructor: BX.UI.Viewer.PlainText,
+		__proto__: BX.UI.Viewer.Item.prototype,
+		constructor: BX.UI.Viewer.Item,
 
-		/**
-		 * @param {HTMLElement} node
-		 */
-		setPropertiesByNode: function (node)
+		render: function ()
 		{
-			BX.UI.Viewer.Item.prototype.setPropertiesByNode.apply(this, arguments);
-
-			this.content = 'Unknown type';
+			return BX.create('div', {
+				props: {
+					className: 'ui-viewer-error'
+				},
+				children: [
+					BX.create('div', {
+						props: {
+							className: 'ui-viewer-info-title'
+						},
+						text: BX.message('JS_UI_VIEWER_ITEM_UNKNOWN_TITLE')
+					})
+				]
+			});
 		}
 	};
 
@@ -343,7 +532,8 @@
 			this.playerId = 'playerId_' + this.hashCode(this.src) + (Math.floor(Math.random() * Math.floor(10000)));
 		}
 		this.sources = [];
-		this.transFormationPromise = null;
+		this.transformationPromise = null;
+		this.forceTransformation = false;
 	};
 
 	BX.UI.Viewer.Video.prototype =
@@ -372,20 +562,16 @@
 			return h;
 		},
 
+		applyReloadOptions: function (options)
+		{
+			if (options.forceTransformation)
+			{
+				this.forceTransformation = true;
+			}
+		},
+
 		init: function () 
 		{
-			BX.addCustomEvent('onPullEvent', function (moduleId, command, params) {
-				if (moduleId === 'main' && command === 'transformationComplete')
-				{
-					if (this.transFormationPromise)
-					{
-						this.loadData().then(function(){
-							this.transFormationPromise.fulfill(this);
-						}.bind(this));
-					}
-				}
-			}.bind(this));
-
 			BX.addCustomEvent('PlayerManager.Player:onAfterInit', function(player)
 			{
 				if (player.id !== this.playerId)
@@ -393,11 +579,12 @@
 					return;
 				}
 
-				if (player.vjsPlayer.error())
+				if (player.vjsPlayer.error() && !this.forceTransformation)
 				{
 					console.log('forceTransformation');
-					this.forceTransformation = true;
-					this.controller.reload(this);
+					this.controller.reload(this, {
+						forceTransformation: true
+					});
 				}
 
 			}.bind(this));
@@ -431,16 +618,17 @@
 				{
 					promise.reject({
 						item: this,
-						type: 'error'
+						type: 'error',
+						errors: response.errors || []
 					});
 
 					return;
 				}
 
-				if(response.data.pullTag)
+				if (response.data.hasOwnProperty('pullTag'))
 				{
-					BX.PULL.extendWatch(response.data.pullTag);
-					this.transFormationPromise = promise;
+					this.transformationPromise = promise;
+					this.registerTransformationHandler(response.data.pullTag);
 				}
 				else
 				{
@@ -495,7 +683,7 @@
 		this.contentNode = null;
 		this.previewHtml = null;
 		this.previewScriptToProcess = null;
-		this.transFormationPromise = null;
+		this.transformationPromise = null;
 	};
 
 	BX.UI.Viewer.Document.prototype =
@@ -509,22 +697,6 @@
 		setPropertiesByNode: function (node)
 		{
 			BX.UI.Viewer.Item.prototype.setPropertiesByNode.apply(this, arguments);
-		},
-
-		init: function()
-		{
-			BX.addCustomEvent('onPullEvent', function (moduleId, command, params) {
-				if (moduleId === 'main' && command === 'transformationComplete')
-				{
-					if (this.transFormationPromise)
-					{
-						this.loadData().then(function(){
-							this.transFormationPromise.fulfill(this);
-						}.bind(this));
-					}
-				}
-			}.bind(this));
-
 		},
 
 		loadData: function ()
@@ -565,13 +737,14 @@
 					return;
 				}
 
-				if(response.data.pullTag)
+
+				if (response.data.hasOwnProperty('pullTag'))
 				{
-					BX.PULL.extendWatch(response.data.pullTag);
-					this.transFormationPromise = promise;
+					this.transformationPromise = promise;
+					this.registerTransformationHandler(response.data.pullTag);
 				}
 
-				if(response.data.html)
+				if (response.data.html)
 				{
 					this.previewHtml = response.data.html;
 					this.processPreviewHtml(response.data.html);
@@ -584,6 +757,7 @@
 
 		processPreviewHtml: function (previewHtml)
 		{
+			console.log('processPreviewHtml');
 			var html = BX.processHTML(previewHtml);
 
 			if (!this.contentNode)
@@ -609,6 +783,13 @@
 			if (this.previewScriptToProcess)
 			{
 				BX.ajax.processScripts(this.previewScriptToProcess);
+			}
+
+			var pdfContainer = this.contentNode.querySelector('.bx-pdf-container');
+			if (pdfContainer)
+			{
+				var height = Math.min(this.controller.getItemContainer().clientHeight, parseInt(pdfContainer.style.height, 10)) - 50;
+				pdfContainer.style.height = height + 'px';
 			}
 		}
 	};

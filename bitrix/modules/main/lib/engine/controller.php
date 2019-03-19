@@ -3,6 +3,8 @@
 namespace Bitrix\Main\Engine;
 
 
+use Bitrix\Main\Config\Configuration;
+use Bitrix\Main\Diag\ExceptionHandlerFormatter;
 use Bitrix\Main\Engine\Contract\Controllerable;
 use Bitrix\Main\Engine\Response\Converter;
 use Bitrix\Main\Error;
@@ -246,7 +248,9 @@ class Controller implements Errorable, Controllerable
 	{
 		$this->collectDebugInfo();
 
+		$e = null;
 		$result = null;
+
 		try
 		{
 			$this->sourceParametersList = $sourceParametersList;
@@ -286,15 +290,32 @@ class Controller implements Errorable, Controllerable
 		{
 			$this->runProcessingError($e);
 		}
+		finally
+		{
+			$this->processExceptionInDebug($e);
+		}
 
 		$this->logDebugInfo();
 
 		return $result;
 	}
 
-	final public function getFullEventName($eventName)
+	private function processExceptionInDebug($e)
 	{
-		return $this::className() . '::' . $eventName;
+		$exceptionHandling = Configuration::getValue('exception_handling');
+		if (!empty($exceptionHandling['debug']) && ($e instanceof \Throwable || $e instanceof \Exception))
+		{
+			$this->addError(new Error(ExceptionHandlerFormatter::format($e)));
+			if ($e->getPrevious())
+			{
+				$this->addError(new Error(ExceptionHandlerFormatter::format($e->getPrevious())));
+			}
+		}
+	}
+
+	final public static function getFullEventName($eventName)
+	{
+		return get_called_class() . '::' . $eventName;
 	}
 
 	/**
@@ -354,7 +375,7 @@ class Controller implements Errorable, Controllerable
 	{
 		$event = new Event(
 			'main',
-			$this->getFullEventName(static::EVENT_ON_BEFORE_ACTION),
+			static::getFullEventName(static::EVENT_ON_BEFORE_ACTION),
 			array(
 				'action' => $action,
 				'controller' => $this,
@@ -396,7 +417,7 @@ class Controller implements Errorable, Controllerable
 	{
 		$event = new Event(
 			'main',
-			$this->getFullEventName(static::EVENT_ON_AFTER_ACTION),
+			static::getFullEventName(static::EVENT_ON_AFTER_ACTION),
 			array(
 				'result' => $result,
 				'action' => $action,
@@ -628,7 +649,7 @@ class Controller implements Errorable, Controllerable
 
 			$eventManager->addEventHandler(
 				'main',
-				$this->getFullEventName(static::EVENT_ON_BEFORE_ACTION),
+				static::getFullEventName(static::EVENT_ON_BEFORE_ACTION),
 				array($filter, 'onBeforeAction')
 			);
 
@@ -647,7 +668,7 @@ class Controller implements Errorable, Controllerable
 
 			$eventManager->addEventHandler(
 				'main',
-				$this->getFullEventName(static::EVENT_ON_AFTER_ACTION),
+				static::getFullEventName(static::EVENT_ON_AFTER_ACTION),
 				array($filter, 'onAfterAction')
 			);
 		}
