@@ -41,6 +41,7 @@ if (Loader::includeModule('crm'))
 }
 
 // refresh block repo
+\Bitrix\Landing\Manager::getRestPath();
 \Bitrix\Landing\Block::getRepository();
 
 // check rights

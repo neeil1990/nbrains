@@ -42,7 +42,7 @@ create table if not exists b_landing_block
     PUBLIC char(1) not null default 'Y',
     DELETED char(1) not null default 'N',
     ACCESS char(1) not null default 'X',
-    CONTENT text not null,
+    CONTENT mediumtext not null,
     CREATED_BY_ID int(18) not null,
     MODIFIED_BY_ID int(18) not null,
     DATE_CREATE timestamp null,

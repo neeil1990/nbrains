@@ -17,4 +17,7 @@ $MESS["BX_TRANSLATE_IMPORT_ERR_ROW_LANG_ABSENT"] = "нет фразы для я�
 $MESS["BX_TRANSLATE_IMPORT_MESS_FILENAME"] = "файл #FILENAME#";
 $MESS["BX_TRANSLATE_IMPORT_MESS_PHRASE_CODE"] = "фраза #PHRASE#";
 $MESS["BX_TRANSLATE_IMPORT_ERR_BAD_FILEPATH"] = "Некорректный путь #FILE#";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_CREATE_BACKUP_LANG_FILE"] = "Не удалось создать бэкап файла #FILEPATH#";
+$MESS["BX_TRANSLATE_LIST_GROUP_ERR_CANNOT_REWRITE_LANG_FILE"] = "Не удалось перезаписать файл #FILEPATH#";
+$MESS["TR_CREATE_BACKUP_ERROR"] = "Не удалось создать бэкап файла \"%FILE%\"";
 ?>

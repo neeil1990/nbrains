@@ -433,7 +433,7 @@
 		enableCheckAllCheckboxes: function()
 		{
 			this.getCheckAllCheckboxes().forEach(function(checkbox) {
-				checkbox.getNode().disabled = true;
+				checkbox.getNode().disabled = false;
 			});
 		},
 

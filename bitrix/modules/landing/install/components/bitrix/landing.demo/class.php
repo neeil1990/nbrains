@@ -93,6 +93,7 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 		{
 			return true;
 		}
+
 		$landing = Landing::createInstance($landingId);
 		if ($landing->exist())
 		{
@@ -232,10 +233,7 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 			}
 			$data = $demo[$code]['DATA'];
 			$pageData = $data['fields'];
-			if ($demo[$code]['REST'] <= 0)
-			{
-				$pageData = $this->prepareAdditionalFieldsPage($pageData);
-			}
+			$pageData = $this->prepareAdditionalFieldsPage($pageData);
 			$pageData['SITE_ID'] = $siteId;
 			$pageData['ACTIVE'] = 'N';
 			$pageData['PUBLIC'] = 'N';
@@ -262,7 +260,6 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 					$blocks = array();
 					$blocksIds = array();
 					$blocksCodes = array();
-					$blocksAccess = array();
 					foreach ($data['items'] as $k => $block)
 					{
 						if (is_array($block))
@@ -304,10 +301,6 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 													: ''
 									)
 								);
-								if (isset($block['access']))
-								{
-									$blocksAccess[$blockId] = $block['access'];
-								}
 								$blocksIds[$block['old_id']] = $blockId;
 								$sort += 500;
 								$blocks[$blockId] = $k;
@@ -519,18 +512,6 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 						{
 							$block->saveContent($content);
 							$block->save();
-						}
-						if (
-							isset($blocksAccess[$block->getId()]) &&
-							$blocksAccess[$block->getId()] != \Bitrix\Landing\Block::ACCESS_X
-						)
-						{
-							\Bitrix\Landing\Internals\BlockTable::update(
-								$block->getId(),
-								[
-									'ACCESS' => $blocksAccess[$block->getId()]
-								]
-							);
 						}
 					}
 					return $landing->getId();
@@ -762,10 +743,7 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 			$data = $demo[$code]['DATA'];
 			$version = $data['version'];
 			$siteData = $data['fields'];
-			if ($demo[$code]['REST'] <= 0)
-			{
-				$siteData = $this->prepareAdditionalFieldsSite($siteData);
-			}
+			$siteData = $this->prepareAdditionalFieldsSite($siteData);
 			$siteData['DOMAIN_ID'] = $this->getDomainId();
 			$siteData['ACTIVE'] = 'N';
 			$siteData['CODE'] = str_replace(
@@ -794,8 +772,14 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 				)
 				{
 					$settings = Settings::getDataForSite();
-					// if shop section exist, save for site, else make import
-					$sectionId = $this->getParentCatalogSectionId($settings['IBLOCK_ID']);
+					// if shop section exist, save for site
+					$sectionXmlId = null;
+					if (!empty($additional) && is_array($additional))
+					{
+						if (!empty($additional['section']))
+							$sectionXmlId = $additional['section'];
+					}
+					$sectionId = $this->getParentCatalogSectionId($settings['IBLOCK_ID'], $sectionXmlId);
 					if ($sectionId !== null)
 					{
 						$siteData['ADDITIONAL_FIELDS']['SETTINGS_SECTION_ID'] = $sectionId;
@@ -1217,6 +1201,10 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 			$cacheId = 'demo_manifest';
 			$cacheId .= $subDir . LANGUAGE_ID . $this->arParams['TYPE'];
 			$cacheId .= 'b24partner' . Option::get('landing', 'b24partner', 'N');
+			if (Option::get('crm', 'import_instagram_enabled', 'Y') == 'Y')//tmp
+			{
+				$cacheId .= 'instagramY';
+			}
 			$cachePath = 'landing';
 			if ($cache->initCache($cacheTime, $cacheId, $cachePath))
 			{
@@ -1261,16 +1249,16 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 							0
 						);
 					}
-					$newShopEnabled = Option::get(
+					$instEnabled = Option::get(
 						'crm',
-						'crm_shop_enabled',
-						'N'
+						'import_instagram_enabled',
+						'Y'
 					) == 'Y';
 					$res = Json::decode($http->get(
 						$restSrc . 'landing_cloud.cloud.' . $command .
 						'?user_lang=' . LANGUAGE_ID .
 						'&type=' . $this->arParams['TYPE'] .
-						($newShopEnabled ? '&newshop=1' : '') .// tmp
+						($instEnabled ? '&inst=1' : '') .// tmp
 						(isset($partnerId) ? '&pv=2&partner_id=' . $partnerId : '')//tmp
 					));
 				}
@@ -2405,14 +2393,21 @@ class LandingSiteDemoComponent extends LandingBaseComponent
 			unset($_SESSION['LANDING_DEMO_STORAGE']);
 	}
 
-	private function getParentCatalogSectionId($iblockId)
+	/**
+	 * Gets parent section id for iblock id, if exists.
+	 * @param int $iblockId Iblock id.
+	 * @param string|null $xmlId Parent section external code.
+	 * @return int|null
+	 */
+	private function getParentCatalogSectionId($iblockId, $xmlId = null)
 	{
+		if (empty($xmlId))
+			$xmlId = '666';
 		$iterator = Iblock\SectionTable::getList([
 			'select' => ['ID'],
 			'filter' => [
 				'=IBLOCK_ID' => $iblockId,
-				'=CODE' => 'clothes',
-				'=XML_ID' => '666',
+				'=XML_ID' => $xmlId,
 			]
 		]);
 		$row = $iterator->fetch();

@@ -9,8 +9,8 @@ use Bitrix\Main\Localization\Loc;
 return array(
 	'code' => 'store-instagram/checkout',
 	'name' => Loc::getMessage("LANDING_DEMO_STORE_INSTAGRAM--CHECKOUT--NAME"),
-	'description' => null,
-	'active' => false,
+	'description' => Loc::getMessage("LANDING_DEMO_STORE_INSTAGRAM--CHECKOUT--NAME"),
+	'active' => true,
 	'preview' => '',
 	'preview2x' => '',
 	'preview3x' => '',
@@ -26,7 +26,13 @@ return array(
 			'VIEW_TYPE' => 'no',
 		),
 	),
-	'layout' => array(),
+	'layout' => array(
+		'code' => 'header_footer',
+		'ref' => array(
+			1 => 'store-instagram/header',
+			2 => 'store-instagram/footer',
+		),
+	),
 	'items' => array(
 		'#block7139' => array(
 			'code' => 'store.order',

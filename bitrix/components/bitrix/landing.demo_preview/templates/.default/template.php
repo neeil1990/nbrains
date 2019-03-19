@@ -4,6 +4,7 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 	die();
 }
 
+use Bitrix\Main\Loader;
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\UI\Extension;
 
@@ -37,7 +38,21 @@ if (!$template)
 	return;
 }
 
-$createStore = ($arParams['SITE_ID'] <= 0 && $template['TYPE'] == 'STORE');
+
+$createStore = false;
+$externalImport = ($arResult['TEMPLATE']['ID'] === 'store-instagram/mainpage' && Loader::includeModule('crm'));
+$externalImportPath = '';
+if ($externalImport)
+{
+	$externalImportPath = (string)\Bitrix\Main\Config\Option::get('crm', 'path_to_order_import_instagram');
+	if (empty($externalImportPath))
+		$externalImport = false;
+}
+if (!$externalImport)
+{
+	$createStore = ($arParams['SITE_ID'] <= 0 && $template['TYPE'] == 'STORE');
+}
+
 if ($createStore)
 {
 	$uriSelect = new \Bitrix\Main\Web\Uri($arResult['CUR_URI']);
@@ -51,14 +66,44 @@ if ($createStore)
 }
 else
 {
-	$uriSelect = new \Bitrix\Main\Web\Uri($arResult['CUR_URI']);
-	$uriSelect->addParams(array(
+	$uriData = array(
 		'action' => 'select',
 		'param' => isset($template['DATA']['parent'])
 			? $template['DATA']['parent']
 			: $template['ID'],
 		'sessid' => bitrix_sessid()
-	));
+	);
+	if ($externalImport)
+	{
+		//TODO: change to method from \Bitrix\Crm\Order\Import\Instagram - get section XML_ID
+		$uriData['additional'] = array('section' => 'instagram');
+	}
+	$uriSelect = new \Bitrix\Main\Web\Uri($arResult['CUR_URI']);
+	$uriSelect->addParams($uriData);
+	unset($uriData);
+}
+
+$importUrl = '';
+
+// removed dependency from crm instagram feature
+/** @see \Bitrix\Crm\Order\Import\Instagram::isSiteTemplateImportable */
+if ($externalImport)
+{
+	$uriCreate = new \Bitrix\Main\Web\Uri($externalImportPath);
+
+	$params = [
+		'create_url' => $uriSelect->getUri(),
+	];
+
+	if ($request->get('IFRAME') === 'Y')
+	{
+		$params['IFRAME'] = 'Y';
+		$params['IFRAME_TYPE'] = 'SIDE_SLIDER';
+	}
+
+	$uriCreate->addParams($params);
+
+	$importUrl = $uriCreate->getUri();
 }
 ?>
 <div class="landing-template-preview-body">
@@ -93,7 +138,7 @@ else
                     </div>
 
 					<?if ($template['URL_PREVIEW']):?>
-                    <div class="landing-template-preview-settings"<?= $template['REST'] > 0 ? ' style="display: none;"' : '';?>>
+                    <div class="landing-template-preview-settings">
                         <div class="landing-template-preview-header">
 							<?= Loc::getMessage('LANDING_TPL_HEADER_COLOR');?>
                         </div>
@@ -110,7 +155,7 @@ else
 									 ?>style="background-color: <?= $color['color'];?>;"><span></span></div>
 							<?endforeach;?>
 						</div>
-	
+
 						<? // add USE SITE COLOR setting only for adding page in exist site?>
 						<? // always ACTIVE by default!?>
 						<? if ($arParams['SITE_ID']): ?>
@@ -139,7 +184,22 @@ else
         <div class="<?if ($request->get('IFRAME') == 'Y'){?>landing-edit-footer-fixed <?}?>pinable-block">
             <div class="landing-form-footer-container">
 			<?
-			if ($createStore)
+			if ($externalImport)
+			{
+				?>
+				<a href="<?=$importUrl;?>"
+						class="ui-btn ui-btn-success landing-template-preview-create-by-import"
+						data-create-url="<?=$uriSelect->getUri();?>"
+						value="<?=Loc::getMessage('LANDING_TPL_BUTTON_CREATE');?>">
+					<?=Loc::getMessage('LANDING_TPL_BUTTON_CREATE');?>
+				</a>
+				<span href="<?= $uriSelect->getUri(); ?>" class="ui-btn ui-btn-success landing-template-preview-create"
+						title="<?= Loc::getMessage('LANDING_TPL_BUTTON_CREATE'); ?>" style="display: none;">
+					<?= Loc::getMessage('LANDING_TPL_BUTTON_CREATE'); ?>
+				</span>
+				<?
+			}
+			elseif ($createStore)
 			{
 				?>
 				<span data-href="<?= $uriSelect->getUri(); ?>" class="ui-btn ui-btn-success landing-template-preview-create"
@@ -160,7 +220,7 @@ else
 			?>
 			<span class="ui-btn ui-btn-md ui-btn-link landing-template-preview-close">
 					<?= Loc::getMessage('LANDING_TPL_BUTTON_CANCEL');?>
-                </span>
+				</span>
             </div>
         </div>
     </div>
@@ -169,7 +229,7 @@ else
 <?if ($template['URL_PREVIEW']):?>
 <script type="text/javascript">
 	// Force init template preview layout
-	BX.Landing.TemplatePreview.getInstance({
+	BX.Landing.TemplatePreviewInstance = BX.Landing.TemplatePreview.getInstance({
 		createStore: <?=($createStore ? 'true' : 'false'); ?>,
 		messages: {
 			LANDING_LOADER_WAIT: "<?= \CUtil::jsEscape(Loc::getMessage('LANDING_LOADER_WAIT'));?>"

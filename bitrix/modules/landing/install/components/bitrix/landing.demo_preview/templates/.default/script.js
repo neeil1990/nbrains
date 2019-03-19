@@ -23,6 +23,7 @@
 	{
 		this.closeButton = document.querySelector(".landing-template-preview-close");
 		this.createButton = document.querySelector(".landing-template-preview-create");
+		this.createByImportButton = document.querySelector(".landing-template-preview-create-by-import");
 		this.palette = document.querySelector(".landing-template-preview-palette");
 		this.paletteSiteColor = document.querySelector(".landing-template-preview-palette-sitecolor");
 		this.imageContainer = document.querySelector(".preview-desktop-body-image");
@@ -45,6 +46,8 @@
 		this.onFrameLoad = proxy(this.onFrameLoad, this);
 
 		this.init();
+
+		return this;
 	};
 
 	/**
@@ -346,6 +349,22 @@
 				removeClass(this.getActiveColorNode(), "active");
 				addClass(event.currentTarget, "active");
 				this.showPreview(data(this.getActiveColorNode(), "data-src"));
+			}
+
+			if (BX.type.isDomNode(this.createByImportButton))
+			{
+				this.createByImportButton.setAttribute(
+					'href',
+					addQueryParams(
+						this.createByImportButton.getAttribute('href'),
+						{
+							"create_url": BX.util.urlencode(addQueryParams(
+								this.createByImportButton.getAttribute("data-create-url"),
+								this.getValue()
+							))
+						}
+					)
+				);
 			}
 		},
 

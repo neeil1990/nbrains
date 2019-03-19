@@ -59,6 +59,7 @@ if (isset($landing))
 				"HIDE_ORDER_DESCRIPTION" => "Y",
 				"USE_CUSTOM_MAIN_MESSAGES" => "Y",
 				"MESS_REGION_BLOCK_NAME" => Loc::getMessage('LANDING_BLOCK_STORE_ORDER--REGION_NAME'),
+				"NO_PERSONAL" => !isset($syspages['personal']) ? 'Y' : 'N',
 			),
 			false
 		);?>

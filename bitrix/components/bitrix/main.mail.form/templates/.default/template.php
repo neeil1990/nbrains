@@ -334,10 +334,6 @@ $renderField = function($htmlFormId, $field, $isExt = false)
 
 <script type="text/javascript">
 
-BX.message({
-	BXEdBbCode: '<?=\CUtil::jsEscape(getMessage('MAIN_MAIL_FORM_EDITOR_HTML_MODE_BTN_HINT')) ?>'
-});
-
 BX.ready(function()
 {
 	var form = new BXMainMailForm(
