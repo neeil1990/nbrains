@@ -202,7 +202,7 @@
 										&& BX.util.in_array(file.type, ['gif','jpg','jpeg','png','jpe','bmp'])
 									) // only one image in the attachment
 									{
-										text += "[DISK FILE ID=" + (file.fieldValue ? file.fieldValue : "n" + file.fileId) + "]";
+										text += "\n[DISK FILE ID=" + (file.fieldValue ? file.fieldValue : "n" + file.fileId) + "]";
 									}
 								}
 							}
@@ -448,7 +448,7 @@
 						this.writingParams.text += e.text;
 						this.writingParams["~text"] = e.text;
 
-						window.BXMobileApp.onCustomEvent("main.post.form/text", [e.text], true, true);
+						BX.onCustomEvent("main.post.form/text", [e.text]);
 
 						if (this.writingParams.text.length > 4)
 						{

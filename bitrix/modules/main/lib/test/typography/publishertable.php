@@ -22,7 +22,11 @@ class PublisherTable extends DataManager
 {
 	public static function getTableName()
 	{
-		return '(SELECT 253 AS ID, "Publisher Title 253" AS TITLE)';
+		return '(
+			(SELECT 253 AS ID, "Publisher Title 253" AS TITLE)
+			UNION
+			(SELECT 254 AS ID, "Publisher Title 254" AS TITLE)
+		)';
 	}
 
 	public static function getMap()

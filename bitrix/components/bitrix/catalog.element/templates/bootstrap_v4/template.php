@@ -299,10 +299,15 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 			</div>
 		</div>
 
-		<div class="<?=($haveOffers ? "col-md-5 col-lg-6" : "col-md-4"); ?>">
+		<?
+		$showOffersBlock = $haveOffers && !empty($arResult['OFFERS_PROP']);
+		$showPropsBlock = !empty($arResult['DISPLAY_PROPERTIES']) || $arResult['SHOW_OFFERS_PROPS'];
+		$showBlockWithOffersAndProps = $showOffersBlock || $showPropsBlock;
+		?>
+		<div class="<?=($showBlockWithOffersAndProps ? "col-md-5 col-lg-6" : "col-md-4"); ?>">
 			<div class="row">
 				<?
-				if ($haveOffers)
+				if ($showBlockWithOffersAndProps)
 				{
 				?>
 				<div class="col-lg-5">
@@ -312,7 +317,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 						switch ($blockName)
 						{
 							case 'sku':
-								if ($haveOffers && !empty($arResult['OFFERS_PROP']))
+								if ($showOffersBlock)
 								{
 									?>
 									<div class="mb-3" id="<?=$itemIds['TREE_ID']?>">
@@ -385,7 +390,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 								break;
 
 							case 'props':
-								if (!empty($arResult['DISPLAY_PROPERTIES']) || $arResult['SHOW_OFFERS_PROPS'])
+								if ($showPropsBlock)
 								{
 									?>
 									<div class="mb-3">
@@ -436,7 +441,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 				<?
 				}
 				?>
-				<div class="<?=($haveOffers ? "col-lg-7" : "col-lg"); ?>">
+				<div class="<?=($showBlockWithOffersAndProps ? "col-lg-7" : "col-lg"); ?>">
 					<div class="product-item-detail-pay-block">
 						<?
 						foreach ($arParams['PRODUCT_PAY_BLOCK_ORDER'] as $blockName)
@@ -1054,7 +1059,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 						'POTENTIAL_PRODUCT_TO_BUY' => array(
 							'ID' => isset($arResult['ID']) ? $arResult['ID'] : null,
 							'MODULE' => isset($arResult['MODULE']) ? $arResult['MODULE'] : 'catalog',
-							'PRODUCT_PROVIDER_CLASS' => isset($arResult['PRODUCT_PROVIDER_CLASS']) ? $arResult['PRODUCT_PROVIDER_CLASS'] : 'CCatalogProductProvider',
+							'PRODUCT_PROVIDER_CLASS' => isset($arResult['~PRODUCT_PROVIDER_CLASS']) ? $arResult['~PRODUCT_PROVIDER_CLASS'] : '\Bitrix\Catalog\Product\CatalogProvider',
 							'QUANTITY' => isset($arResult['QUANTITY']) ? $arResult['QUANTITY'] : null,
 							'IBLOCK_ID' => isset($arResult['IBLOCK_ID']) ? $arResult['IBLOCK_ID'] : null,
 
@@ -1150,7 +1155,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 							'POTENTIAL_PRODUCT_TO_BUY' => array(
 								'ID' => isset($arResult['ID']) ? $arResult['ID'] : null,
 								'MODULE' => isset($arResult['MODULE']) ? $arResult['MODULE'] : 'catalog',
-								'PRODUCT_PROVIDER_CLASS' => isset($arResult['PRODUCT_PROVIDER_CLASS']) ? $arResult['PRODUCT_PROVIDER_CLASS'] : 'CCatalogProductProvider',
+								'PRODUCT_PROVIDER_CLASS' => isset($arResult['~PRODUCT_PROVIDER_CLASS']) ? $arResult['~PRODUCT_PROVIDER_CLASS'] : '\Bitrix\Catalog\Product\CatalogProvider',
 								'QUANTITY' => isset($arResult['QUANTITY']) ? $arResult['QUANTITY'] : null,
 								'IBLOCK_ID' => isset($arResult['IBLOCK_ID']) ? $arResult['IBLOCK_ID'] : null,
 
@@ -1633,7 +1638,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 					? $arResult['DISPLAY_PROPERTIES'][$arParams['BRAND_PROPERTY']]['DISPLAY_VALUE']
 					: null
 			),
-			'PRODUCT_TYPE' => $arResult['CATALOG_TYPE'],
+			'PRODUCT_TYPE' => $arResult['PRODUCT']['TYPE'],
 			'VISUAL' => $itemIds,
 			'DEFAULT_PICTURE' => array(
 				'PREVIEW_PICTURE' => $arResult['DEFAULT_PICTURE'],
@@ -1766,7 +1771,7 @@ $themeClass = isset($arParams['TEMPLATE_THEME']) ? ' bx-'.$arParams['TEMPLATE_TH
 					: null
 			),
 			'VISUAL' => $itemIds,
-			'PRODUCT_TYPE' => $arResult['CATALOG_TYPE'],
+			'PRODUCT_TYPE' => $arResult['PRODUCT']['TYPE'],
 			'PRODUCT' => array(
 				'ID' => $arResult['ID'],
 				'ACTIVE' => $arResult['ACTIVE'],

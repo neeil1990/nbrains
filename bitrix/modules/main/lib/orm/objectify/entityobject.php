@@ -1235,7 +1235,9 @@ abstract class EntityObject implements \ArrayAccess
 				));
 			}
 
-			return $this->_actualValues[$fieldName];
+			return isset($this->_actualValues[$fieldName])
+				? $this->_actualValues[$fieldName]
+				: null;
 		}
 	}
 
@@ -1865,7 +1867,7 @@ abstract class EntityObject implements \ArrayAccess
 	 */
 	public function offsetExists($offset)
 	{
-		return $this->entity->hasField($offset);
+		return $this->sysHasValue($offset) && $this->sysGetValue($offset) !== null;
 	}
 
 	/**

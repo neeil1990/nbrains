@@ -386,6 +386,7 @@
 	max-width: 100%;
 	background: transparent;
 	transition: background 800ms ease;
+	z-index:90;
 }
 
 .product-item-detail-slider-block {

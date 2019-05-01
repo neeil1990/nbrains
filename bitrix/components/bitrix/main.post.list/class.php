@@ -730,6 +730,9 @@ HTML;
 			}
 		}
 
+		$viewUri = new \Bitrix\Main\Web\Uri(htmlspecialcharsback(str_replace(array("#ID#", "#id#"), $res["ID"], $arParams["VIEW_URL"])));
+		$viewUri->deleteParams(['b24statAction']);
+
 		$replacement = array(
 			"#ID#" =>
 				$res["ID"],
@@ -752,7 +755,7 @@ HTML;
 			"#VOTE_ID#" =>
 				(is_array($res["RATING"]) ? $res["RATING"]["VOTE_ID"] : ""),
 			"#VIEW_URL#" =>
-				str_replace(array("#ID#", "#id#"), $res["ID"], $arParams["VIEW_URL"]),
+				$viewUri->getUri(),
 			"#VIEW_SHOW#" =>
 				($arParams["VIEW_URL"] == "" ? "N" : "Y"),
 			"#EDIT_URL#" =>
@@ -1018,6 +1021,44 @@ HTML;
 				ExecuteModuleEventEx($arEvent, array(&$output, &$this->arParams, &$this->arResult));
 			}
 			$this->sendIntoPull($this->arParams, $this->arResult);
+
+			if (
+				$this->scope == self::STATUS_SCOPE_MOBILE
+				&& strtolower($this->getMode()) == 'plain'
+				&& is_array($this->arParams['RECORDS'])
+				&& !empty($this->arParams['RECORDS'])
+				&& !empty($this->arParams['IS_POSTS_LIST'])
+				&& $this->arParams['IS_POSTS_LIST'] == "N"
+				&& Loader::includeModule('socialnetwork')
+			)
+			{
+				$contentEntityType = (
+					!empty($this->arParams["RATING_TYPE_ID"])
+						? $this->arParams["RATING_TYPE_ID"]
+						: (
+							!empty($this->arParams["CONTENT_TYPE_ID"])
+								? $this->arParams["CONTENT_TYPE_ID"]
+								: ''
+							)
+				);
+
+				foreach($this->arParams['RECORDS'] as $key => $record)
+				{
+					if (!empty($contentEntityType))
+					{
+						$provider = \Bitrix\Socialnetwork\Livefeed\Provider::init([
+							'ENTITY_TYPE' => $contentEntityType,
+							'ENTITY_ID' => $record["ID"],
+						]);
+						if ($provider)
+						{
+							$provider->setContentView(array(
+								'save' => false
+							));
+						}
+					}
+				}
+			}
 
 			if ($this->arParams["MODE"] == "PULL_MESSAGE")
 			{

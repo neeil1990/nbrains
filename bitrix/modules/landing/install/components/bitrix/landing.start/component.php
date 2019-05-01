@@ -287,7 +287,7 @@ if (
 	if (!$res->fetch())
 	{
 		SiteTemplateTable::add(array(
-			'TEMPLATE' => Manager::getOption('site_template_id'),
+			'TEMPLATE' => Manager::getTemplateId(SITE_ID),
 			'SITE_ID' => SITE_ID,
 			'SORT' => 500,
 			'CONDITION' => $condition

@@ -97,7 +97,10 @@ BX.TileGrid.Grid.prototype =
 				this.handleBackspace();
 			}
 
-			this.handleEnter(event);
+			if (this.isFocusOnTile())
+			{
+				this.handleEnter(event);
+			}
 
 		}.bind(this));
 		BX.bind(window, 'keyup', function(event) {
@@ -482,7 +485,7 @@ BX.TileGrid.Grid.prototype =
 	showLoader: function()
 	{
 		this.loader.show();
-		
+
 		if(this.container.getBoundingClientRect().top < 0)
 		{
 			var positionTop = this.container.getBoundingClientRect().top * -1 + BX.pos(this.container).top;

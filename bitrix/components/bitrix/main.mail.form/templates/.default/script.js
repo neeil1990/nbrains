@@ -38,7 +38,7 @@
 	{
 		var form = this;
 
-		var footer = BX.findChildByClassName(this.formWrapper, 'main-mail-form-footer', false);
+		var footer = BX.findChildByClassName(this.formWrapper, 'main-mail-form-footer', false) || this.footerNode;
 		var button = BX.findChildByClassName(footer, 'main-mail-form-submit-button', true);
 
 		if (button.disabled)
@@ -251,6 +251,8 @@
 		var footerWrapper = BX.findChildByClassName(this.formWrapper, 'main-mail-form-footer-wrapper', true);
 		var footer = BX.findChildByClassName(footerWrapper, 'main-mail-form-footer', false);
 
+		this.footerNode = footer;
+
 		var footerButtons = BX.findChildrenByClassName(footer, 'main-mail-form-footer-button', true);
 		for (var i in footerButtons)
 		{
@@ -274,6 +276,7 @@
 				footer.style.left = '';
 				footer.style.width = '';
 				footerWrapper.style.height = '';
+				footerWrapper.appendChild(footer);
 			}
 		};
 
@@ -297,6 +300,7 @@
 							BX.addClass(footer, 'main-mail-form-footer-fixed-hidden');
 						footerWrapper.style.height = footerWrapper.offsetHeight+'px';
 						BX.addClass(footer, 'main-mail-form-footer-fixed');
+						document.body.appendChild(footer);
 					}
 
 					var editorWrapper = BX.findChildByClassName(form.formWrapper, 'main-mail-form-editor-wrapper', true);
@@ -312,6 +316,25 @@
 			resetFooter();
 		};
 
+		var scrollableObserver = new MutationObserver(function ()
+		{
+			form.initScrollable();
+
+			if (form.__scrollable)
+			{
+				var state = [
+					form.__scrollable.scrollHeight,
+					form.__scrollable.scrollTop
+				].join(':');
+
+				if (form.__scrollable.__lastState != state)
+				{
+					form.__scrollable.__lastState = state;
+
+					positionFooter();
+				}
+			}
+		});
 		var startMonitoring = function ()
 		{
 			setTimeout(function ()
@@ -319,6 +342,15 @@
 				if (!form.__footerMonitoring)
 				{
 					form.__footerMonitoring = true;
+
+					scrollableObserver.observe(
+						document.body,
+						{
+							attributes: true,
+							childList: true,
+							subtree: true
+						}
+					);
 
 					BX.bind(window, 'resize', positionFooter);
 					BX.bind(window, 'scroll', positionFooter);
@@ -331,6 +363,8 @@
 		var stopMonitoring = function ()
 		{
 			form.__footerMonitoring = false;
+
+			scrollableObserver.disconnect();
 
 			BX.unbind(window, 'resize', positionFooter);
 			BX.unbind(window, 'scroll', positionFooter);

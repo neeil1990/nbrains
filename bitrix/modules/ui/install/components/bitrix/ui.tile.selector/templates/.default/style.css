@@ -177,6 +177,9 @@
 	opacity: 1;
 }
 
+.ui-tile-selector-item-readonly-yes .ui-tile-selector-item-remove {
+	display: none;
+}
 
 /*** SEARCHER ***/
 
@@ -342,4 +345,19 @@
 		stroke-dasharray: 89, 200;
 		stroke-dashoffset: -124px;
 	}
+}
+
+.ui-tile-selector-selector-mask {
+	z-index: 10000;
+	position: absolute;
+	display: none;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	outline: 1px dashed #f00;
+	background-color: rgba(255,255,255,.5);
+}
+.ui-tile-selector-selector-mask-active {
+	display: block;
 }

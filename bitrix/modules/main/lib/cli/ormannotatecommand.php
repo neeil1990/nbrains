@@ -8,6 +8,7 @@
 
 namespace Bitrix\Main\Cli;
 
+use Bitrix\Iblock\IblockTable;
 use Bitrix\Main\Application;
 use Bitrix\Main\Authentication\Context;
 use Bitrix\Main\Loader;
@@ -97,6 +98,9 @@ class OrmAnnotateCommand extends Command
 				))
 			)
 		;
+
+		// disable Loader::requireModule exception
+		Loader::setRequireThrowException(false);
 	}
 
 	protected function execute(InputInterface $input, OutputInterface $output)
@@ -129,6 +133,9 @@ class OrmAnnotateCommand extends Command
 		{
 			$this->scanDir($dir, $input, $output);
 		}
+
+		// get classes from outside regular filesystem (e.g. iblock, hlblock)
+		$this->handleVirtualClasses($inputModules, $input, $output);
 
 		// output file path
 		$filePath = $input->getArgument('output');
@@ -277,16 +284,20 @@ class OrmAnnotateCommand extends Command
 				{
 					include_once $item->getPathname();
 					$this->filesIncluded++;
+
+					$classes = array_diff(get_declared_classes(), $classes);
+
+					// check classes
+					$this->handleClasses($classes, $input, $output);
 				}
-				catch (\Exception $e)
+				catch (\Throwable $e) // php7
 				{
-					throw  $e;
+					$this->debug($output, $e->getMessage());
 				}
-
-				$classes = array_diff(get_declared_classes(), $classes);
-
-				// check classes
-				$this->handleClasses($classes, $input, $output);
+				catch (\Exception $e) // php5
+				{
+					$this->debug($output, $e->getMessage());
+				}
 			}
 		}
 	}
@@ -315,24 +326,16 @@ class OrmAnnotateCommand extends Command
 		$objectClass = $entity->getObjectClass();
 		$objectClassName = $entity->getObjectClassName();
 		$objectDefaultClassName = Entity::getDefaultObjectClassName($entity->getName());
-		$objectNamespace =  trim(
-			substr($objectClass, 0, strrpos($objectClass, '\\')),
-			'\\'
-		);
 
 		$collectionClass = $entity->getCollectionClass();
 		$collectionClassName = $entity->getCollectionClassName();
 		$collectionDefaultClassName = Entity::getDefaultCollectionClassName($entity->getName());
-		$collectionNamespace =  trim(
-			substr($collectionClass, 0, strrpos($collectionClass, '\\')),
-			'\\'
-		);
 
 		$code = [];
 		$objectCode = [];
 		$collectionCode = [];
 
-		$code[] = "namespace {$objectNamespace} {"; // start namespace
+		$code[] = "namespace {$entityNamespace} {"; // start namespace
 		$code[] = "\t/**"; // start class annotations
 		$code[] = "\t * {$objectClassName}";
 		$code[] = "\t * @see {$dataClass}";
@@ -397,7 +400,7 @@ class OrmAnnotateCommand extends Command
 		$code[] = "\t * @method void addTo(\$fieldName, \$value)";
 		$code[] = "\t * @method void removeFrom(\$fieldName, \$value)";
 		$code[] = "\t * @method void removeAll(\$fieldName)";
-		$code[] = "\t * @method void delete()";
+		$code[] = "\t * @method \\".Result::class." delete()";
 		$code[] = "\t * @method void fill(\$fields = \\".FieldTypeMask::class."::ALL) flag or array of field names";
 		$code[] = "\t * @method mixed[] collectValues(\$valuesType = \Bitrix\Main\ORM\Objectify\Values::ALL, \$fieldsMask = \Bitrix\Main\ORM\Fields\FieldTypeMask::ALL)";
 		$code[] = "\t * @method \\".AddResult::class."|\\".UpdateResult::class."|\\".Result::class." save()";
@@ -424,7 +427,7 @@ class OrmAnnotateCommand extends Command
 		$code[] = "}"; // end namespace
 
 		// annotate collection class
-		$code[] = "namespace {$collectionNamespace} {"; // start namespace
+		$code[] = "namespace {$entityNamespace} {"; // start namespace
 		$code[] = "\t/**";
 		$code[] = "\t * {$collectionClassName}";
 		$code[] = "\t *";
@@ -445,9 +448,10 @@ class OrmAnnotateCommand extends Command
 		$code[] = "\t * @method {$objectClass} getByPrimary(\$primary)";
 		$code[] = "\t * @method {$objectClass}[] getAll()";
 		$code[] = "\t * @method bool remove({$objectClass} \$object)";
+		$code[] = "\t * @method void removeByPrimary(\$primary)";
 		$code[] = "\t * @method void fill(\$fields = \\".FieldTypeMask::class."::ALL) flag or array of field names";
 		$code[] = "\t * @method static {$collectionClass} wakeUp(\$data)";
-		$code[] = "\t * @method void save(\$ignoreEvents = false)";
+		$code[] = "\t * @method \\".Result::class." save(\$ignoreEvents = false)";
 		$code[] = "\t * @method void offsetSet() ArrayAccess";
 		$code[] = "\t * @method void offsetExists() ArrayAccess";
 		$code[] = "\t * @method void offsetUnset() ArrayAccess";
@@ -495,7 +499,7 @@ class OrmAnnotateCommand extends Command
 		$code[] = "\t * @method static {$objectClass} wakeUpObject(\$row)";
 		$code[] = "\t * @method static {$collectionClass} wakeUpCollection(\$rows)";
 		$code[] = "\t */";
-		$code[] = "\tclass {$dataClassName} {}";
+		$code[] = "\tclass {$dataClassName} extends \\".DataManager::class." {}";
 
 		$code[] = "\t/**";
 		$code[] = "\t * @method {$resultClassName} exec()";
@@ -508,7 +512,7 @@ class OrmAnnotateCommand extends Command
 		$code[] = "\t * @method {$objectClass} fetchObject()";
 		$code[] = "\t * @method {$collectionClass} fetchCollection()";
 		$code[] = "\t */";
-		$code[] = "\tclass {$resultClassName} {}";
+		$code[] = "\tclass {$resultClassName} extends \\".\Bitrix\Main\ORM\Query\Result::class." {}";
 
 		$code[] = "\t/**";
 		$code[] = "\t * @method {$objectClass} createObject(\$setDefaultValues = true)";
@@ -516,7 +520,7 @@ class OrmAnnotateCommand extends Command
 		$code[] = "\t * @method {$objectClass} wakeUpObject(\$row)";
 		$code[] = "\t * @method {$collectionClass} wakeUpCollection(\$rows)";
 		$code[] = "\t */";
-		$code[] = "\tclass {$entityClassName} {}";
+		$code[] = "\tclass {$entityClassName} extends \\".Entity::class." {}";
 
 		$code[] = "}"; // end namespace
 
@@ -741,6 +745,28 @@ class OrmAnnotateCommand extends Command
 		}
 
 		return true;
+	}
+
+	/**
+	 * Builds annotation for classes outside regular filesystem (e.g. iblock, hlblock)
+	 *
+	 * @param array           $inputModules
+	 * @param InputInterface  $input
+	 * @param OutputInterface $output
+	 */
+	protected function handleVirtualClasses($inputModules, InputInterface $input, OutputInterface $output)
+	{
+		// remember current classes
+		$classes = get_declared_classes();
+
+		// init new classes by event
+		$event = new \Bitrix\Main\Event("main", "onVirtualClassBuildList", [], $inputModules);
+		$event->send();
+
+		// no need to handle event result, get classes from the memory
+		$classes = array_diff(get_declared_classes(), $classes);
+
+		$this->handleClasses($classes, $input, $output);
 	}
 
 	protected static function getFieldNameCamelCase($fieldName)

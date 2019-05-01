@@ -1,11 +1,14 @@
 <?php
-use \Bitrix\Main\Config\Option;
+use Bitrix\Landing\Manager;
 
 $pathJS = '/bitrix/js/landing';
 $pathTemplate24 = '/bitrix/templates/';
-$pathTemplate24 .= \Bitrix\Main\Config\Option::get('landing', 'site_template_id', 'landing24');
+$pathTemplate24 .= Manager::getTemplateId(
+	Manager::getMainSiteId()
+);
 $pathCSS = '/bitrix/js/landing/css';
 $pathLang = BX_ROOT . '/modules/landing/lang/' . LANGUAGE_ID;
+
 
 $jsConfig = array(
 	'landing_master' => array(
@@ -278,6 +281,7 @@ $jsConfig = array(
 
 	'map_provider' => array(
 		'js' => array(
+			$pathJS . '/utils.js',
 			$pathJS . '/collection/base_collection.js',
 			$pathJS . '/provider/map/base-map-provider.js',
 			$pathJS . '/provider/map/google-map.js',
@@ -337,7 +341,7 @@ $jsConfig = array(
 	'landing_core' => array(
 		'js' => array(
 			$pathJS . '/utils.js',
-			$pathTemplate24 . '/assets/vendor/vendors_base.js',
+			//$pathTemplate24 . '/assets/vendor/vendors_base.js',
 			$pathTemplate24 . '/assets/js/helpers/onscroll-animation_init.js',
 			$pathTemplate24 . '/assets/js/helpers/go_to_init.js',
 			$pathTemplate24 . '/assets/js/helpers/popup_init.js',
@@ -367,21 +371,12 @@ $jsConfig = array(
 		'js' => array(
 			$pathTemplate24 . '/assets/js/helpers/form_init.js',
 		),
-		'lang' => $pathLang . '/js/landing_master.php',
+		'lang' => $pathLang . '/js/webform_alerts.php',
 	),
 
 	'landing_gallery_cards' => array(
 		'js' => array(
 			$pathTemplate24 . '/assets/js/helpers/gallery_cards_init.js',
-		),
-		'rel' => array('landing_core'),
-	),
-
-	'landing_google_map' => array(
-		'js' => array(
-			$pathTemplate24 . '/assets/vendor/gmaps/gmaps.js',
-			$pathTemplate24 . '/assets/js/components/hs.map.js',
-			$pathTemplate24 . '/assets/js/helpers/gmap_init.js',
 		),
 		'rel' => array('landing_core'),
 	),
@@ -425,13 +420,6 @@ $jsConfig = array(
 		'rel' => array('landing_core'),
 	),
 	
-	'landing_rating' => array(
-		'js' => array(
-			$pathTemplate24 . '/assets/js/components/hs.rating.js',
-			$pathTemplate24 . '/assets/js/helpers/rating_init.js',
-		),
-		'rel' => array('landing_core'),
-	),
 	'landing_google_maps_new' => array(
 		'js' => array(
 			$pathTemplate24 . '/assets/js/helpers/google_maps_new.js'
@@ -444,5 +432,5 @@ $jsConfig = array(
 
 foreach ($jsConfig as $code => $ext)
 {
-	\CJSCore::RegisterExt($code, $ext);
+	\CJSCore::registerExt($code, $ext);
 }

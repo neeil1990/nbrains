@@ -18,8 +18,14 @@ if(!Loader::includeModule('iblock'))
 }
 
 $FILTER_NAME = (string)$arParams["FILTER_NAME"];
+$PREFILTER_NAME = (string)$arParams["PREFILTER_NAME"];
 
-if($this->StartResultCache(false, 'v9'.($arParams["CACHE_GROUPS"]? $USER->GetGroups(): false)))
+global ${$PREFILTER_NAME};
+$preFilter = ${$PREFILTER_NAME};
+if (!is_array($preFilter))
+	$preFilter = array();
+
+if($this->StartResultCache(false, array('v10', $preFilter, ($arParams["CACHE_GROUPS"]? $USER->GetGroups(): false))))
 {
 	$arResult["FACET_FILTER"] = false;
 	$arResult["COMBO"] = array();
@@ -42,7 +48,9 @@ if($this->StartResultCache(false, 'v9'.($arParams["CACHE_GROUPS"]? $USER->GetGro
 				"CHECK_PERMISSIONS" => "Y",
 			);
 			if ($this->arParams['HIDE_NOT_AVAILABLE'] == 'Y')
-				$arResult["FACET_FILTER"]['CATALOG_AVAILABLE'] = 'Y';
+				$arResult["FACET_FILTER"]['AVAILABLE'] = 'Y';
+			if (!empty($preFilter))
+				$arResult["FACET_FILTER"] = array_merge($preFilter, $arResult["FACET_FILTER"]);
 
 			$cntProperty = 0;
 			$tmpProperty = array();
@@ -147,7 +155,9 @@ if($this->StartResultCache(false, 'v9'.($arParams["CACHE_GROUPS"]? $USER->GetGro
 				"CHECK_PERMISSIONS" => "Y",
 			);
 			if ('Y' == $this->arParams['HIDE_NOT_AVAILABLE'])
-				$arElementFilter['CATALOG_AVAILABLE'] = 'Y';
+				$arElementFilter['AVAILABLE'] = 'Y';
+			if (!empty($preFilter))
+				$arElementFilter = array_merge($preFilter, $arElementFilter);
 
 			$arElements = array();
 
@@ -174,7 +184,7 @@ if($this->StartResultCache(false, 'v9'.($arParams["CACHE_GROUPS"]? $USER->GetGro
 					"=PROPERTY_".$this->SKU_PROPERTY_ID => array_keys($arElements),
 				);
 				if ($this->arParams['HIDE_NOT_AVAILABLE'] == 'Y')
-					$arSkuFilter['CATALOG_AVAILABLE'] = 'Y';
+					$arSkuFilter['AVAILABLE'] = 'Y';
 
 				$rsElements = CIBlockElement::GetPropertyValues($this->SKU_IBLOCK_ID, $arSkuFilter, false, array('ID' => $this->arResult["SKU_PROPERTY_ID_LIST"]));
 				while($arSku = $rsElements->Fetch())
@@ -236,8 +246,10 @@ if($this->StartResultCache(false, 'v9'.($arParams["CACHE_GROUPS"]? $USER->GetGro
 			{
 				if (!$value['CAN_VIEW'] && !$value['CAN_BUY'])
 					continue;
-				$arSelect[] = $value["SELECT"];
-				$arFilter["CATALOG_SHOP_QUANTITY_".$value["ID"]] = 1;
+				$arSelect = array_merge($arSelect, $value["SELECT_EXTENDED"]);
+				$arElementFilter["DEFAULT_PRICE_FILTER_".$value["ID"]] = 1;
+				if (isset($arSkuFilter))
+					$arSkuFilter["DEFAULT_PRICE_FILTER_".$value["ID"]] = 1;
 			}
 			unset($value);
 
@@ -826,6 +838,8 @@ else
 if(isset($_REQUEST["ajax"]) && $_REQUEST["ajax"] === "y")
 {
 	$arFilter = $this->makeFilter($FILTER_NAME);
+	if (!empty($preFilter))
+		$arFilter = array_merge($preFilter, $arFilter);
 	$arResult["ELEMENT_COUNT"] = CIBlockElement::GetList(array(), $arFilter, array(), false);
 
 	if (isset($_GET["bxajaxid"]))

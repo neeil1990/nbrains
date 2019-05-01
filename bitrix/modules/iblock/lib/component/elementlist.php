@@ -735,7 +735,7 @@ abstract class ElementList extends Base
 			$priceFilter = array();
 			foreach ($this->globalFilter as $key => $value)
 			{
-				if (preg_match('/^(>=|<=|><)CATALOG_PRICE_/', $key))
+				if (\CProductQueryBuilder::isPriceFilterField($key))
 				{
 					$priceFilter[$key] = $value;
 					unset($this->globalFilter[$key]);
@@ -754,7 +754,7 @@ abstract class ElementList extends Base
 
 				if ($this->arParams['HIDE_NOT_AVAILABLE'] === 'Y')
 				{
-					$this->storage['SUB_FILTER']['CATALOG_AVAILABLE'] = 'Y';
+					$this->storage['SUB_FILTER']['AVAILABLE'] = 'Y';
 				}
 
 				$this->filterFields['=ID'] = \CIBlockElement::SubQuery(
@@ -891,7 +891,7 @@ abstract class ElementList extends Base
 			&& $this->arParams['HIDE_NOT_AVAILABLE'] === 'Y'
 		)
 		{
-			$filterFields['CATALOG_AVAILABLE'] = 'Y';
+			$filterFields['AVAILABLE'] = 'Y';
 		}
 
 		if (!empty($this->arParams['CUSTOM_FILTER']))
@@ -922,7 +922,7 @@ abstract class ElementList extends Base
 			&& $this->arParams['HIDE_NOT_AVAILABLE'] === 'L'
 		)
 		{
-			$sortFields['CATALOG_AVAILABLE'] = 'desc,nulls';
+			$sortFields['AVAILABLE'] = 'desc,nulls';
 		}
 
 		if (!isset($sortFields[$this->arParams['ELEMENT_SORT_FIELD']]))
@@ -2325,7 +2325,7 @@ abstract class ElementList extends Base
 				'QUANTITY_FLOAT' => is_float($offer['ITEM_MEASURE_RATIOS'][$ratioSelectedIndex]['RATIO']), //deprecated
 				'MEASURE' => $offer['ITEM_MEASURE']['TITLE'],
 				'CAN_BUY' => $offer['CAN_BUY'],
-				'CATALOG_SUBSCRIBE' => $offer['CATALOG_SUBSCRIBE']
+				'CATALOG_SUBSCRIBE' => $offer['PRODUCT']['SUBSCRIBE']
 			);
 			unset($ratioSelectedIndex);
 

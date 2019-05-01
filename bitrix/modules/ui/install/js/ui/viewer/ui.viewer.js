@@ -116,12 +116,43 @@
 			return extensions;
 		},
 
-		handleDocumentClick: function (event)
+		/**
+		 * @param {MouseEvent} event
+		 * @return {HTMLElement|null}
+		 */
+		extractTargetFromEvent: function (event)
 		{
 			var target = BX.getEventTarget(event);
-			if (!this.shouldRunViewer(target))
+
+			var shouldRunViewer = false;
+			var maxDepth = 8;
+			do
+			{
+				if (this.shouldRunViewer(target))
+				{
+					shouldRunViewer = true;
+					break;
+				}
+
+				target = target.parentNode;
+				maxDepth--;
+			}
+			while (maxDepth > 0 && target);
+
+			return shouldRunViewer? target : null;
+		},
+
+		handleDocumentClick: function (event)
+		{
+			var target = this.extractTargetFromEvent(event);
+			if (!target)
 			{
 				return;
+			}
+
+			if (target.tagName !== 'A' && target.closest('a[target="_blank"]'))
+			{
+				return false;
 			}
 
 			event.preventDefault();
@@ -176,19 +207,23 @@
 
 		handleVisibleControls: function(ev)
 		{
-			if(this._timerIdReadingMode)
+			if (BX.browser.IsMobile() || BX.hasClass(document.documentElement, 'bx-touch'))
+			{
+				return;
+			}
+
+			if (this._timerIdReadingMode)
 			{
 				clearTimeout(this._timerIdReadingMode);
 			}
 
-			if(!this.cursorInPerimeter(ev) || BX.findParent(ev.target, { className: 'ui-viewer-next' }) || BX.findParent(ev.target, { className: 'ui-viewer-prev' }))
+			if (!this.cursorInPerimeter(ev) || BX.findParent(ev.target, {className: 'ui-viewer-next'}) || BX.findParent(ev.target, {className: 'ui-viewer-prev'}))
 			{
 				this.disableReadingMode();
 			}
 			else
 			{
-				this._timerIdReadingMode = setTimeout(function()
-				{
+				this._timerIdReadingMode = setTimeout(function () {
 					this.enableReadingMode();
 				}.bind(this), 2800);
 			}
@@ -196,6 +231,11 @@
 
 		enableReadingMode: function(withTimer)
 		{
+			if (BX.browser.IsMobile())
+			{
+				return;
+			}
+
 			if(withTimer)
 			{
 				this._timerIdReadingMode = setTimeout(function()
@@ -278,6 +318,28 @@
 			console.log('SidePanel.Slider:onOpen', this.originalZIndex, event.getSlider().getZindex() - 1);
 
 			this.setZindex(event.getSlider().getZindex() - 1);
+		},
+
+		adjustViewport: function ()
+		{
+			var viewportNode = document.querySelector('[name="viewport"]');
+			if (!viewportNode)
+			{
+				return;
+			}
+			this._viewportContent = viewportNode.getAttribute('content');
+			viewportNode.setAttribute('content', 'width=device-width, user-scalable=no');
+		},
+
+		restoreViewport: function ()
+		{
+			var viewportNode = document.querySelector('[name="viewport"]');
+			if (!this._viewportContent || !viewportNode)
+			{
+				return;
+			}
+
+			viewportNode.setAttribute('content', this._viewportContent);
 		},
 
 		adjustZindex: function ()
@@ -1079,6 +1141,7 @@
 
 		open: function(index)
 		{
+			this.adjustViewport();
 			this.addBodyPadding();
 			this.adjustZindex();
 
@@ -1246,6 +1309,7 @@
 			BX.onCustomEvent('BX.UI.Viewer.Controller:onClose', [this]);
 
 			BX.addClass(this.layout.container, 'ui-viewer-hide');
+			this.restoreViewport();
 			this.hideCurrentItem();
 
 			BX.bind(this.layout.container, 'transitionend', function()
@@ -1296,7 +1360,7 @@
 
 		adjustViewerHeight: function()
 		{
-			if(!this.layout.container)
+			if(!this.layout.container || BX.browser.IsMobile())
 				return;
 
 			this.layout.container.style.height = document.documentElement.clientHeight + 'px';
@@ -1355,7 +1419,7 @@
 			this.startX = touchObject.pageX;
 			this.startY = touchObject.pageY;
 			this.startTime = (new Date()).getTime();
-			event.preventDefault();
+			// event.preventDefault();
 
 		},
 
@@ -1375,25 +1439,23 @@
 				{
 					this.swipeDirection = (distanceX < 0) ? 'left' : 'right';
 				}
-				else if (Math.abs(distanceY) >= threshold && Math.abs(distanceX) <= restraint)
-				{
-					this.swipeDirection = (distanceY < 0) ? 'up' : 'down';
-				}
+				// else if (Math.abs(distanceY) >= threshold && Math.abs(distanceX) <= restraint)
+				// {
+				// 	this.swipeDirection = (distanceY < 0) ? 'up' : 'down';
+				// }
 			}
 
 			switch (this.swipeDirection)
 			{
-				case 'up':
 				case 'left':
 					this.showPrev();
 					break;
-				case 'down':
 				case 'right':
 					this.showNext();
 					break;
 			}
 
-			event.preventDefault();
+			// event.preventDefault();
 		},
 
 		isOnTop: function ()
@@ -1638,6 +1700,11 @@
 	});
 
 	window.document.addEventListener('click', function(event) {
+		if (event.button !== 0)
+		{
+			return;
+		}
+
 		if (window.top !== window && !BX.getClass('window.top.BX.UI.Viewer.Instance'))
 		{
 			top.BX.loadExt('ui.viewer').then(function () {

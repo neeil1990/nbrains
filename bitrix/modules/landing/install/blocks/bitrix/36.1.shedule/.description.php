@@ -61,7 +61,7 @@ return array(
 		),
 		'.landing-block-node-card-time' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_36.1.SHEDULE_NODES_LANDINGBLOCKNODECARD_TIME'),
-			'type' => 'background-color',
+			'type' => ['color', 'background-color'],
 		),
 		'.landing-block-node-card-time-line' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_36.1.SHEDULE_NODES_LANDINGBLOCKNODECARD_TIME'),

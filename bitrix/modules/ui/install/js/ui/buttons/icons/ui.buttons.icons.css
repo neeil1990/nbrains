@@ -7,7 +7,10 @@
 
 .ui-btn[class*="ui-btn-icon-"]:not(input):empty,
 .ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty,
-.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty {
+.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty,
+.ui-btn[class*="ui-btn-icon-"].ui-btn-empty:not(input),
+.ui-btn-split[class*="ui-btn-icon-"].ui-btn-empty .ui-btn-main,
+.ui-btn-double[class*="ui-btn-icon-"].ui-btn-empty .ui-btn-main {
 	padding: 0;
 	min-width: 0;
 	width: var(--ui-btn-height);
@@ -16,7 +19,10 @@
 
 .ui-btn[class*="ui-btn-icon-"]:not(input):empty:after,
 .ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty:after,
-.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty:after {
+.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty:after,
+.ui-btn[class*="ui-btn-icon-"].ui-btn-empty:not(input):after,
+.ui-btn-split[class*="ui-btn-icon-"].ui-btn-empty .ui-btn-main:after,
+.ui-btn-double[class*="ui-btn-icon-"].ui-btn-empty .ui-btn-main:after {
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
@@ -498,7 +504,7 @@
 .ui-btn-icon-download.ui-btn-light,
 .ui-btn-icon-download.ui-btn-success,
 .ui-btn-icon-download.ui-btn-secondary,
-.ui-btn-icon-cloud.ui-btn-light-border,
+.ui-btn-icon-download.ui-btn-light-border,
 .bitrix24-dark-theme .ui-btn-icon-download.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-download-black.svg?v=1.1); }
 
 /*endregion*/
@@ -519,7 +525,7 @@
 .ui-btn-icon-remove.ui-btn-light,
 .ui-btn-icon-remove.ui-btn-success,
 .ui-btn-icon-remove.ui-btn-secondary,
-.ui-btn-icon-cloud.ui-btn-light-border,
+.ui-btn-icon-remove.ui-btn-light-border,
 .bitrix24-dark-theme .ui-btn-icon-remove.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-remove-black.svg?v=1.1); }
 
 /*endregion*/
@@ -540,7 +546,7 @@
 .ui-btn-icon-share.ui-btn-light,
 .ui-btn-icon-share.ui-btn-success,
 .ui-btn-icon-share.ui-btn-secondary,
-.ui-btn-icon-cloud.ui-btn-light-border,
+.ui-btn-icon-share.ui-btn-light-border,
 .bitrix24-dark-theme .ui-btn-icon-share.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-share-black.svg?v=1.1); }
 
 /*endregion*/
@@ -561,8 +567,29 @@
 .ui-btn-icon-edit.ui-btn-light,
 .ui-btn-icon-edit.ui-btn-success,
 .ui-btn-icon-edit.ui-btn-secondary,
-.ui-btn-icon-cloud.ui-btn-light-border,
+.ui-btn-icon-edit.ui-btn-light-border,
 .bitrix24-dark-theme .ui-btn-icon-edit.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-edit-black.svg?v=1.1); }
+
+/*endregion*/
+
+/*region ui-btn-icon-page*/
+.ui-btn-icon-page.ui-btn,
+.ui-btn-icon-page.ui-btn-split,
+.ui-btn-icon-page.ui-btn-double,
+.ui-btn-icon-page.ui-btn-danger,
+.ui-btn-icon-page.ui-btn-primary,
+.ui-btn-icon-page.ui-btn-default,
+.ui-btn-icon-page.ui-btn-danger-dark,
+.ui-btn-icon-page.ui-btn-success-dark,
+.ui-btn-icon-page.ui-btn-primary-dark,
+.bitrix24-light-theme .ui-btn-icon-page.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-page-white.svg?v=1.2); }
+
+.ui-btn-icon-page.ui-btn-link,
+.ui-btn-icon-page.ui-btn-light,
+.ui-btn-icon-page.ui-btn-success,
+.ui-btn-icon-page.ui-btn-secondary,
+.ui-btn-icon-page.ui-btn-light-border,
+.bitrix24-dark-theme .ui-btn-icon-page.ui-btn-themes { --ui-btn-icon: url(/bitrix/js/ui/buttons/icons/images/ui-page-black.svg?v=1.2); }
 
 /*endregion*/
 

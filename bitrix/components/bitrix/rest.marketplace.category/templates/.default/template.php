@@ -84,7 +84,7 @@ if ($arParams['SHOW_FILTER'] == "Y")
 				<div class="mp-container" id="mp-elements-block"></div>
 				<?if ($arResult["CURRENT_PAGE"] < $arResult["PAGE_COUNT"]):?>
 				<div class="mp-container-more">
-					<span class="ui-btn ui-btn-md ui-btn-light-border ui-btn-themes" id="mp-more-button"><?=GetMessage("MARKETPLACE_MORE_APPS")?></span>
+					<span class="ui-btn ui-btn-light-border mp-btn-more" id="mp-more-button"><?=GetMessage("MARKETPLACE_MORE_APPS")?></span>
 				</div>
 				<?endif?>
 			</div>

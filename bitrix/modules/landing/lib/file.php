@@ -41,11 +41,12 @@ class File
 		));
 		if (!$res->fetch())
 		{
-			FileTable::add(array(
+			$res = FileTable::add(array(
 				'FILE_ID' => $fileId,
 				'ENTITY_ID' => $entityId,
 				'ENTITY_TYPE' => $entityType
 			));
+			$res->isSuccess();
 		}
 	}
 
@@ -74,12 +75,13 @@ class File
 		));
 		while ($row = $res->fetch())
 		{
-			FileTable::update(
+			$resUpdate = FileTable::update(
 				$row['ID'],
 				array(
 					'FILE_ID' => -1 * abs($row['FILE_ID'])
 				)
 			);
+			$resUpdate->isSuccess();
 		}
 	}
 

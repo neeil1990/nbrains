@@ -32,6 +32,11 @@ class Text extends \Bitrix\Landing\Node
 				$value = \Bitrix\Landing\Manager::sanitize($value, $bad);
 				// clear some amp
 				$value = preg_replace('/&amp;([^\s]{1})/is', '&$1', $value);
+				$value = str_replace(
+					' bxstyle="',
+					' style="',
+					$value
+				);
 				$resultList[$pos]->setInnerHTML(!$value ? ' ' : $value);
 			}
 		}
@@ -52,6 +57,11 @@ class Text extends \Bitrix\Landing\Node
 		foreach ($resultList as $pos => $res)
 		{
 			$data[$pos] = $res->getInnerHTML();
+			$data[$pos] = str_replace(
+				' style="',
+				' bxstyle="',
+				$data[$pos]
+			);
 		}
 
 		return $data;

@@ -844,7 +844,14 @@
 			return BX.ajax.runComponentAction(
 				'bitrix:main.ui.filter',
 				action,
-				{mode: 'ajax', data: data}
+				{
+					mode: 'ajax',
+					data: data,
+					analyticsLabel: {
+						FILTER_ID: this.getParam('FILTER_ID'),
+						GRID_ID: this.getParam('GRID_ID')
+					}
+				}
 			);
 		},
 
@@ -1883,6 +1890,13 @@
 			values[monthName] = '';
 			values[quarterName] = '';
 			values[yearName] = '';
+
+			var input = field.querySelector(".main-ui-date-input");
+
+			if (input && input.dataset.isValid === "false")
+			{
+				return;
+			}
 
 			selectValue = JSON.parse(BX.data(select, 'value'));
 			values[selectName] = selectValue.VALUE;

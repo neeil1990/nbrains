@@ -67,10 +67,11 @@ ob_start();
 						<div class="feed-post-text-more-but"><div class="feed-post-text-more-left"></div><div class="feed-post-text-more-right"></div></div>
 					</div><?
 					?><script>
-						var arCommentsMoreButtonID = (arCommentsMoreButtonID || []);
-						arCommentsMoreButtonID.push({
-							'bodyBlockID' : 'record-#FULL_ID#-text',
-							'moreButtonBlockID' : 'record-#FULL_ID#-more'
+						BX.ready(function() {
+							BX.onCustomEvent(window, 'OnUCMoreButtonAdd', [{
+								bodyBlockID : 'record-#FULL_ID#-text',
+								moreButtonBlockID : 'record-#FULL_ID#-more'
+							}]);
 						});
 					</script><?
 					?></div>

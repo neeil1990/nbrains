@@ -1,4 +1,6 @@
 <?
+use Bitrix\Main\Loader;
+
 IncludeModuleLangFile(__FILE__);
 
 class CAllIBlockSection
@@ -105,6 +107,10 @@ class CAllIBlockSection
 					AND BS1.LEFT_MARGIN >= BS.LEFT_MARGIN
 					AND BS1.RIGHT_MARGIN <= BS.RIGHT_MARGIN
 				)";
+				break;
+			case "PICTURE":
+			case "DETAIL_PICTURE":
+				$arSqlSearch[] = CIBlock::FilterCreate("BS.".$key, $val, "number", $cOperationType);
 				break;
 			}
 		}
@@ -2690,13 +2696,14 @@ class CAllIBlockSection
 		$result = array();
 		if (!empty($filter))
 		{
+			$catalogIncluded = Loader::includeModule('catalog');
 			foreach($filter as $index => $value)
 			{
 				$op = CIBlock::MkOperationFilter($index);
 				$newIndex = strtoupper($op["FIELD"]);
 				if (
 					strncmp($newIndex, "PROPERTY_", 9) == 0
-					|| strncmp($newIndex, "CATALOG_", 8) == 0
+					|| ($catalogIncluded && \CProductQueryBuilder::isValidField($newIndex))
 				)
 				{
 					$result[$index] = $value;
@@ -2715,24 +2722,15 @@ class CAllIBlockSection
 		$result = true;
 		if (!empty($filter))
 		{
+			$catalogIncluded = Loader::includeModule('catalog');
 			foreach($filter as $index => $value)
 			{
-				$found = false;
 				$op = CIBlock::MkOperationFilter($index);
 				$newIndex = strtoupper($op["FIELD"]);
 				if (
 					strncmp($newIndex, "PROPERTY_", 9) == 0
+					|| ($catalogIncluded && \CProductQueryBuilder::isRealFilterField($newIndex))
 				)
-				{
-					$found = true;
-				}
-				elseif (strncmp($newIndex, "CATALOG_", 8) == 0)
-				{
-					if (strncmp($newIndex, "CATALOG_SHOP_QUANTITY_", 22) != 0)
-						$found = true;
-				}
-
-				if ($found)
 				{
 					$result = false;
 					break;

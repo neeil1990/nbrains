@@ -84,6 +84,8 @@ class Result extends BaseResult
 		// TODO when join, add primary and hide it in ARRAY result, but use for OBJECT fetch
 		// e.g. when first fetchObject, remove data modifier that cuts 'unexpected' primary fields
 
+		// TODO wakeup reference objects with only primary if there are enough data in result
+
 		// base object initialization
 		$this->initializeFetchObject();
 

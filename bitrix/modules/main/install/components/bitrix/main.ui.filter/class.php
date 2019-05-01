@@ -65,6 +65,8 @@ class CMainUiFilter extends CBitrixComponent
 		$this->arResult["MAIN_UI_FILTER__CONFIRM_APPLY_FOR_ALL"] = Loc::getMessage("MAIN_UI_FILTER__CONFIRM_APPLY_FOR_ALL");
 		$this->arResult["MAIN_UI_FILTER__DATE_NEXT_DAYS_LABEL"] = Loc::getMessage("MAIN_UI_FILTER__DATE_NEXT_DAYS_LABEL");
 		$this->arResult["MAIN_UI_FILTER__DATE_PREV_DAYS_LABEL"] = Loc::getMessage("MAIN_UI_FILTER__DATE_PREV_DAYS_LABEL");
+		$this->arResult["MAIN_UI_FILTER__DATE_ERROR_TITLE"] = Loc::getMessage("MAIN_UI_FILTER__DATE_ERROR_TITLE");
+		$this->arResult["MAIN_UI_FILTER__DATE_ERROR_LABEL"] = Loc::getMessage("MAIN_UI_FILTER__DATE_ERROR_LABEL");
 		$this->arResult["CLEAR_GET"] = $this->prepareClearGet();
 		$this->arResult["VALUE_REQUIRED_MODE"] = $this->prepareValueRequiredMode();
 		$this->arResult["THEME"] = $this->getTheme();
@@ -73,8 +75,21 @@ class CMainUiFilter extends CBitrixComponent
 		$this->arResult["IS_AUTHORIZED"] = $this->prepareIsAuthorized();
 		$this->arResult["LAZY_LOAD"] = $this->arParams["LAZY_LOAD"];
 		$this->arResult["VALUE_REQUIRED"] = $this->arParams["VALUE_REQUIRED"];
-	}
 
+		if (isset($this->arParams["MESSAGES"]) && is_array($this->arParams["MESSAGES"]))
+		{
+			foreach ($this->arParams["MESSAGES"] as $key => $message)
+			{
+				if (
+					strpos($key, "MAIN_UI_FILTER__") !== false
+					&& isset($this->arResult[$key])
+				)
+				{
+					$this->arResult[$key] = $message;
+				}
+			}
+		}
+	}
 
 	protected static function prepareIsAuthorized()
 	{
@@ -326,7 +341,7 @@ class CMainUiFilter extends CBitrixComponent
 		return array_key_exists($field["NAME"], $presetFields) ? $presetFields[$field["NAME"]] : "";
 	}
 
-	protected static function prepareDestSelectorValue(Array $field, Array $presetFields = array())
+	protected static function prepareDestSelectorValue(Array $field, Array $presetFields = array(), Array $params = array())
 	{
 		$fieldName = $field["NAME"];
 		$fieldNameLabel = $fieldName."_label";
@@ -355,6 +370,36 @@ class CMainUiFilter extends CBitrixComponent
 		if (empty($result["_label"]) && array_key_exists($fieldNameLabelAlias, $presetFields))
 		{
 			$result["_label"] = $presetFields[$fieldNameLabelAlias];
+		}
+
+		if (!empty($result["_value"]) && empty($result["_label"]))
+		{
+			$value = (
+				!empty($params[$field['NAME']])
+				&& !empty($params[$field['NAME']]['params'])
+				&& !empty($params[$field['NAME']]['params']['isNumeric'])
+				&& $params[$field['NAME']]['params']['isNumeric'] == 'Y'
+				&& !empty($params[$field['NAME']]['params']['prefix'])
+					? $params[$field['NAME']]['params']['prefix'].$result["_value"]
+					: $result["_value"]
+			);
+
+			$entityType = Bitrix\Main\UI\Selector\Entities::getEntityType(array(
+				'itemCode' => $value
+			));
+			if (!empty($entityType))
+			{
+				if ($entityType == 'department')
+				{
+					$entityType = 'departments';
+				}
+
+				$provider = \Bitrix\Main\UI\Selector\Entities::getProviderByEntityType(strtoupper($entityType));
+				if ($provider !== false)
+				{
+					$result["_label"] = $provider->getItemName($value);
+				}
+			}
 		}
 
 		if (!empty($result["_value"]) && empty($result["_label"]))
@@ -496,7 +541,7 @@ class CMainUiFilter extends CBitrixComponent
 
 					case Type::DEST_SELECTOR :
 					{
-						$field["VALUES"] = self::prepareDestSelectorValue($field, $presetFields);
+						$field["VALUES"] = self::prepareDestSelectorValue($field, $presetFields, $this->arParams['FILTER']);
 						break;
 					}
 

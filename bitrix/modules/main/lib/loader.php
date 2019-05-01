@@ -49,6 +49,11 @@ final class Loader
 
 	private static $isAutoLoadOn = true;
 
+	/**
+	 * @var bool Controls throwing exception by requireModule method
+	 */
+	private static $requireThrowException = true;
+
 	const ALPHA_LOWER = "qwertyuioplkjhgfdsazxcvbnm";
 	const ALPHA_UPPER = "QWERTYUIOPLKJHGFDSAZXCVBNM";
 
@@ -106,6 +111,26 @@ final class Loader
 			return self::$arLoadedModules[$moduleName] = false;
 
 		return self::$arLoadedModules[$moduleName] = true;
+	}
+
+	/**
+	 * Includes module by its name, throws an exception in case of failure
+	 *
+	 * @param $moduleName
+	 *
+	 * @return bool
+	 * @throws LoaderException
+	 */
+	public static function requireModule($moduleName)
+	{
+		$included = static::includeModule($moduleName);
+
+		if (!$included && static::$requireThrowException)
+		{
+			throw new LoaderException("Required module `{$moduleName}` was not found");
+		}
+
+		return $included;
 	}
 
 	private static function includeModuleInternal($path)
@@ -387,6 +412,11 @@ final class Loader
 			\Bitrix\Main\ORM\Loader::autoLoad($className);
 		}
 
+		// still not found, check for auto-generated iblock entity classes
+		if (!class_exists($className) && !empty(static::$arLoadedModules['iblock']) && class_exists(\Bitrix\Iblock\ORM\Loader::class))
+		{
+			\Bitrix\Iblock\ORM\Loader::autoLoad($className);
+		}
 	}
 
 	/**
@@ -425,6 +455,16 @@ final class Loader
 			return $root.$personal."/".$path;
 
 		return self::getLocal($path, $root);
+	}
+
+	/**
+	 * Changes requireModule behavior
+	 *
+	 * @param bool $requireThrowException
+	 */
+	public static function setRequireThrowException($requireThrowException)
+	{
+		self::$requireThrowException = (bool) $requireThrowException;
 	}
 }
 

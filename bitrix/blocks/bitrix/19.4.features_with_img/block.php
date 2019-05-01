@@ -1,8 +1,8 @@
 <section class="g-pt-90 g-pb-0">
 	<div class="container">
 		<div class="row">
-			<div class="col-lg-7 g-mb-30 order-2 order-md-1">
-				<div class="align-self-center">
+			<div class="landing-block-node-text-container col-lg-7 g-mb-30 order-2 order-md-1 d-flex">
+				<div>
 					<div class="text-uppercase g-line-height-1_3 g-mb-20">
 						<h4 class="landing-block-node-subtitle g-font-weight-700 g-font-size-11 g-mb-15">
 							<span class="g-color-primary">06.</span> Why our app</h4>

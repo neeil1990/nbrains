@@ -1319,7 +1319,7 @@ if(
 					}
 				}
 
-				$reloadUrl = "/bitrix/admin/iblock_edit.php?type=".$type."&tabControl_active_tab=".urlencode($tabControl_active_tab)."&lang=".LANG."&ID=".$ID."&admin=".($_REQUEST["admin"]=="Y"? "Y": "N").(strlen($_REQUEST["return_url"])>0? "&return_url=".urlencode($_REQUEST["return_url"]): "");
+				$reloadUrl = "/bitrix/admin/iblock_edit.php?type=".$type."&tabControl_active_tab=".urlencode($tabControl_active_tab)."&lang=".LANGUAGE_ID."&ID=".$ID."&admin=".($_REQUEST["admin"]=="Y"? "Y": "N").(strlen($_REQUEST["return_url"])>0? "&return_url=".urlencode($_REQUEST["return_url"]): "");
 				if ($adminSidePanelHelper->isAjaxRequest())
 				{
 					$reloadUrl .= "&IFRAME=Y&IFRAME_TYPE=SIDE_SLIDER";
@@ -1333,7 +1333,7 @@ if(
 						if(strlen($_REQUEST["return_url"])>0)
 							LocalRedirect($_REQUEST["return_url"]);
 						else
-							LocalRedirect("/bitrix/admin/iblock_admin.php?type=".$type."&lang=".LANG."&admin=".($_REQUEST["admin"]=="Y"? "Y": "N"));
+							LocalRedirect("/bitrix/admin/iblock_admin.php?type=".$type."&lang=".LANGUAGE_ID."&admin=".($_REQUEST["admin"]=="Y"? "Y": "N"));
 					}
 					LocalRedirect($reloadUrl);
 				}
@@ -4988,8 +4988,14 @@ $tabControl->BeginNextTab();
 		</tr>
 	<?endforeach;
 
-	$tabControl->Buttons(array("disabled"=>false, "back_url"=>'iblock_admin.php?lang='.LANGUAGE_ID.'&type='.urlencode($type).'&admin='.($_REQUEST["admin"]=="Y"? "Y": "N")));
+	$backUrl = '';
+	if (isset($_REQUEST['return_url']) && is_string($_REQUEST['return_url']))
+		$backUrl = trim($_REQUEST['return_url']);
+	if ($backUrl === '')
+		$backUrl = 'iblock_admin.php?lang='.LANGUAGE_ID.'&type='.urlencode($type).'&admin='.($_REQUEST["admin"]=="Y"? "Y": "N");
+	$tabControl->Buttons(array("disabled"=>false, "back_url"=>$backUrl));
 	$tabControl->End();
+	unset($backUrl);
 	?>
 </form>
 <?else:?>

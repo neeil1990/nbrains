@@ -2,11 +2,17 @@
 
 namespace Bitrix\Seo\Retargeting\Services;
 
+use Bitrix\Main\Web\Json;
+use Bitrix\Main\Web\Uri;
 use \Bitrix\Seo\Retargeting\Account;
+use Bitrix\Main\Result;
+use Bitrix\Main\Type\Date;
 
 class AccountVkontakte extends Account
 {
 	const TYPE_CODE = 'vkontakte';
+
+	const MAX_ADS_EDIT = 20;
 
 	protected static $listRowMap = array(
 		'ID' => 'ACCOUNT_ID',

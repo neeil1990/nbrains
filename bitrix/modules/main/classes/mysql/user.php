@@ -101,6 +101,14 @@ class CUser extends CAllUser
 			if(is_set($arFields, "GROUP_ID"))
 				CUser::SetUserGroup($ID, $arFields["GROUP_ID"], true);
 
+			if(isset($arFields["PHONE_NUMBER"]) && $arFields["PHONE_NUMBER"] <> '')
+			{
+				Main\UserPhoneAuthTable::add(array(
+					"USER_ID" => $ID,
+					"PHONE_NUMBER" => $arFields["PHONE_NUMBER"],
+				));
+			}
+
 			//update digest hash for http digest authorization
 			if(COption::GetOptionString('main', 'use_digest_auth', 'N') == 'Y')
 				CUser::UpdateDigest($ID, $original_pass);
@@ -529,13 +537,6 @@ class CUser extends CAllUser
 					IF(U.SECOND_NAME IS NULL OR U.SECOND_NAME = '', 1, U.SECOND_NAME) %1\$s,
 					U.LOGIN %1\$s", $dir
 				);
-			}
-			else
-			{
-				$field = "TIMESTAMP_X";
-				$arSqlOrder[$field] = "U.".$field." ".$dir;
-				if ($bSingleBy)
-					$by = strtolower($field);
 			}
 		}
 

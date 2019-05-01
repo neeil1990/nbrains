@@ -53,6 +53,12 @@ class LandingBaseComponent extends \CBitrixComponent
 	protected $lastNavigation = null;
 
 	/**
+	 * Current request
+	 * @var \Bitrix\Main\HttpRequest
+	 */
+	protected $currentRequest = null;
+
+	/**
 	 * Init class' vars, check conditions.
 	 * @return bool
 	 */
@@ -74,8 +80,30 @@ class LandingBaseComponent extends \CBitrixComponent
 			$this->addError('LANDING_CMP_NOT_INSTALLED');
 			$init = false;
 		}
+		$this->initRequest();
 
 		return $init;
+	}
+
+	/**
+	 * Http request initialization.
+	 *
+	 * @return void
+	 * @throws \Bitrix\Main\SystemException
+	 */
+	protected function initRequest()
+	{
+		if ($this->currentRequest !== null)
+		{
+			return;
+		}
+		$context = \Bitrix\Main\Application::getInstance()->getContext();
+		$this->currentRequest = $context->getRequest();
+		if ($this->currentRequest->isAjaxRequest())
+		{
+			$this->currentRequest->addFilter(new \Bitrix\Main\Web\PostDecodeFilter());
+		}
+		unset($context);
 	}
 
 	/**
@@ -230,8 +258,7 @@ class LandingBaseComponent extends \CBitrixComponent
 	 */
 	protected function refresh(array $add = array())
 	{
-		$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
-		$uriString = $request->getRequestUri();
+		$uriString = $this->currentRequest->getRequestUri();
 		if ($add)
 		{
 			$uriSave = new \Bitrix\Main\Web\Uri($uriString);
@@ -248,15 +275,8 @@ class LandingBaseComponent extends \CBitrixComponent
 	 */
 	protected function request($var)
 	{
-		static $request = null;
-
-		if ($request === null)
-		{
-			$context = \Bitrix\Main\Application::getInstance()->getContext();
-			$request = $context->getRequest();
-		}
-
-		return isset($request[$var]) ? $request[$var] : '';
+		$result = $this->currentRequest[$var];
+		return ($result !== null ? $result : '');
 	}
 
 	/**
@@ -515,8 +535,7 @@ class LandingBaseComponent extends \CBitrixComponent
 
 		if ($uri === null)
 		{
-			$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
-			$curUri = new \Bitrix\Main\Web\Uri($request->getRequestUri());
+			$curUri = new \Bitrix\Main\Web\Uri($this->currentRequest->getRequestUri());
 			$curUri->deleteParams(array(
 				'sessid', 'action', 'param', 'additional', 'code', 'tpl',
 				'stepper', 'start', 'IS_AJAX', $this::NAVIGATION_ID

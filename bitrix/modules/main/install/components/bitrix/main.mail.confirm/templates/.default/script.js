@@ -13,7 +13,6 @@
 			var mode = params && params.mode ? params.mode : 'add';
 
 			var dlg = new BX.PopupWindow('add_from_email', null, {
-				width: 480,
 				titleBar: BX.message('MAIN_MAIL_CONFIRM_TITLE'),
 				draggable: true,
 				closeIcon: true,

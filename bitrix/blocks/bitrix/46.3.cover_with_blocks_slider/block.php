@@ -12,7 +12,7 @@
 					<img class="landing-block-node-card-photo w-100 img-fluid" src="https://cdn.bitrix24.site/bitrix/images/landing/business/600x315/img1.jpg"
 						 alt="">
 
-					<div class="landing-block-node-card-text-container g-bg-white g-pa-40">
+					<div class="landing-block-node-card-text-container g-bg-white g-pr-40 g-pl-40 g-pb-40 g-pt-40">
 						<h4 class="landing-block-node-card-title js-animation fadeInRightBig g-font-size-30 g-font-cormorant-infant font-italic g-font-weight-700 g-mb-20">
 							Monica and Eddie</h4>
 						<div class="landing-block-node-card-subtitle text-uppercase g-font-weight-700 g-font-size-12 g-color-primary g-mb-25">
@@ -41,7 +41,7 @@
 					<img class="landing-block-node-card-photo w-100 img-fluid" src="https://cdn.bitrix24.site/bitrix/images/landing/business/600x315/img2.jpg"
 						 alt="">
 
-					<div class="landing-block-node-card-text-container g-bg-white g-pa-40">
+					<div class="landing-block-node-card-text-container g-bg-white g-pr-40 g-pl-40 g-pb-40 g-pt-40">
 						<h4 class="landing-block-node-card-title js-animation fadeInRight g-font-size-30 g-font-cormorant-infant font-italic g-font-weight-700 g-mb-20">
 							Sofia and Carl</h4>
 						<div class="landing-block-node-card-subtitle text-uppercase g-font-weight-700 g-font-size-12 g-color-primary g-mb-25">

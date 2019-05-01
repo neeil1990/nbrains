@@ -62,7 +62,7 @@ final class Router
 
 	private function resolveVendor($action)
 	{
-		list($vendor, $action) = explode(':', $action);
+		list($vendor, $action) = explode(':', $action) + [null, null];
 		if (!$action)
 		{
 			$action = $vendor;
@@ -181,7 +181,7 @@ final class Router
 			throw new SystemException("Unknown ajax mode ({$modeAsString}) to work {$this->component}");
 		}
 	}
-	
+
 	private function includeModule($module)
 	{
 		if (!Configuration::getInstance($module)->get('controllers'))

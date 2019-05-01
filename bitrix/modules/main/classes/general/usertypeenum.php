@@ -926,6 +926,15 @@ EOT;
 		elseif($arUserField["SETTINGS"]["DISPLAY"] == "CHECKBOX")
 		{
 			$first = true;
+			if($arUserField['MULTIPLE'] === 'Y')
+			{
+				$html .= '<input '.static::buildTagAttributes([
+						'type' => 'hidden',
+						'name' => $fieldName,
+						'value' => ''
+					]).' />';
+			}
+
 			foreach($arUserField["USER_TYPE"]["FIELDS"] as $key => $val)
 			{
 				$tag = '';
@@ -983,7 +992,7 @@ EOT;
 
 			foreach($arUserField["USER_TYPE"]["FIELDS"] as $key => $val)
 			{
-				$bSelected = in_array(strval($key), $value, true) && (
+				$bSelected = in_array($key, $value) && (
 						(!$bWasSelect) ||
 						($arUserField["MULTIPLE"] == "Y")
 					);

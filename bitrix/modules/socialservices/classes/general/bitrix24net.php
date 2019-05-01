@@ -764,6 +764,7 @@ class CBitrix24NetTransport
 	protected function prepareRequest(array $request)
 	{
 		$request["broadcast_last_check"] = Network::getLastBroadcastCheck();
+		$request["user_lang"] = LANGUAGE_ID;
 		$request["auth"] = $this->access_token;
 
 		return $this->convertRequest($request);

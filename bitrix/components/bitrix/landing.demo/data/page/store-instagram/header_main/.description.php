@@ -63,7 +63,7 @@ return array(
 					0 => array(
 						'text' => '
 					<img class="landing-block-node-menu-logo u-header__logo-img u-header__logo-img--main g-max-width-180" src="https://cdn.bitrix24.site/bitrix/images/landing/logos/instagram-logo.png" alt="" data-fileid="7238" />',
-						'href' => '/',
+						'href' => '#system_mainpage',
 						'target' => '_self',
 					),
 				),

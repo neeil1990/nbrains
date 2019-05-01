@@ -1666,7 +1666,7 @@ class CAdminContextMenu
 
 		foreach(GetModuleEvents("main", "OnAdminContextMenuShow", true) as $arEvent)
 		{
-			ExecuteModuleEventEx($arEvent, array(&$this->items));
+			ExecuteModuleEventEx($arEvent, array(&$this->items, &$this->additional_items));
 		}
 
 		if(empty($this->items) && empty($this->additional_items))
@@ -1700,7 +1700,7 @@ class CAdminContextMenu
 			$bFirst = false;
 		}
 
-		if (count($this->additional_items) > 0)
+		if (!empty($this->additional_items))
 		{
 			if($bFirst)
 			{
@@ -2016,13 +2016,22 @@ class CAdminResult extends CDBResult
 	var $nInitialSize;
 	var $table_id;
 
+	/**
+	* CAdminResult constructor.
+	* @param mixed $res
+	* @param string $table_id
+	*/
 	public function __construct($res, $table_id)
 	{
 		parent::__construct($res);
 		$this->table_id = $table_id;
 	}
 
-	/** @deprecated */
+	/**
+	* @deprecated
+ 	* @param mixed $res
+	* @param string $table_id
+	*/
 	public function CAdminResult($res, $table_id)
 	{
 		self::__construct($res, $table_id);
@@ -2119,7 +2128,11 @@ class CAdminMessage
 		$this->exception = $exception;
 	}
 
-	/** @deprecated */
+	/**
+	* @deprecated
+	 * @param string|array $message
+	 * @param CAdminException|bool $exception
+	*/
 	public function CAdminMessage($message, $exception=false)
 	{
 		self::__construct($message, $exception);

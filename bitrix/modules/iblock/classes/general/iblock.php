@@ -2264,22 +2264,27 @@ REQ
 		);
 
 		$key = (string)$key;
+		$result = array(
+			"FIELD" => $key,
+			"OPERATION" => "E",
+			"PREFIX" => ""
+		);
 		if ($key == '')
-			return array("FIELD"=>$key, "OPERATION"=>"E"); // zero key
+			return $result; // zero key
 
 		for ($i = 3; $i > 0; $i--)
 		{
 			$op = substr($key, 0, $i);
 			if ($op && isset($operations[$op]))
 			{
-				return array(
-					"FIELD" => substr($key, $i),
-					"OPERATION" => $operations[$op],
-				);
+				$result["FIELD"] = substr($key, $i);
+				$result["OPERATION"] = $operations[$op];
+				$result["PREFIX"] = $op;
+				break;
 			}
 		}
 
-		return array("FIELD"=>$key, "OPERATION"=>"E"); // field LIKE val
+		return $result; // field LIKE val
 	}
 
 	public static function FilterCreate($field_name, $values, $type, $cOperationType=false, $bSkipEmpty = true)
@@ -3448,9 +3453,10 @@ REQ
 			"desc"       => array(false, "desc"),
 		);
 		$order = strtolower(trim($order));
-		if(array_key_exists($order, $arOrder))
+		$default_order = strtolower(trim($default_order));
+		if (isset($arOrder[$order]))
 			$o = $arOrder[$order];
-		elseif(array_key_exists($default_order, $arOrder))
+		elseif(isset($arOrder[$default_order]))
 			$o = $arOrder[$default_order];
 		else
 			$o = $arOrder["desc,nulls"];
@@ -3459,10 +3465,7 @@ REQ
 		//column can not contain nulls
 		if(!$nullable)
 		{
-			if($o[1] == "asc")
-				$o[0] = true;
-			else
-				$o[0] = false;
+			$o[0] = ($o[1] == "asc");
 		}
 
 		return $o;

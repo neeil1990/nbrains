@@ -319,7 +319,7 @@
 			this.mediaButton.disable();
 			this.targetInput.enable();
 			this.targetInput.closePopup();
-			this.targetInput.setValue(this.content.target);
+			this.targetInput.setValue("_self");
 			this.hideMediaPreview();
 			this.hideMediaSettings();
 		},

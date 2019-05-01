@@ -10,40 +10,72 @@
 /** @var string $templateFolder */
 /** @var string $componentPath */
 /** @var CBitrixComponent $component */
+
+use Bitrix\Main\Loader;
+
 $this->setFrameMode(true);
 
-$arElements = $APPLICATION->IncludeComponent(
-	"bitrix:search.page",
-	".default",
-	Array(
-		"RESTART" => $arParams["RESTART"],
-		"NO_WORD_LOGIC" => $arParams["NO_WORD_LOGIC"],
-		"USE_LANGUAGE_GUESS" => $arParams["USE_LANGUAGE_GUESS"],
-		"CHECK_DATES" => $arParams["CHECK_DATES"],
-		"arrFILTER" => array("iblock_".$arParams["IBLOCK_TYPE"]),
-		"arrFILTER_iblock_".$arParams["IBLOCK_TYPE"] => array($arParams["IBLOCK_ID"]),
-		"USE_TITLE_RANK" => "N",
-		"DEFAULT_SORT" => "rank",
-		"FILTER_NAME" => "",
-		"SHOW_WHERE" => "N",
-		"arrWHERE" => array(),
-		"SHOW_WHEN" => "N",
-		"PAGE_RESULT_COUNT" => (isset($arParams["PAGE_RESULT_COUNT"]) ? $arParams["PAGE_RESULT_COUNT"] : 50),
-		"DISPLAY_TOP_PAGER" => "N",
-		"DISPLAY_BOTTOM_PAGER" => "N",
-		"PAGER_TITLE" => "",
-		"PAGER_SHOW_ALWAYS" => "N",
-		"PAGER_TEMPLATE" => "N",
-	),
-	$component,
-	array('HIDE_ICONS' => 'Y')
-);
-if (!empty($arElements) && is_array($arElements))
+global $searchFilter;
+
+if (Loader::includeModule('search'))
 {
-	global $searchFilter;
-	$searchFilter = array(
-		"=ID" => $arElements,
+	$arElements = $APPLICATION->IncludeComponent(
+		"bitrix:search.page",
+		".default",
+		Array(
+			"RESTART" => $arParams["RESTART"],
+			"NO_WORD_LOGIC" => $arParams["NO_WORD_LOGIC"],
+			"USE_LANGUAGE_GUESS" => $arParams["USE_LANGUAGE_GUESS"],
+			"CHECK_DATES" => $arParams["CHECK_DATES"],
+			"arrFILTER" => array("iblock_".$arParams["IBLOCK_TYPE"]),
+			"arrFILTER_iblock_".$arParams["IBLOCK_TYPE"] => array($arParams["IBLOCK_ID"]),
+			"USE_TITLE_RANK" => "N",
+			"DEFAULT_SORT" => "rank",
+			"FILTER_NAME" => "",
+			"SHOW_WHERE" => "N",
+			"arrWHERE" => array(),
+			"SHOW_WHEN" => "N",
+			"PAGE_RESULT_COUNT" => (isset($arParams["PAGE_RESULT_COUNT"]) ? $arParams["PAGE_RESULT_COUNT"] : 50),
+			"DISPLAY_TOP_PAGER" => "N",
+			"DISPLAY_BOTTOM_PAGER" => "N",
+			"PAGER_TITLE" => "",
+			"PAGER_SHOW_ALWAYS" => "N",
+			"PAGER_TEMPLATE" => "N",
+		),
+		$component,
+		array('HIDE_ICONS' => 'Y')
 	);
+	if (!empty($arElements) && is_array($arElements))
+	{
+		$searchFilter = array(
+			"=ID" => $arElements,
+		);
+	}
+	else
+	{
+		if (is_array($arElements))
+		{
+			echo GetMessage("CT_BCSE_NOT_FOUND");
+			return;
+		}
+	}
+}
+else
+{
+	$searchQuery = '';
+	if (isset($_REQUEST['q']) && is_string($_REQUEST['q']))
+		$searchQuery = trim($_REQUEST['q']);
+	if ($searchQuery !== '')
+	{
+		$searchFilter = array(
+			'*SEARCHABLE_CONTENT' => $searchQuery
+		);
+	}
+	unset($searchQuery);
+}
+
+if (!empty($searchFilter) && is_array($searchFilter))
+{
 	$APPLICATION->IncludeComponent(
 		"bitrix:catalog.section",
 		".default",
@@ -159,8 +191,4 @@ if (!empty($arElements) && is_array($arElements))
 		$arResult["THEME_COMPONENT"],
 		array('HIDE_ICONS' => 'Y')
 	);
-}
-elseif (is_array($arElements))
-{
-	echo GetMessage("CT_BCSE_NOT_FOUND");
 }

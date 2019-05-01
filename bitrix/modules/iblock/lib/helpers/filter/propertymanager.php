@@ -236,10 +236,10 @@ class PropertyManager
 	public function AddFilter($filterId, array &$filter)
 	{
 		$listProperty = $this->getListProperty();
-		if (!empty($this->getListProperty()))
+		if (!empty($listProperty))
 		{
 			$filterKeys = (!empty($filter) ? array_fill_keys(array_keys($filter), true) : []);
-			foreach ($this->getListProperty() as $property)
+			foreach ($listProperty as $property)
 			{
 				if (isset($property["PROPERTY_USER_TYPE"]["AddFilterFields"]))
 				{

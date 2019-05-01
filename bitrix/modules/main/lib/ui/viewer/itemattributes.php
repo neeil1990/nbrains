@@ -73,7 +73,7 @@ class ItemAttributes
 		$fileData = \CFile::getByID($fileId)->fetch();
 		if (!$fileData)
 		{
-			throw new ArgumentException('Invalid fileId');
+			throw new ArgumentException('Invalid fileId', 'fileId');
 		}
 
 		return new static($fileData, $sourceUri);
@@ -90,10 +90,27 @@ class ItemAttributes
 	{
 		if (empty($fileData['ID']))
 		{
-			throw new ArgumentException('Invalid file data');
+			throw new ArgumentException('Invalid file data', 'fileData');
 		}
 
 		return new static($fileData, $sourceUri);
+	}
+
+	public static function tryBuildByFileData(array $fileData, $sourceUri)
+	{
+		try
+		{
+			return static::buildByFileData($fileData, $sourceUri);
+		}
+		catch (ArgumentException $exception)
+		{
+			if ($exception->getParameter() == 'fileData')
+			{
+				return static::buildAsUnknownType($sourceUri);
+			}
+
+			throw $exception;
+		}
 	}
 
 	/**
@@ -109,6 +126,23 @@ class ItemAttributes
 		];
 
 		return new static($fakeFileData, $sourceUri);
+	}
+
+	public static function tryBuildByFileId($fileId, $sourceUri)
+	{
+		try
+		{
+			return static::buildByFileId($fileId, $sourceUri);
+		}
+		catch (ArgumentException $exception)
+		{
+			if ($exception->getParameter() == 'fileId')
+			{
+				return static::buildAsUnknownType($sourceUri);
+			}
+
+			throw $exception;
+		}
 	}
 
 	/**

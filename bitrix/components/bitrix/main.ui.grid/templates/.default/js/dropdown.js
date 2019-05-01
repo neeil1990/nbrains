@@ -254,6 +254,8 @@
 				dataItem = this.getDataItemByValue(value);
 			}
 
+			event.stopPropagation();
+
 			BX.onCustomEvent(window, 'Dropdown::change', [this.dropdown.id, event, item, dataItem, value]);
 		},
 

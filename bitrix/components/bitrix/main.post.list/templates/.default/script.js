@@ -6,7 +6,10 @@
 	var safeEditing = true,
 		safeEditingCurrentObj = null,
 		quoteData = null,
-		repo = {commentExemplarId : {}};
+		repo = {
+			commentExemplarId : {},
+			arCommentsMoreButtonID: []
+		};
 
 	window.FCList = function (params, add) {
 		this.CID = params["CID"];
@@ -527,6 +530,7 @@
 							container.setAttribute("bx-mpl-loaded", "Y");
 							this.recalcMoreButtonsList(container);
 							BX.onCustomEvent(this, "OnUCListWasBuilt", [this, data, container]);
+							FCList.recalcMoreButtonCommentsList();
 						}
 						else
 							BX.defer(func)();
@@ -756,6 +760,7 @@
 				}
 				BX.onCustomEvent(window, 'OnUCRecordHasDrawn', [this.ENTITY_XML_ID, id, data["messageFields"]]);
 				BX.onCustomEvent(window, "OnUCFeedChanged", [id]);
+				FCList.recalcMoreButtonCommentById(id);
 			};
 			BX.defer(func, this)();
 			return true;
@@ -876,7 +881,7 @@
 					BX.addClass(node1, 'feed-com-block-pointer-to-new feed-com-block-new');
 				}
 				this.pullNewRecords[id.join('-')] = "done";
-				BX.onCustomEvent(window, "OnUCCommentWasPulled", [id, {"messageFields" : params}])
+				BX.onCustomEvent(window, "OnUCCommentWasPulled", [id, {"messageFields" : params}]);
 			}
 			return true;
 		},
@@ -1899,4 +1904,131 @@
 	};
 
 	BX.onCustomEvent("main.post.list/default", ["script.js"]);
+
+	BX.addCustomEvent(window, 'OnUCMoreButtonAdd', function(params) {
+		repo.arCommentsMoreButtonID.push(params);
+	});
+	BX.addCustomEvent(window, 'OnUCMoreButtonListClear', function() {
+		repo.arCommentsMoreButtonID = [];
+	});
+	BX.addCustomEvent(window, 'OnUCMoreButtonListRecalc', function() {
+		FCList.recalcMoreButtonCommentsList();
+	});
+	BX.addCustomEvent(window, 'OnUCMoreButtonRecalc', function(params) {
+		FCList.recalcMoreButtonComment(params);
+	});
+	BX.ready(function() {
+		setTimeout(function() {
+			FCList.recalcMoreButtonCommentsList();
+		}, 1000);
+	});
+
+	window.FCList.recalcMoreButtonCommentsList = function()
+	{
+		var arPos = null;
+
+		for (var i = 0; i < repo.arCommentsMoreButtonID.length; i++)
+		{
+			arPos = BX.pos(BX(repo.arCommentsMoreButtonID[i].bodyBlockID));
+			FCList.recalcMoreButtonComment({
+				arPos: arPos,
+				bodyBlock: BX(repo.arCommentsMoreButtonID[i].bodyBlockID),
+				moreButtonBlock: (
+					typeof repo.arCommentsMoreButtonID[i].moreButtonBlockID != 'undefined'
+						? BX(repo.arCommentsMoreButtonID[i].moreButtonBlockID)
+						: null
+				)
+			});
+
+			delete repo.arCommentsMoreButtonID[i];
+		}
+		repo.arCommentsMoreButtonID = repo.arCommentsMoreButtonID.filter(function (item) {
+			return (typeof item !== 'undefined');
+		});
+
+		repo.arCommentsMoreButtonID.sort();
+	};
+
+	window.FCList.recalcMoreButtonComment = function(params)
+	{
+		var
+			ii =  null,
+			arPos = (
+				BX.type.isNotEmptyObject(params.arPos)
+					? params.arPos
+					: BX.pos(params.bodyBlock)
+			);
+
+		if (arPos.height < 200)
+		{
+			if (params.moreButtonBlock)
+			{
+				params.moreButtonBlock.style.display = "none";
+			}
+		}
+		else
+		{
+			if (
+				params.moreButtonBlock
+				&& params.moreButtonBlock.style.display == "none"
+			)
+			{
+				params.moreButtonBlock.style.display = "block";
+			}
+		}
+
+		var onLoadImageList = BX.findChildren(
+			params.bodyBlock,
+			{
+				attr: {
+					'data-bx-onload': 'Y'
+				}
+			},
+			true
+		);
+
+		if (BX.type.isArray(onLoadImageList))
+		{
+			for (ii = 0; ii < onLoadImageList.length; ii++)
+			{
+				onLoadImageList[ii].addEventListener('load', function(e) {
+					var
+						bodyBlock = null,
+						outerBlock = BX.findParent(e.currentTarget, { className: 'feed-com-text' });
+
+					if (outerBlock) // comment
+					{
+						bodyBlock = BX.findChild(outerBlock, { className: 'feed-com-text-inner-inner'}, true);
+						if (bodyBlock)
+						{
+							FCList.recalcMoreButtonComment({
+								bodyBlock: bodyBlock,
+								moreButtonBlock: BX.findChild(outerBlock, { className: 'feed-post-text-more'}, true)
+							});
+						}
+					}
+					e.currentTarget.setAttribute('data-bx-onload', 'N');
+				});
+			}
+		}
+	};
+
+	window.FCList.recalcMoreButtonCommentById = function(id)
+	{
+		setTimeout(function() {
+			var outerBlock = BX('record-' + id[0] + '-' +  + id[1]);
+			if (outerBlock)
+			{
+				bodyBlock = BX.findChild(outerBlock, { className: 'feed-com-text-inner-inner'}, true);
+				if (bodyBlock)
+				{
+					FCList.recalcMoreButtonComment({
+						bodyBlock: bodyBlock,
+						moreButtonBlock: BX.findChild(outerBlock, { className: 'feed-post-text-more'}, true)
+					});
+				}
+			}
+		}, 1000);
+	};
+
 })();

@@ -2190,11 +2190,11 @@ class Query
 			$this->setFilterChains($this->filter);
 			$this->divideFilter();
 
-			if ($this->filterHandler)
-			{
-				$this->setFilterHandlerChains($this->filterHandler);
-				$this->divideFilterHandler();
-			}
+			// unconditional entity scope
+			$this->entity->setDefaultScope($this);
+
+			$this->setFilterHandlerChains($this->filterHandler);
+			$this->divideFilterHandler();
 
 			foreach ($this->group as $value)
 			{

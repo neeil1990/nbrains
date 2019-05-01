@@ -67,6 +67,7 @@ CREATE TABLE b_event_type
 	NAME varchar(100),
 	DESCRIPTION text,
 	SORT INT(18) not null default '150',
+	EVENT_TYPE varchar(10) not null default 'email',
 	PRIMARY KEY (ID),
 	UNIQUE ux_1 (EVENT_NAME, LID)
 );
@@ -214,7 +215,9 @@ CREATE TABLE b_user
 	UNIQUE ix_login (LOGIN, EXTERNAL_AUTH_ID),
 	INDEX ix_b_user_email (EMAIL),
 	INDEX ix_b_user_activity_date (LAST_ACTIVITY_DATE),
-	INDEX IX_B_USER_XML_ID (XML_ID)
+	INDEX IX_B_USER_XML_ID (XML_ID),
+	INDEX ix_user_last_login(LAST_LOGIN),
+	INDEX ix_user_date_register(DATE_REGISTER)
 );
 
 CREATE TABLE b_user_index
@@ -1313,4 +1316,36 @@ CREATE TABLE b_user_profile_record
 	DATA mediumtext,
 	PRIMARY KEY (ID),
 	INDEX ix_profile_record_history_field(HISTORY_ID, FIELD)
+);
+
+CREATE TABLE b_user_phone_auth
+(
+	USER_ID int not null,
+	PHONE_NUMBER varchar(25) not null,
+	OTP_SECRET text,
+	ATTEMPTS int default 0,
+	CONFIRMED char(1) default 'N',
+	DATE_SENT datetime,
+	PRIMARY KEY (USER_ID),
+	UNIQUE INDEX ix_user_phone_auth_number(PHONE_NUMBER)
+);
+
+CREATE TABLE b_sms_template
+(
+	ID int not null auto_increment,
+	EVENT_NAME varchar(255) not null,
+	ACTIVE char(1) not null default 'Y',
+	SENDER varchar(50),
+	RECEIVER varchar(50),
+	MESSAGE text,
+	LANGUAGE_ID char(2),
+	PRIMARY KEY (ID),
+	INDEX ix_sms_message_name (EVENT_NAME(50))
+);
+
+CREATE TABLE b_sms_template_site
+(
+	TEMPLATE_ID int not null,
+	SITE_ID char(2) not null,
+	PRIMARY KEY (TEMPLATE_ID, SITE_ID)
 );

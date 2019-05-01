@@ -132,4 +132,16 @@ class CMainUIFilterAjaxController extends \Bitrix\Main\Engine\Controller
 
 		return static::makeResponse();
 	}
+
+	/**
+	 * Checks date format
+	 * @param $value
+	 * @return array
+	 */
+	public function checkDateFormatAction($value)
+	{
+		return [
+			"result" => $value === "" || \Bitrix\Main\Type\DateTime::isCorrect($value),
+		];
+	}
 }

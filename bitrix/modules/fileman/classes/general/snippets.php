@@ -512,7 +512,7 @@ window.arSnGroups['<?=$template?>']['<?= $key?>'] =
 		}
 		$key = ($path === '' ? '' : $path.'/').$fileName;
 
-		if (!$io->ValidatePathString($snippetPath.'/'.$fileName) ||
+		if (!$io->ValidatePathString('/'.$fileName) ||
 			IsFileUnsafe($snippetPath.'/'.$fileName) ||
 			HasScriptExtension($snippetPath.'/'.$fileName))
 		{
@@ -585,8 +585,7 @@ window.arSnGroups['<?=$template?>']['<?= $key?>'] =
 		$snippetPath = $basePath.($path == '' ? '' : '/'.$path);
 
 		$io = CBXVirtualIo::GetInstance();
-
-		if (!$io->ValidatePathString($path) ||
+		if (!$io->ValidatePathString('/'.$path) ||
 			IsFileUnsafe($path) ||
 			HasScriptExtension($path))
 		{

@@ -160,15 +160,20 @@ class Client
 		return $categoriesList;
 	}
 
-	public static function getCategory($code, $page = false)
+	public static function getCategory($code, $page = false, $pageSize = false)
 	{
 		$queryFields = Array(
 			"code" => $code
 		);
 		$page = intval($page);
+		$pageSize = intval($pageSize);
 		if($page > 0)
 		{
 			$queryFields["page"] = $page;
+		}
+		if($pageSize > 0)
+		{
+			$queryFields["onPageSize"] = $pageSize;
 		}
 
 		return Transport::instance()->call(

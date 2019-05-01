@@ -923,6 +923,9 @@
 .bx-ie .ui-btn-primary.ui-btn-dropdown .ui-btn-main:before,
 .bx-ie .ui-btn-default.ui-btn-dropdown .ui-btn-main:before { border-color: #fff; }
 
+.bx-ie .ui-btn.ui-btn-dropdown,
+.bx-ie .ui-btn-dropdown .ui-btn-main { padding-right: 29px; }
+
 /*endregion*/
 
 /*region Disabled*/

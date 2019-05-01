@@ -1,6 +1,6 @@
 <section class="landing-block g-pt-50 g-pb-50">
 	<div class="container">
-		<div class="row">
+		<div class="row landing-block-node-block">
 			<div class="col-md-6 order-2 order-md-1">
 				<img class="landing-block-node-img js-animation slideInLeft img-fluid"
 					 src="https://cdn.bitrix24.site/bitrix/images/landing/business/540x356/img1.jpg">

@@ -1240,10 +1240,13 @@ class CSiteCheckerTest
 		}
 		else
 		{
+			if (\Bitrix\Main\Config\Option::get("updateserverlight", "is_turned_on", "N") === "Y")
+				return true;
+
 			$strRes = GetHttpResponse($res, $strRequest, $strHeaders);
 
 			$strRes = strtolower(strip_tags($strRes));
-			if ($strRes == "license key is invalid" || $strRes == "license key is required")
+			if ($strRes === "license key is invalid" || $strRes === "license key is required")
 				return true;
 			else
 			{

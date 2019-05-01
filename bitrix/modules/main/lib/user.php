@@ -10,6 +10,8 @@ namespace Bitrix\Main;
 use Bitrix\Main\DB\SqlExpression;
 use Bitrix\Main\Entity;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\Search\MapBuilder;
 
 Loc::loadMessages(__FILE__);
@@ -241,6 +243,11 @@ class UserTable extends Entity\DataManager
 				'COUNTER',
 				\Bitrix\Main\UserCounterTable::class,
 				Entity\Query\Join::on('this.ID', 'ref.USER_ID')->where('ref.CODE', 'tasks_effective')
+			)),
+			(new Reference(
+				'PHONE_AUTH',
+				UserPhoneAuthTable::class,
+				Join::on('this.ID', 'ref.USER_ID')
 			))
 		);
 	}

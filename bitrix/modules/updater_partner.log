@@ -1,0 +1,474 @@
+2019-03-21 09:41:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:07 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:07 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-21 09:41:07 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:56 -  - TIME GetUpdatesList(request) 48.921 sec
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:56 -  - TIME GetUpdatesList(request) 49.178 sec
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:41:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:41:57 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:41:57 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:42:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:42:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:42:32 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:42:32 -  - TIME GetUpdatesList(request) 0.414 sec
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-21 09:42:32 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:11:33 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:11:33 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:11:35 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:11:35 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-22 10:11:35 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:11:35 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-22 10:11:35 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:12:00 -  - TIME GetUpdatesList(request) 25.04 sec
+2019-03-22 10:12:00 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:12:00 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:12:00 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:12:01 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:12:01 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:12:01 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:12:02 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:12:02 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-22 10:12:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:12:02 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-22 10:12:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:12:03 -  - TIME GetUpdatesList(request) 0.879 sec
+2019-03-22 10:12:03 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-22 10:12:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-22 10:12:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-22 10:12:03 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:03 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:03 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-25 09:57:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:03 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-25 09:57:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:04 -  - TIME GetUpdatesList(request) 0.39 sec
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:05 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:05 -  - TIME GetUpdatesList(request) 0.411 sec
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-25 09:57:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:00 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:00 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:02 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:02 -  - TIME GetUpdatesList(request) 0.815 sec
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:03 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-26 10:14:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:04 -  - TIME GetUpdatesList(request) 0.849 sec
+2019-03-26 10:14:04 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-26 10:14:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-26 10:14:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-26 10:14:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:36 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:36 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:37 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:37 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-27 14:35:37 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:37 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-27 14:35:37 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:38 -  - TIME GetUpdatesList(request) 0.456 sec
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:38 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-27 14:35:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:39 -  - TIME GetUpdatesList(request) 0.378 sec
+2019-03-27 14:35:39 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-27 14:35:39 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-27 14:35:39 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-27 14:35:39 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:52 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-31 14:25:52 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:53 -  - TIME GetUpdatesList(request) 0.301 sec
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:53 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:53 -  - TIME GetUpdatesList(request) 0.261 sec
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::ParseServerData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-03-31 14:25:53 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-03-31 14:25:54 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:16 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-01 17:46:16 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:17 -  - TIME GetUpdatesList(request) 0.37 sec
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:17 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:17 -  - TIME GetUpdatesList(request) 0.263 sec
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-01 17:46:17 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-01 17:46:18 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-01 17:46:18 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:40 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:40 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:41 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:41 -  - TIME GetUpdatesList(request) 0.252 sec
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:42 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:42 -  - TIME GetUpdatesList(request) 0.361 sec
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-03 10:10:42 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:33 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:33 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:34 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:34 -  - TIME GetUpdatesList(request) 0.333 sec
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:34 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:35 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:35 -  - TIME GetUpdatesList(request) 0.324 sec
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-04 15:24:35 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:37 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-07 14:00:37 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:38 -  - TIME GetUpdatesList(request) 0.275 sec
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:38 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:38 -  - TIME GetUpdatesList(request) 0.332 sec
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-07 14:00:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-07 14:00:39 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:04 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:04 -  - TIME GetUpdatesList(request) 0.602 sec
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:04 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:05 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-15 12:35:05 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:06 -  - TIME GetUpdatesList(request) 0.58 sec
+2019-04-15 12:35:06 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-15 12:35:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-15 12:35:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-15 12:35:06 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-16 14:13:48 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-16 14:13:48 -  - TIME GetUpdatesList(request) 0.37 sec
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-16 14:13:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-17 14:21:31 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-17 14:21:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-17 14:21:32 -  - TIME GetUpdatesList(request) 0.356 sec
+2019-04-17 14:21:32 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-17 14:21:32 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-17 14:21:32 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-17 14:21:32 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:47 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:47 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-18 14:31:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:48 -  - TIME GetUpdatesList(request) 0.569 sec
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:48 -  - TIME GetUpdatesList(request) 0.905 sec
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-18 14:31:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:40 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:40 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:41 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:41 -  - TIME GetUpdatesList(request) 0.309 sec
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:41 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-19 15:44:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:42 -  - TIME GetUpdatesList(request) 0.325 sec
+2019-04-19 15:44:42 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-19 15:44:42 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-19 15:44:42 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-19 15:44:42 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-20 15:44:51 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-20 15:44:51 -  - TIME GetUpdatesList(request) 0.305 sec
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-20 15:44:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-20 15:44:52 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-21 16:11:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-21 16:11:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-21 16:11:48 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-21 16:11:48 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-21 16:11:48 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-21 16:11:48 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-21 16:11:48 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-21 16:12:02 -  - TIME GetUpdatesList(request) 13.97 sec
+2019-04-21 16:12:02 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-21 16:12:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-21 16:12:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-21 16:12:02 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:30 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:30 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-25 10:34:30 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:31 -  - TIME GetUpdatesList(request) 0.373 sec
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:31 -  - TIME GetUpdatesList(request) 0.392 sec
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-25 10:34:31 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:55 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-29 09:59:55 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:56 -  - TIME GetUpdatesList(request) 0.331 sec
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:56 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-29 09:59:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:57 -  - TIME GetUpdatesList(request) 0.328 sec
+2019-04-29 09:59:57 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-29 09:59:57 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-29 09:59:57 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-29 09:59:57 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:27 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:27 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:27 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:27 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:28 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:28 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:28 -  - TIME GetUpdatesList(request) 0.498 sec
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:28 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:29 -  - TIME GetUpdatesList(request) 0.728 sec
+2019-04-30 10:46:29 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:29 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-04-30 10:46:29 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-04-30 10:46:29 -  - exec CUpdateClientPartner::ParseServerData
+2019-04-30 10:46:29 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:03 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:03 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:06 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:06 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-05-01 17:16:06 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:06 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-05-01 17:16:06 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:09 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.1.8%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.2%2CN%3Bfileman%2C18.5.2%2CN%3Bhighloadblock%2C18.5.1%2CN%3Bseo%2C18.5.1%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.0%2CN%3Blanding%2C18.5.16%2CN%3Bui%2C18.5.3%2CN%3Bsocialservices%2C18.0.3%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.0.1%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.6%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:09 -  - TIME GetUpdatesList(request) 3.061 sec
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:09 -  - TIME GetUpdatesList(request) 0.546 sec
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:16:09 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:16:10 -  - exec CUpdateClientPartner::ParseServerData
+2019-05-01 17:18:08 -  - exec CUpdateClientPartner::GetUpdatesList
+2019-05-01 17:18:08 -  - exec CUpdateClientPartner::__CollectRequestData
+2019-05-01 17:18:08 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.21&NGINX=Y&dbv=5.7.21&instm=main%2C18.5.180%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Biblock%2C18.6.400%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Bseo%2C18.6.100%2CN%3Bcompression%2C16.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bsearch%2C18.5.200%2CN%3Blanding%2C18.6.75%2CN%3Bui%2C18.5.150%2CN%3Bsocialservices%2C18.5.100%2CN%3Bmessageservice%2C18.0.3%2CN%3Bb24connector%2C18.5.0%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN&reqm=bitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2019-05-01 17:18:08 -  - exec CUpdateClientPartner::GetHTTPPage
+2019-05-01 17:18:08 -  - TIME GetUpdatesList(request) 0.327 sec
+2019-05-01 17:18:08 -  - exec CUpdateClientPartner::ParseServerData

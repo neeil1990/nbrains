@@ -407,6 +407,34 @@ class AppTable extends Main\Entity\DataManager
 		}
 	}
 
+	public static function checkUninstallAvailability($appId, $clean = 0)
+	{
+		$event = new Main\Event('rest', 'onBeforeApplicationUninstall', [
+			'ID' => $appId,
+			'CLEAN' => $clean
+		]);
+		$event->send();
+
+		$result = new Main\ErrorCollection();
+		if ($event->getResults())
+		{
+			/** @var \Bitrix\Main\EventResult $eventResult */
+			foreach ($event->getResults() as $eventResult)
+			{
+				if($eventResult->getType() === Main\EventResult::ERROR)
+				{
+					$eventResultData = $eventResult->getParameters();
+					if ($eventResultData instanceof Main\Error)
+					{
+						$result->add([$eventResultData]);
+					}
+				}
+			}
+		}
+
+		return $result;
+	}
+
 	public static function updateAppStatusInfo()
 	{
 		$appList = OAuthService::getEngine()->getClient()->getApplicationList();

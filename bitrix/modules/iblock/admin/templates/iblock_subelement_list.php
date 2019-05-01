@@ -52,7 +52,6 @@ if (!defined('B_ADMIN_SUBELEMENTS') || 1 != B_ADMIN_SUBELEMENTS)
 if (!defined('B_ADMIN_SUBELEMENTS_LIST'))
 	return '';
 
-IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/iblock/admin/iblock_element_admin.php");
 IncludeModuleLangFile(__FILE__);
 
 $strSubElementAjaxPath = trim($strSubElementAjaxPath);
@@ -75,6 +74,10 @@ $boolCatalogPurchasInfo = false;
 $catalogPurchasInfoEdit = false;
 $boolCatalogSet = false;
 $productTypeList = array();
+$priceTypeList = array();
+$priceTypeIndex = array();
+$basePriceType = [];
+$basePriceTypeId = 0;
 if ($boolSubCatalog)
 {
 	$useStoreControl = Catalog\Config\State::isUsedInventoryManagement();
@@ -86,6 +89,9 @@ if ($boolSubCatalog)
 	$productTypeList = CCatalogAdminTools::getIblockProductTypeList($intSubIBlockID, true);
 	if ($boolCatalogPurchasInfo)
 		$catalogPurchasInfoEdit = $boolCatalogPrice && !$useStoreControl;
+	$basePriceType = \CCatalogGroup::GetBaseGroup();
+	if (!empty($basePriceType))
+		$basePriceTypeId = $basePriceType['ID'];
 }
 
 define("MODULE_ID", "iblock");
@@ -134,18 +140,8 @@ if (!isset($by))
 if (!isset($order))
 	$order = 'asc';
 $by = strtoupper($by);
-switch ($by)
-{
-	case 'ID':
-		$arOrder = array('ID' => $order);
-		break;
-	case 'CATALOG_TYPE':
-		$arOrder = array('CATALOG_TYPE' => $order, 'CATALOG_BUNDLE' => $order, 'ID' => 'ASC');
-		break;
-	default:
-		$arOrder = array($by => $order, 'ID' => 'ASC');
-		break;
-}
+if ($by == 'CATALOG_TYPE')
+	$by = 'TYPE';
 
 // only sku property filter
 $arFilterFields = array(
@@ -172,6 +168,405 @@ else
 }
 $arFilter["CHECK_PERMISSIONS"] = "Y";
 $arFilter["MIN_PERMISSION"] = "R";
+
+$transferHeaders = [
+	'CATALOG_TYPE' => 'TYPE',
+	'CATALOG_BUNDLE' => 'BUNDLE',
+	'CATALOG_AVAILABLE' => 'AVAILABLE',
+	'CATALOG_QUANTITY' => 'QUANTITY',
+	'CATALOG_QUANTITY_RESERVED' => 'QUANTITY_RESERVED',
+	'CATALOG_MEASURE' => 'MEASURE',
+	'CATALOG_QUANTITY_TRACE' => 'QUANTITY_TRACE',
+	'CATALOG_WEIGHT' => 'WEIGHT',
+	'CATALOG_WIDTH' => 'WIDTH',
+	'CATALOG_LENGTH' => 'LENGTH',
+	'CATALOG_HEIGHT' => 'HEIGHT',
+	'CATALOG_VAT_INCLUDED' => 'VAT_INCLUDED',
+	'CATALOG_PURCHASING_PRICE' => 'PURCHASING_PRICE',
+	'CATALOG_PURCHASING_CURRENCY' => 'PURCHASING_CURRENCY'
+];
+$revertFields = array_flip($transferHeaders);
+
+$arHeader = array();
+if ($boolSubCatalog)
+{
+	$arHeader[] = array(
+		"id" => "CATALOG_TYPE",
+		"content" => GetMessage("IBEL_CATALOG_TYPE"),
+		"title" => GetMessage('IBEL_CATALOG_TYPE_TITLE'),
+		"align" => "right",
+		"sort" => "TYPE",
+		"default" => true,
+	);
+}
+$arHeader[] = array("id"=>"NAME", "content"=>GetMessage("IBLOCK_FIELD_NAME"), "sort"=>"name", "default"=>true);
+
+$arHeader[] = array("id"=>"ACTIVE", "content"=>GetMessage("IBLOCK_FIELD_ACTIVE"), "sort"=>"active", "default"=>true, "align"=>"center");
+$arHeader[] = array("id"=>"SORT", "content"=>GetMessage("IBLOCK_FIELD_SORT"), "sort"=>"sort", "default"=>true, "align"=>"right");
+$arHeader[] = array("id"=>"TIMESTAMP_X", "content"=>GetMessage("IBLOCK_FIELD_TIMESTAMP_X"), "sort"=>"timestamp_x");
+$arHeader[] = array("id"=>"USER_NAME", "content"=>GetMessage("IBLOCK_FIELD_USER_NAME"), "sort"=>"modified_by");
+$arHeader[] = array("id"=>"DATE_CREATE", "content"=>GetMessage("IBLOCK_EL_ADMIN_DCREATE"), "sort"=>"created");
+$arHeader[] = array("id"=>"CREATED_USER_NAME", "content"=>GetMessage("IBLOCK_EL_ADMIN_WCREATE2"), "sort"=>"created_by");
+
+$arHeader[] = array("id"=>"CODE", "content"=>GetMessage("IBEL_A_CODE"), "sort"=>"code");
+$arHeader[] = array("id"=>"EXTERNAL_ID", "content"=>GetMessage("IBEL_A_EXTERNAL_ID"), "sort"=>"external_id");
+$arHeader[] = array("id"=>"TAGS", "content"=>GetMessage("IBEL_A_TAGS"), "sort"=>"tags");
+
+if ($boolSubWorkFlow)
+{
+	$arHeader[] = array("id"=>"WF_STATUS_ID", "content"=>GetMessage("IBLOCK_FIELD_STATUS"), "sort"=>"status", "default"=>true);
+	$arHeader[] = array("id"=>"WF_NEW", "content"=>GetMessage("IBEL_A_EXTERNAL_WFNEW"), "sort"=>"");
+	$arHeader[] = array("id"=>"LOCK_STATUS", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK"), "default"=>true);
+	$arHeader[] = array("id"=>"LOCKED_USER_NAME", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK_BY"));
+	$arHeader[] = array("id"=>"WF_DATE_LOCK", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK_WHEN"));
+	$arHeader[] = array("id"=>"WF_COMMENTS", "content"=>GetMessage("IBEL_A_EXTERNAL_COM"));
+}
+
+$arHeader[] = array("id"=>"ID", "content"=>'ID', "sort"=>"id", "default"=>true, "align"=>"right");
+$arHeader[] = array("id"=>"SHOW_COUNTER", "content"=>GetMessage("IBEL_A_EXTERNAL_SHOWS"), "sort"=>"show_counter", "align"=>"right");
+$arHeader[] = array("id"=>"SHOW_COUNTER_START", "content"=>GetMessage("IBEL_A_EXTERNAL_SHOW_F"), "sort"=>"show_counter_start", "align"=>"right");
+$arHeader[] = array("id"=>"PREVIEW_PICTURE", "content"=>GetMessage("IBEL_A_EXTERNAL_PREV_PIC"), "sort" => "has_preview_picture");
+$arHeader[] = array("id"=>"PREVIEW_TEXT", "content"=>GetMessage("IBEL_A_EXTERNAL_PREV_TEXT"));
+$arHeader[] = array("id"=>"DETAIL_PICTURE", "content"=>GetMessage("IBEL_A_EXTERNAL_DET_PIC"), "sort" => "has_detail_picture");
+$arHeader[] = array("id"=>"DETAIL_TEXT", "content"=>GetMessage("IBEL_A_EXTERNAL_DET_TEXT"));
+
+
+foreach ($arProps as &$arFProps)
+{
+	if ($arSubCatalog['SKU_PROPERTY_ID'] != $arFProps['ID'])
+	{
+		$arHeader[] = array(
+			"id" => "PROPERTY_".$arFProps['ID'],
+			"content" => htmlspecialcharsEx($arFProps['NAME']),
+			"align" => ($arFProps["PROPERTY_TYPE"] == 'N' ? "right" : "left"),
+			"sort" => ($arFProps["MULTIPLE"] != 'Y' ? "PROPERTY_".$arFProps['ID'] : "")
+		);
+	}
+}
+if (isset($arFProps))
+	unset($arFProps);
+
+$arWFStatus = array();
+if ($boolSubWorkFlow)
+{
+	$rsWF = CWorkflowStatus::GetDropDownList('Y');
+	while($arWF = $rsWF->GetNext())
+		$arWFStatus[$arWF["~REFERENCE_ID"]] = $arWF["~REFERENCE"];
+}
+
+if ($boolSubCatalog)
+{
+	$arHeader[] = array(
+		"id" => "CATALOG_AVAILABLE",
+		"content" => GetMessage("IBEL_CATALOG_AVAILABLE"),
+		"title" => GetMessage("IBEL_CATALOG_AVAILABLE_TITLE_EXT"),
+		"align" => "center",
+		"sort" => "AVAILABLE",
+		"default" => true,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_QUANTITY",
+		"content" => GetMessage("IBEL_CATALOG_QUANTITY_EXT"),
+		"align" => "right",
+		"sort" => "QUANTITY",
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_QUANTITY_RESERVED",
+		"content" => GetMessage("IBEL_CATALOG_QUANTITY_RESERVED"),
+		"align" => "right"
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_MEASURE_RATIO",
+		"content" => GetMessage("IBEL_CATALOG_MEASURE_RATIO"),
+		"title" => GetMessage('IBEL_CATALOG_MEASURE_RATIO_TITLE'),
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_MEASURE",
+		"content" => GetMessage("IBEL_CATALOG_MEASURE"),
+		"title" => GetMessage('IBEL_CATALOG_MEASURE_TITLE'),
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_QUANTITY_TRACE",
+		"content" => GetMessage("IBEL_CATALOG_QUANTITY_TRACE"),
+		"align" => "right",
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_WEIGHT",
+		"content" => GetMessage("IBEL_CATALOG_WEIGHT"),
+		"align" => "right",
+		"sort" => "WEIGHT",
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_WIDTH",
+		"content" => GetMessage("IBEL_CATALOG_WIDTH"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_LENGTH",
+		"content" => GetMessage("IBEL_CATALOG_LENGTH"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_HEIGHT",
+		"content" => GetMessage("IBEL_CATALOG_HEIGHT"),
+		"title" => "",
+		"align" => "right",
+		"default" => false,
+	);
+	$arHeader[] = array(
+		"id" => "CATALOG_VAT_INCLUDED",
+		"content" => GetMessage("IBEL_CATALOG_VAT_INCLUDED"),
+		"align" => "right",
+	);
+	if ($boolCatalogPurchasInfo)
+	{
+		$arHeader[] = array(
+			"id" => "CATALOG_PURCHASING_PRICE",
+			"content" => GetMessage("IBEL_CATALOG_PURCHASING_PRICE"),
+			"title" => "",
+			"align" => "right",
+			"sort" => "PURCHASING_PRICE",
+			"default" => false,
+		);
+	}
+	if ($useStoreControl)
+	{
+		$arHeader[] = array(
+			"id" => "CATALOG_BAR_CODE",
+			"content" => GetMessage("IBEL_CATALOG_BAR_CODE"),
+			"title" => "",
+			"align" => "right",
+			"default" => false,
+		);
+	}
+
+	$priceTypeList = CCatalogGroup::GetListArray();
+	if (!empty($priceTypeList))
+	{
+		foreach ($priceTypeList as $priceType)
+		{
+			$arHeader[] = array(
+				"id" => "CATALOG_GROUP_".$priceType["ID"],
+				"content" => htmlspecialcharsEx(!empty($priceType["NAME_LANG"]) ? $priceType["NAME_LANG"] : $priceType["NAME"]),
+				"align" => "right",
+				"sort" => "SCALED_PRICE_".$priceType["ID"],
+				"default" => false,
+			);
+		}
+		unset($priceType);
+	}
+
+	$arCatExtra = array();
+	$db_extras = CExtra::GetList(array("ID" =>"ASC"));
+	while ($extras = $db_extras->Fetch())
+		$arCatExtra[$extras['ID']] = $extras;
+	unset($extras, $db_extras);
+}
+
+if($bCatalog)
+{
+	$arHeader[] = array(
+		"id" => "SUBSCRIPTIONS",
+		"content" => GetMessage("IBLOCK_FIELD_SUBSCRIPTIONS"),
+		"default" => false,
+	);
+}
+
+if ($boolSubBizproc)
+{
+	$arWorkflowTemplates = CBPDocument::GetWorkflowTemplatesForDocumentType(array("iblock", "CIBlockDocument", "iblock_".$intSubIBlockID));
+	foreach ($arWorkflowTemplates as $arTemplate)
+	{
+		$arHeader[] = array(
+			"id" => "WF_".$arTemplate["ID"],
+			"content" => $arTemplate["NAME"],
+		);
+	}
+	$arHeader[] = array(
+		"id" => "BIZPROC",
+		"content" => GetMessage("IBEL_A_BP_H"),
+	);
+	$arHeader[] = array(
+		"id" => "BP_PUBLISHED",
+		"content" => GetMessage("IBLOCK_FIELD_BP_PUBLISHED"),
+		"sort" => "status",
+		"default" => true,
+	);
+}
+
+$lAdmin->AddHeaders($arHeader);
+
+$arSelectedFieldsMap = array_fill_keys($lAdmin->GetVisibleHeaderColumns(), true);
+
+$arSelectedProps = array();
+$selectedPropertyIds = array();
+$arSelect = array();
+foreach ($arProps as $arProperty)
+{
+	if (isset($arSelectedFieldsMap['PROPERTY_'.$arProperty['ID']]))
+	{
+		$arSelectedProps[] = $arProperty;
+		$selectedPropertyIds[] = $arProperty['ID'];
+		if ($arProperty["PROPERTY_TYPE"] == "L")
+		{
+			$arSelect[$arProperty['ID']] = array();
+			$rs = CIBlockProperty::GetPropertyEnum($arProperty['ID']);
+			while($ar = $rs->GetNext())
+				$arSelect[$arProperty['ID']][$ar["ID"]] = $ar["VALUE"];
+		}
+		elseif ($arProperty["PROPERTY_TYPE"] == "G")
+		{
+			$arSelect[$arProperty['ID']] = array();
+			$rs = CIBlockSection::GetTreeList(array("IBLOCK_ID"=>$arProperty["LINK_IBLOCK_ID"]), array("ID", "NAME", "DEPTH_LEVEL"));
+			while($ar = $rs->GetNext())
+				$arSelect[$arProperty['ID']][$ar["ID"]] = str_repeat(" . ", $ar["DEPTH_LEVEL"]).$ar["NAME"];
+		}
+		unset($arSelectedFieldsMap['PROPERTY_'.$arProperty['ID']]);
+	}
+}
+
+$arSelectedFieldsMap["ID"] = true;
+$arSelectedFieldsMap["CREATED_BY"] = true;
+$arSelectedFieldsMap["LANG_DIR"] = true;
+$arSelectedFieldsMap["LID"] = true;
+$arSelectedFieldsMap["WF_PARENT_ELEMENT_ID"] = true;
+$arSelectedFieldsMap["ACTIVE"] = true;
+
+if (isset($arSelectedFieldsMap["LOCKED_USER_NAME"]))
+	$arSelectedFieldsMap["WF_LOCKED_BY"] = true;
+if (isset($arSelectedFieldsMap["USER_NAME"]))
+	$arSelectedFieldsMap["MODIFIED_BY"] = true;
+if (isset($arSelectedFieldsMap["PREVIEW_TEXT"]))
+	$arSelectedFieldsMap["PREVIEW_TEXT_TYPE"] = true;
+if (isset($arSelectedFieldsMap["DETAIL_TEXT"]))
+	$arSelectedFieldsMap["DETAIL_TEXT_TYPE"] = true;
+
+$arSelectedFieldsMap["LOCK_STATUS"] = true;
+$arSelectedFieldsMap["WF_NEW"] = true;
+$arSelectedFieldsMap["WF_STATUS_ID"] = true;
+$arSelectedFieldsMap["DETAIL_PAGE_URL"] = true;
+$arSelectedFieldsMap["SITE_ID"] = true;
+$arSelectedFieldsMap["CODE"] = true;
+$arSelectedFieldsMap["EXTERNAL_ID"] = true;
+
+$measureList = array(0 => ' ');
+if ($boolSubCatalog)
+{
+	if (isset($arSelectedFieldsMap['CATALOG_QUANTITY_RESERVED']) || isset($arSelectedFieldsMap['CATALOG_MEASURE']))
+		$arSelectedFieldsMap['CATALOG_TYPE'] = true;
+
+	$boolPriceInc = false;
+	if ($boolCatalogPurchasInfo)
+	{
+		if (isset($arSelectedFieldsMap["CATALOG_PURCHASING_PRICE"]))
+		{
+			$arSelectedFieldsMap["CATALOG_PURCHASING_CURRENCY"] = true;
+			$boolPriceInc = true;
+		}
+	}
+	if (!empty($priceTypeList))
+	{
+		$priceIndex = array_keys($priceTypeList);
+		foreach($priceIndex as $index)
+		{
+			if (isset($arSelectedFieldsMap["CATALOG_GROUP_".$index]))
+			{
+				$boolPriceInc = true;
+			}
+			else
+			{
+				unset($priceTypeList[$index]);
+			}
+		}
+		unset($index, $priceIndex);
+		if (!empty($priceTypeList))
+			$priceTypeIndex = array_keys($priceTypeList);
+	}
+	if ($boolPriceInc)
+	{
+		if (!isset($arSelectedFieldsMap['CATALOG_TYPE']))
+			$arSelectedFieldsMap['CATALOG_TYPE'] = true;
+		$boolSubCurrency = Loader::includeModule('currency');
+		if ($boolSubCurrency)
+			$arCurrencyList = array_keys(Currency\CurrencyManager::getCurrencyList());
+	}
+	unset($boolPriceInc);
+
+	if (isset($arSelectedFieldsMap['CATALOG_TYPE']) && $boolCatalogSet)
+		$arSelectedFieldsMap['CATALOG_BUNDLE'] = true;
+
+	if (isset($arSelectedFieldsMap['CATALOG_MEASURE']))
+	{
+		$measureIterator = CCatalogMeasure::getList(array(), array(), false, false, array('ID', 'MEASURE_TITLE', 'SYMBOL_RUS'));
+		while($measure = $measureIterator->Fetch())
+			$measureList[$measure['ID']] = ($measure['SYMBOL_RUS'] != '' ? $measure['SYMBOL_RUS'] : $measure['MEASURE_TITLE']);
+		unset($measure, $measureIterator);
+	}
+}
+
+$arSelectedFields = $arSelectedFieldsMap;
+if ($bCatalog)
+{
+	if (!empty($priceTypeIndex))
+	{
+		foreach($priceTypeIndex as $index)
+			unset($arSelectedFields["CATALOG_GROUP_".$index]);
+		unset($index);
+	}
+}
+$arSelectedFields = array_keys($arSelectedFields);
+if ($bCatalog)
+{
+	foreach ($arSelectedFields as $index => $field)
+	{
+		if (isset($transferHeaders[$field]))
+			$arSelectedFields[$index] = $transferHeaders[$field];
+	}
+	unset($index, $field);
+}
+
+$nonCatalogFields = $arSelectedFields;
+$catalogFieldsView = false;
+if ($bCatalog)
+{
+	foreach ($nonCatalogFields as $index => $field)
+	{
+		if (!\CProductQueryBuilder::isValidField($field))
+			continue;
+		unset($nonCatalogFields[$index]);
+		$catalogFieldsView = true;
+	}
+	unset($index, $field);
+}
+
+switch ($by)
+{
+	case 'ID':
+		$arOrder = array('ID' => $order);
+		break;
+	case 'TYPE':
+		$arOrder = array('TYPE' => $order, 'BUNDLE' => $order, 'ID' => 'ASC');
+		break;
+	default:
+		$arOrder = array($by => $order, 'ID' => 'ASC');
+		break;
+}
+if ($bCatalog)
+{
+	$arFilter = \CProductQueryBuilder::modifyFilterFromOrder(
+		\CProductQueryBuilder::convertOldFilter($arFilter),
+		$arOrder,
+		['QUANTITY' => 1]
+	);
+}
 
 if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 {
@@ -234,7 +629,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 			{
 				if (!CIBlockElementRights::UserHasRightTo($intSubIBlockID, $subID, "element_edit"))
 				{
-					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 					continue;
 				}
 				$STATUS_PERMISSION = 2;
@@ -243,7 +638,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 					$STATUS_PERMISSION = CIBlockElement::WF_GetStatusPermission($arRes["WF_STATUS_ID"]);
 				if ($STATUS_PERMISSION < 2)
 				{
-					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 					continue;
 				}
 
@@ -252,7 +647,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 				{
 					if (CIBlockElement::WF_GetStatusPermission($arFields["WF_STATUS_ID"])<1)
 					{
-						$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR2")." (ID:".$subID.")", $subID);
+						$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 						continue;
 					}
 				}
@@ -272,13 +667,13 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 
 				if (!$bCanWrite)
 				{
-					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 					continue;
 				}
 			}
 			elseif (!CIBlockElementRights::UserHasRightTo($intSubIBlockID, $subID, "element_edit"))
 			{
-				$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+				$lAdmin->AddUpdateError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 				continue;
 			}
 
@@ -691,7 +1086,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 
 			if (!$bPermissions)
 			{
-				$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+				$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 				continue;
 			}
 
@@ -732,7 +1127,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 				}
 				else
 				{
-					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 				}
 				break;
 			case "wf_status":
@@ -760,28 +1155,37 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 						}
 						else
 						{
-							$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+							$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 						}
 					}
 				}
 				break;
 			case "lock":
+				$elementAccess = true;
 				if ($bWorkFlow && !CIBlockElementRights::UserHasRightTo($intSubIBlockID, $subID, "element_edit"))
 				{
-					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
+					$elementAccess = false;
 				}
-				CIBlockElement::WF_Lock($subID);
+				if ($elementAccess)
+					CIBlockElement::WF_Lock($subID);
+				unset($elementAccess);
 				break;
 			case "unlock":
+				$elementAccess = true;
 				if ($bWorkFlow && !CIBlockElementRights::UserHasRightTo($intSubIBlockID, $subID, "element_edit"))
 				{
-					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
-					continue;
+					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
+					$elementAccess = false;
 				}
-				if ($bBizproc)
-					call_user_func(array(ENTITY, "UnlockDocument"), $subID, "");
-				else
-					CIBlockElement::WF_UnLock($subID);
+				if ($elementAccess)
+				{
+					if ($bBizproc)
+						call_user_func(array(ENTITY, "UnlockDocument"), $subID, "");
+					else
+						CIBlockElement::WF_UnLock($subID);
+				}
+				unset($elementAccess);
 				break;
 			case 'clear_counter':
 				if (CIBlockElementRights::UserHasRightTo($intSubIBlockID, $subID, "element_edit"))
@@ -793,7 +1197,7 @@ if (defined('B_ADMIN_SUBELEMENTS_LIST') && true === B_ADMIN_SUBELEMENTS_LIST)
 				}
 				else
 				{
-					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR3")." (ID:".$subID.")", $subID);
+					$lAdmin->AddGroupError(GetMessage("IBEL_A_UPDERR_ACCESS")." (ID:".$subID.")", $subID);
 				}
 				break;
 			}
@@ -811,347 +1215,6 @@ CJSCore::Init(array('translit'));
 
 if (true == B_ADMIN_SUBELEMENTS_LIST)
 	CJSCore::Init(array('date'));
-
-$arHeader = array();
-if ($boolSubCatalog)
-{
-	$arHeader[] = array(
-		"id" => "CATALOG_TYPE",
-		"content" => GetMessage("IBEL_CATALOG_TYPE"),
-		"title" => GetMessage('IBEL_CATALOG_TYPE_TITLE'),
-		"align" => "right",
-		"sort" => "CATALOG_TYPE",
-		"default" => true,
-	);
-}
-$arHeader[] = array("id"=>"NAME", "content"=>GetMessage("IBLOCK_FIELD_NAME"), "sort"=>"name", "default"=>true);
-
-$arHeader[] = array("id"=>"ACTIVE", "content"=>GetMessage("IBLOCK_FIELD_ACTIVE"), "sort"=>"active", "default"=>true, "align"=>"center");
-$arHeader[] = array("id"=>"SORT", "content"=>GetMessage("IBLOCK_FIELD_SORT"), "sort"=>"sort", "default"=>true, "align"=>"right");
-$arHeader[] = array("id"=>"TIMESTAMP_X", "content"=>GetMessage("IBLOCK_FIELD_TIMESTAMP_X"), "sort"=>"timestamp_x");
-$arHeader[] = array("id"=>"USER_NAME", "content"=>GetMessage("IBLOCK_FIELD_USER_NAME"), "sort"=>"modified_by");
-$arHeader[] = array("id"=>"DATE_CREATE", "content"=>GetMessage("IBLOCK_EL_ADMIN_DCREATE"), "sort"=>"created");
-$arHeader[] = array("id"=>"CREATED_USER_NAME", "content"=>GetMessage("IBLOCK_EL_ADMIN_WCREATE2"), "sort"=>"created_by");
-
-$arHeader[] = array("id"=>"CODE", "content"=>GetMessage("IBEL_A_CODE"), "sort"=>"code");
-$arHeader[] = array("id"=>"EXTERNAL_ID", "content"=>GetMessage("IBEL_A_EXTERNAL_ID"), "sort"=>"external_id");
-$arHeader[] = array("id"=>"TAGS", "content"=>GetMessage("IBEL_A_TAGS"), "sort"=>"tags");
-
-if ($boolSubWorkFlow)
-{
-	$arHeader[] = array("id"=>"WF_STATUS_ID", "content"=>GetMessage("IBLOCK_FIELD_STATUS"), "sort"=>"status", "default"=>true);
-	$arHeader[] = array("id"=>"WF_NEW", "content"=>GetMessage("IBEL_A_EXTERNAL_WFNEW"), "sort"=>"");
-	$arHeader[] = array("id"=>"LOCK_STATUS", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK"), "default"=>true);
-	$arHeader[] = array("id"=>"LOCKED_USER_NAME", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK_BY"));
-	$arHeader[] = array("id"=>"WF_DATE_LOCK", "content"=>GetMessage("IBEL_A_EXTERNAL_LOCK_WHEN"));
-	$arHeader[] = array("id"=>"WF_COMMENTS", "content"=>GetMessage("IBEL_A_EXTERNAL_COM"));
-}
-
-$arHeader[] = array("id"=>"ID", "content"=>'ID', "sort"=>"id", "default"=>true, "align"=>"right");
-$arHeader[] = array("id"=>"SHOW_COUNTER", "content"=>GetMessage("IBEL_A_EXTERNAL_SHOWS"), "sort"=>"show_counter", "align"=>"right");
-$arHeader[] = array("id"=>"SHOW_COUNTER_START", "content"=>GetMessage("IBEL_A_EXTERNAL_SHOW_F"), "sort"=>"show_counter_start", "align"=>"right");
-$arHeader[] = array("id"=>"PREVIEW_PICTURE", "content"=>GetMessage("IBEL_A_EXTERNAL_PREV_PIC"), "sort" => "has_preview_picture");
-$arHeader[] = array("id"=>"PREVIEW_TEXT", "content"=>GetMessage("IBEL_A_EXTERNAL_PREV_TEXT"));
-$arHeader[] = array("id"=>"DETAIL_PICTURE", "content"=>GetMessage("IBEL_A_EXTERNAL_DET_PIC"), "sort" => "has_detail_picture");
-$arHeader[] = array("id"=>"DETAIL_TEXT", "content"=>GetMessage("IBEL_A_EXTERNAL_DET_TEXT"));
-
-
-foreach ($arProps as &$arFProps)
-{
-	if ($arSubCatalog['SKU_PROPERTY_ID'] != $arFProps['ID'])
-	{
-		$arHeader[] = array(
-			"id" => "PROPERTY_".$arFProps['ID'],
-			"content" => htmlspecialcharsEx($arFProps['NAME']),
-			"align" => ($arFProps["PROPERTY_TYPE"] == 'N' ? "right" : "left"),
-			"sort" => ($arFProps["MULTIPLE"] != 'Y' ? "PROPERTY_".$arFProps['ID'] : "")
-		);
-	}
-}
-if (isset($arFProps))
-	unset($arFProps);
-
-$arWFStatus = array();
-if ($boolSubWorkFlow)
-{
-	$rsWF = CWorkflowStatus::GetDropDownList('Y');
-	while($arWF = $rsWF->GetNext())
-		$arWFStatus[$arWF["~REFERENCE_ID"]] = $arWF["~REFERENCE"];
-}
-
-if ($boolSubCatalog)
-{
-	$arHeader[] = array(
-		"id" => "CATALOG_AVAILABLE",
-		"content" => GetMessage("IBEL_CATALOG_AVAILABLE"),
-		"title" => GetMessage("IBEL_CATALOG_AVAILABLE_TITLE_EXT"),
-		"align" => "center",
-		"sort" => "CATALOG_AVAILABLE",
-		"default" => true,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_QUANTITY",
-		"content" => GetMessage("IBEL_CATALOG_QUANTITY_EXT"),
-		"align" => "right",
-		"sort" => "CATALOG_QUANTITY",
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_QUANTITY_RESERVED",
-		"content" => GetMessage("IBEL_CATALOG_QUANTITY_RESERVED"),
-		"align" => "right"
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_MEASURE_RATIO",
-		"content" => GetMessage("IBEL_CATALOG_MEASURE_RATIO"),
-		"title" => GetMessage('IBEL_CATALOG_MEASURE_RATIO_TITLE'),
-		"align" => "right",
-		"default" => false,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_MEASURE",
-		"content" => GetMessage("IBEL_CATALOG_MEASURE"),
-		"title" => GetMessage('IBEL_CATALOG_MEASURE_TITLE'),
-		"align" => "right",
-		"default" => false,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_QUANTITY_TRACE",
-		"content" => GetMessage("IBEL_CATALOG_QUANTITY_TRACE"),
-		"align" => "right",
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_WEIGHT",
-		"content" => GetMessage("IBEL_CATALOG_WEIGHT"),
-		"align" => "right",
-		"sort" => "CATALOG_WEIGHT",
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_WIDTH",
-		"content" => GetMessage("IBEL_CATALOG_WIDTH"),
-		"title" => "",
-		"align" => "right",
-		"default" => false,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_LENGTH",
-		"content" => GetMessage("IBEL_CATALOG_LENGTH"),
-		"title" => "",
-		"align" => "right",
-		"default" => false,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_HEIGHT",
-		"content" => GetMessage("IBEL_CATALOG_HEIGHT"),
-		"title" => "",
-		"align" => "right",
-		"default" => false,
-	);
-	$arHeader[] = array(
-		"id" => "CATALOG_VAT_INCLUDED",
-		"content" => GetMessage("IBEL_CATALOG_VAT_INCLUDED"),
-		"align" => "right",
-	);
-	if ($boolCatalogPurchasInfo)
-	{
-		$arHeader[] = array(
-			"id" => "CATALOG_PURCHASING_PRICE",
-			"content" => GetMessage("IBEL_CATALOG_PURCHASING_PRICE"),
-			"title" => "",
-			"align" => "right",
-			"sort" => "CATALOG_PURCHASING_PRICE",
-			"default" => false,
-		);
-	}
-	if ($useStoreControl)
-	{
-		$arHeader[] = array(
-			"id" => "CATALOG_BAR_CODE",
-			"content" => GetMessage("IBEL_CATALOG_BAR_CODE"),
-			"title" => "",
-			"align" => "right",
-			"default" => false,
-		);
-	}
-
-	$arCatGroup = CCatalogGroup::GetListArray();
-	if (!empty($arCatGroup))
-	{
-		foreach ($arCatGroup as $priceType)
-		{
-			$arHeader[] = array(
-				"id" => "CATALOG_GROUP_".$priceType["ID"],
-				"content" => htmlspecialcharsEx(!empty($priceType["NAME_LANG"]) ? $priceType["NAME_LANG"] : $priceType["NAME"]),
-				"align" => "right",
-				"sort" => "CATALOG_PRICE_".$priceType["ID"],
-				"default" => false,
-			);
-		}
-		unset($priceType);
-	}
-
-	$arCatExtra = array();
-	$db_extras = CExtra::GetList(array("ID" =>"ASC"));
-	while ($extras = $db_extras->Fetch())
-		$arCatExtra[$extras['ID']] = $extras;
-	unset($extras, $db_extras);
-}
-
-if($bCatalog)
-{
-	$arHeader[] = array(
-		"id" => "SUBSCRIPTIONS",
-		"content" => GetMessage("IBLOCK_FIELD_SUBSCRIPTIONS"),
-		"default" => false,
-	);
-}
-
-if ($boolSubBizproc)
-{
-	$arWorkflowTemplates = CBPDocument::GetWorkflowTemplatesForDocumentType(array("iblock", "CIBlockDocument", "iblock_".$intSubIBlockID));
-	foreach ($arWorkflowTemplates as $arTemplate)
-	{
-		$arHeader[] = array(
-			"id" => "WF_".$arTemplate["ID"],
-			"content" => $arTemplate["NAME"],
-		);
-	}
-	$arHeader[] = array(
-		"id" => "BIZPROC",
-		"content" => GetMessage("IBEL_A_BP_H"),
-	);
-	$arHeader[] = array(
-		"id" => "BP_PUBLISHED",
-		"content" => GetMessage("IBLOCK_FIELD_BP_PUBLISHED"),
-		"sort" => "status",
-		"default" => true,
-	);
-}
-
-$lAdmin->AddHeaders($arHeader);
-
-$arSelectedFieldsMap = array_fill_keys($lAdmin->GetVisibleHeaderColumns(), true);
-
-$arSelectedProps = array();
-$selectedPropertyIds = array();
-$arSelect = array();
-foreach ($arProps as $arProperty)
-{
-	if (isset($arSelectedFieldsMap['PROPERTY_'.$arProperty['ID']]))
-	{
-		$arSelectedProps[] = $arProperty;
-		$selectedPropertyIds[] = $arProperty['ID'];
-		if ($arProperty["PROPERTY_TYPE"] == "L")
-		{
-			$arSelect[$arProperty['ID']] = array();
-			$rs = CIBlockProperty::GetPropertyEnum($arProperty['ID']);
-			while($ar = $rs->GetNext())
-				$arSelect[$arProperty['ID']][$ar["ID"]] = $ar["VALUE"];
-		}
-		elseif ($arProperty["PROPERTY_TYPE"] == "G")
-		{
-			$arSelect[$arProperty['ID']] = array();
-			$rs = CIBlockSection::GetTreeList(array("IBLOCK_ID"=>$arProperty["LINK_IBLOCK_ID"]), array("ID", "NAME", "DEPTH_LEVEL"));
-			while($ar = $rs->GetNext())
-				$arSelect[$arProperty['ID']][$ar["ID"]] = str_repeat(" . ", $ar["DEPTH_LEVEL"]).$ar["NAME"];
-		}
-		unset($arSelectedFieldsMap['PROPERTY_'.$arProperty['ID']]);
-	}
-}
-
-$arSelectedFieldsMap["ID"] = true;
-$arSelectedFieldsMap["CREATED_BY"] = true;
-$arSelectedFieldsMap["LANG_DIR"] = true;
-$arSelectedFieldsMap["LID"] = true;
-$arSelectedFieldsMap["WF_PARENT_ELEMENT_ID"] = true;
-$arSelectedFieldsMap["ACTIVE"] = true;
-
-if (isset($arSelectedFieldsMap["LOCKED_USER_NAME"]))
-	$arSelectedFieldsMap["WF_LOCKED_BY"] = true;
-if (isset($arSelectedFieldsMap["USER_NAME"]))
-	$arSelectedFieldsMap["MODIFIED_BY"] = true;
-if (isset($arSelectedFieldsMap["PREVIEW_TEXT"]))
-	$arSelectedFieldsMap["PREVIEW_TEXT_TYPE"] = true;
-if (isset($arSelectedFieldsMap["DETAIL_TEXT"]))
-	$arSelectedFieldsMap["DETAIL_TEXT_TYPE"] = true;
-
-$arSelectedFieldsMap["LOCK_STATUS"] = true;
-$arSelectedFieldsMap["WF_NEW"] = true;
-$arSelectedFieldsMap["WF_STATUS_ID"] = true;
-$arSelectedFieldsMap["DETAIL_PAGE_URL"] = true;
-$arSelectedFieldsMap["SITE_ID"] = true;
-$arSelectedFieldsMap["CODE"] = true;
-$arSelectedFieldsMap["EXTERNAL_ID"] = true;
-
-$measureList = array(0 => ' ');
-if ($boolSubCatalog)
-{
-	if (isset($arSelectedFieldsMap["CATALOG_QUANTITY_TRACE"]))
-		$arSelectedFieldsMap["CATALOG_QUANTITY_TRACE_ORIG"] = true;
-	if (isset($arSelectedFieldsMap['CATALOG_QUANTITY_RESERVED']) || isset($arSelectedFieldsMap['CATALOG_MEASURE']))
-		$arSelectedFieldsMap['CATALOG_TYPE'] = true;
-
-	$boolPriceInc = false;
-	if ($boolCatalogPurchasInfo)
-	{
-		if (isset($arSelectedFieldsMap["CATALOG_PURCHASING_PRICE"]))
-		{
-			$arSelectedFieldsMap["CATALOG_PURCHASING_CURRENCY"] = true;
-			$boolPriceInc = true;
-		}
-	}
-	if (!empty($arCatGroup))
-	{
-		$priceIndex = array_keys($arCatGroup);
-		foreach($priceIndex as $index)
-		{
-			if (isset($arSelectedFieldsMap["CATALOG_GROUP_".$index]))
-			{
-				$arFilter["CATALOG_SHOP_QUANTITY_".$index] = 1;
-				$boolPriceInc = true;
-			}
-			else
-			{
-				unset($arCatGroup[$index]);
-			}
-		}
-		unset($index, $priceIndex);
-	}
-	if ($boolPriceInc)
-	{
-		if (!isset($arSelectedFieldsMap['CATALOG_TYPE']))
-			$arSelectedFieldsMap['CATALOG_TYPE'] = true;
-		$boolSubCurrency = Loader::includeModule('currency');
-		if ($boolSubCurrency)
-			$arCurrencyList = array_keys(Currency\CurrencyManager::getCurrencyList());
-	}
-	unset($boolPriceInc);
-
-	if (isset($arSelectedFieldsMap['CATALOG_TYPE']) && $boolCatalogSet)
-		$arSelectedFieldsMap['CATALOG_BUNDLE'] = true;
-
-	if (isset($arSelectedFieldsMap['CATALOG_MEASURE']))
-	{
-		$measureIterator = CCatalogMeasure::getList(array(), array(), false, false, array('ID', 'MEASURE_TITLE', 'SYMBOL_RUS'));
-		while($measure = $measureIterator->Fetch())
-			$measureList[$measure['ID']] = ($measure['SYMBOL_RUS'] != '' ? $measure['SYMBOL_RUS'] : $measure['MEASURE_TITLE']);
-		unset($measure, $measureIterator);
-	}
-}
-
-$arSelectedFields = array_keys($arSelectedFieldsMap);
-$nonCatalogFields = $arSelectedFields;
-$catalogFieldsView = false;
-if ($bCatalog)
-{
-	foreach ($nonCatalogFields as $index => $field)
-	{
-		if (strncmp($field, 'CATALOG_', 8) != 0)
-			continue;
-		unset($nonCatalogFields[$index]);
-		$catalogFieldsView = true;
-	}
-	unset($index, $field);
-}
 
 if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 {
@@ -1204,11 +1267,28 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 	$arRows = array();
 	$listItemId = array();
 
+	$productShowPrices = [];
+	$productEditPrices = [];
+
 	$boolSubSearch = Loader::includeModule('search');
 
 	$boolOldOffers = false;
-	while ($arRes = $rsData->NavNext(true, "f_"))
+	while ($arRes = $rsData->Fetch())
 	{
+		$itemId = $arRes['ID'];
+
+		if ($bCatalog)
+		{
+			foreach ($revertFields as $index => $field)
+			{
+				if (!array_key_exists($index, $arRes))
+					continue;
+				$arRes[$field] = $arRes[$index];
+				unset($arRes[$index]);
+			}
+			unset($index, $field);
+		}
+
 		$arRes_orig = $arRes;
 		// in workflow mode show latest changes
 		if ($boolSubWorkFlow)
@@ -1226,27 +1306,24 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 					array("nTopCount"=>1),
 					$nonCatalogFields
 				);
-				$arRes = $rsData2->NavNext(true, "f_");
+				$arRes = $rsData2->NavNext(false);
 				if ($catalogFieldsView)
 					$arRes = array_merge($arRes_orig, $arRes);
-				$f_ID = $arRes_orig["ID"];
+				$arRes["WF_NEW"] = $arRes_orig["WF_NEW"];
 			}
 			$lockStatus = $arRes_orig['LOCK_STATUS'];
 		}
 		elseif ($boolSubBizproc)
 		{
-			$lockStatus = CIBlockDocument::IsDocumentLocked($f_ID, "") ? "red" : "green";
+			$lockStatus = CIBlockDocument::IsDocumentLocked($itemId, "") ? "red" : "green";
 		}
 		else
 		{
 			$lockStatus = "";
 		}
 
-		if (isset($arSelectedFieldsMap["CATALOG_QUANTITY_TRACE"]))
-		{
-			$arRes['CATALOG_QUANTITY_TRACE'] = $arRes['CATALOG_QUANTITY_TRACE_ORIG'];
-			$f_CATALOG_QUANTITY_TRACE = $f_CATALOG_QUANTITY_TRACE_ORIG;
-		}
+		if (isset($arRes['CATALOG_TYPE']))
+			$arRes['CATALOG_TYPE'] = (int)$arRes['CATALOG_TYPE'];
 
 		if (isset($arSelectedFieldsMap['CATALOG_MEASURE']))
 		{
@@ -1266,30 +1343,29 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 			$sThisSectionUrl,
 			defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1
 		);
-		$arRows[$f_ID] = $row = $lAdmin->AddRow($f_ID, $arRes, $edit_url, GetMessage("IB_SE_L_EDIT_ELEMENT"), true);
+		$arRows[$itemId] = $row = $lAdmin->AddRow($itemId, $arRes, $edit_url, GetMessage("IB_SE_L_EDIT_ELEMENT"), true);
 
-		$listItemId[] = $f_ID;
+		$listItemId[] = $itemId;
 
-		$boolEditPrice = false;
-		$boolEditPrice = CIBlockElementRights::UserHasRightTo($intSubIBlockID, $f_ID, "element_edit_price");
+		$boolEditPrice = CIBlockElementRights::UserHasRightTo($intSubIBlockID, $itemId, "element_edit_price");
 
-		$row->AddViewField("ID",$f_ID);
+		$row->AddViewField("ID", $itemId);
 
 		if ($adminSidePanelHelper->isPublicSidePanel())
 		{
-			$contentLockedUserName = $f_LOCKED_USER_NAME;
-			$contentUserName = $f_USER_NAME;
-			$contentCreatedUserName = $f_CREATED_USER_NAME;
+			$contentLockedUserName = $arRes['LOCKED_USER_NAME'];
+			$contentUserName = $arRes['USER_NAME'];
+			$contentCreatedUserName = $arRes['CREATED_USER_NAME'];
 		}
 		else
 		{
-			$contentLockedUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$f_WF_LOCKED_BY.'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$f_LOCKED_USER_NAME.'</a>';
-			$contentUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$f_MODIFIED_BY.'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$f_USER_NAME.'</a>';
-			$contentCreatedUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$f_CREATED_BY.'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$f_CREATED_USER_NAME.'</a>';
+			$contentLockedUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$arRes['WF_LOCKED_BY'].'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$arRes['LOCKED_USER_NAME'].'</a>';
+			$contentUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$arRes['MODIFIED_BY'].'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$arRes['USER_NAME'].'</a>';
+			$contentCreatedUserName = '<a href="'.$selfFolderUrl.'user_edit.php?lang='.LANGUAGE_ID.'&ID='.$arRes['CREATED_BY'].'" title="'.GetMessage("IBEL_A_USERINFO").'">'.$arRes['CREATED_USER_NAME'].'</a>';
 		}
-		if ($f_LOCKED_USER_NAME)
+		if (isset($arRes['LOCKED_USER_NAME']) && $arRes['LOCKED_USER_NAME'] != '')
 			$row->AddViewField("LOCKED_USER_NAME", $contentLockedUserName);
-		if ($f_USER_NAME)
+		if (isset($arRes['USER_NAME']) && $arRes['USER_NAME'] != '')
 			$row->AddViewField("USER_NAME", $contentUserName);
 		$row->AddViewField("CREATED_USER_NAME", $contentCreatedUserName);
 
@@ -1331,8 +1407,8 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 			$last_property_id = false;
 			foreach ($arProperties[$aProp["ID"]] as $valueId => $prop)
 			{
-				$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].']['.$valueId.'][VALUE]';
-				$DESCR_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].']['.$valueId.'][DESCRIPTION]';
+				$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].']['.$valueId.'][VALUE]';
+				$DESCR_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].']['.$valueId.'][DESCRIPTION]';
 				//View part
 				if (isset($arUserType["GetAdminListViewHTML"]))
 				{
@@ -1412,7 +1488,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				{
 					if ($last_property_id != $prop["ID"])
 					{
-						$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].']';
+						$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].']';
 						$arEditHTML[] = call_user_func_array($arUserType["GetPropertyFieldHtmlMulty"], array(
 							$prop,
 							$arProperties[$prop["ID"]],
@@ -1455,7 +1531,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				}
 				elseif ($prop['PROPERTY_TYPE']=='L' && ($last_property_id!=$prop["ID"]))
 				{
-					$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].'][]';
+					$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].'][]';
 					$arValues = array();
 					foreach ($arProperties[$prop["ID"]] as $g_prop)
 					{
@@ -1517,7 +1593,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 						foreach($arProperties[$prop["ID"]] as $g_prop)
 						{
 							$arOneFileControl[] = CFileInput::Show(
-								'NO_FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].']['.$g_prop['PROPERTY_VALUE_ID'].']',
+								'NO_FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].']['.$g_prop['PROPERTY_VALUE_ID'].']',
 								$g_prop["VALUE"],
 								array(
 									"IMAGE" => "Y",
@@ -1570,7 +1646,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				}
 				elseif (($prop['PROPERTY_TYPE']=='G') && ($last_property_id!=$prop["ID"]))
 				{
-					$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].'][]';
+					$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].'][]';
 					$arValues = array();
 					foreach ($arProperties[$prop["ID"]] as $g_prop)
 					{
@@ -1592,7 +1668,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				}
 				elseif ($prop['PROPERTY_TYPE']=='E')
 				{
-					$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$prop['ID'].']['.$valueId.']';
+					$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$prop['ID'].']['.$valueId.']';
 					$fixIBlock = $prop["LINK_IBLOCK_ID"] > 0;
 					$windowTableId = 'iblockprop-'.Iblock\PropertyTable::TYPE_ELEMENT.'-'.$prop['ID'].'-'.$prop['LINK_IBLOCK_ID'];
 					if ($t = GetElementName($prop["VALUE"]))
@@ -1612,11 +1688,11 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				}
 				$last_property_id = $prop['ID'];
 			}
-			$table_id = md5($f_ID.':'.$aProp['ID']);
+			$table_id = md5($itemId.':'.$aProp['ID']);
 			if ($aProp["MULTIPLE"] == "Y")
 			{
-				$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$aProp['ID'].'][n0][VALUE]';
-				$DESCR_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$aProp['ID'].'][n0][DESCRIPTION]';
+				$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$aProp['ID'].'][n0][VALUE]';
+				$DESCR_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$aProp['ID'].'][n0][DESCRIPTION]';
 				if (isset($arUserType["GetPropertyFieldHtmlMulty"]))
 				{
 				}
@@ -1652,7 +1728,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				}
 				elseif ($aProp['PROPERTY_TYPE']=='E')
 				{
-					$VALUE_NAME = 'FIELDS['.$f_ID.'][PROPERTY_'.$aProp['ID'].'][n0]';
+					$VALUE_NAME = 'FIELDS['.$itemId.'][PROPERTY_'.$aProp['ID'].'][n0]';
 					$fixIBlock = $aProp["LINK_IBLOCK_ID"] > 0;
 					$windowTableId = 'iblockprop-'.Iblock\PropertyTable::TYPE_ELEMENT.'-'.$aProp['ID'].'-'.$aProp['LINK_IBLOCK_ID'];
 					$arEditHTML[] = '<input type="text" name="'.$VALUE_NAME.'" id="'.$VALUE_NAME.'" value="" size="5">'.
@@ -1673,84 +1749,22 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 
 		if ($boolSubCatalog)
 		{
-			if (!empty($arCatGroup))
+			if (!empty($priceTypeList))
 			{
-				$row->arRes['price'] = array();
-				foreach ($arCatGroup as &$CatGroup)
+				$productShowPrices[$itemId] = true;
+
+				if (
+					$boolCatalogPrice
+					&& CIBlockElementRights::UserHasRightTo($IBLOCK_ID, $itemId, "element_edit_price")
+				)
+					$productEditPrices[$itemId] = true;
+
+				foreach ($priceTypeIndex as $index)
 				{
-					if (isset($arSelectedFieldsMap["CATALOG_GROUP_".$CatGroup["ID"]]))
-					{
-						$price = "";
-						$sHTML = "";
-						$selectCur = "";
-						$extraId = (isset($arRes['CATALOG_EXTRA_ID_'.$CatGroup['ID']]) ? (int)$arRes['CATALOG_EXTRA_ID_'.$CatGroup['ID']] : 0);
-						if (!isset($arCatExtra[$extraId]))
-							$extraId = 0;
-						if ($boolSubCurrency)
-						{
-							$price = htmlspecialcharsEx(CCurrencyLang::CurrencyFormat(
-								$arRes["CATALOG_PRICE_".$CatGroup["ID"]],
-								$arRes["CATALOG_CURRENCY_".$CatGroup["ID"]],
-								true
-							));
-							if ($extraId > 0)
-							{
-								$price .= ' <span title="'.
-									htmlspecialcharsbx(GetMessage(
-										'IBSEL_CATALOG_EXTRA_DESCRIPTION',
-										array('#VALUE#' => $arCatExtra[$extraId]['NAME'])
-									)).
-									'">(+'.$arCatExtra[$extraId]['PERCENTAGE'].'%)</span>';
-							}
-							if ($boolCatalogPrice && $boolEditPrice)
-							{
-								$selectCur = '<select name="CATALOG_CURRENCY['.$f_ID.']['.$CatGroup["ID"].']" id="CATALOG_CURRENCY['.$f_ID.']['.$CatGroup["ID"].']"';
-								if ($CatGroup["BASE"]=="Y")
-									$selectCur .= ' onchange="top.SubChangeBaseCurrency('.$f_ID.')"';
-								elseif ($extraId > 0)
-									$selectCur .= ' disabled="disabled" readonly="readonly"';
-								$selectCur .= '>';
-								foreach ($arCurrencyList as &$currencyCode)
-								{
-									$selectCur .= '<option value="'.$currencyCode.'"';
-									if ($currencyCode == $arRes["CATALOG_CURRENCY_".$CatGroup["ID"]])
-										$selectCur .= ' selected';
-									$selectCur .= '>'.$currencyCode.'</option>';
-								}
-								unset($currencyCode);
-								$selectCur .= '</select>';
-							}
-						}
-						else
-						{
-							$price = htmlspecialcharsEx($arRes["CATALOG_PRICE_".$CatGroup["ID"]]." ".$arRes["CATALOG_CURRENCY_".$CatGroup["ID"]]);
-						}
-
-						$row->AddViewField("CATALOG_GROUP_".$CatGroup["ID"], $price);
-
-						if ($boolCatalogPrice && $boolEditPrice)
-						{
-							$sHTML = '<input type="text" size="9" id="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" name="CATALOG_PRICE['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_PRICE_".$CatGroup["ID"]].'"';
-							if ($CatGroup["BASE"]=="Y")
-								$sHTML .= ' onchange="top.SubChangeBasePrice('.$f_ID.')"';
-							elseif ($extraId > 0)
-								$sHTML .= ' disabled readonly';
-							$sHTML .= '> '.$selectCur;
-							if ($extraId > 0)
-								$sHTML .= '<input type="hidden" id="CATALOG_EXTRA['.$f_ID.']['.$CatGroup["ID"].']" name="CATALOG_EXTRA['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_EXTRA_ID_".$CatGroup["ID"]].'">';
-
-							$sHTML .= '<input type="hidden" name="CATALOG_old_PRICE['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_PRICE_".$CatGroup["ID"]].'">';
-							$sHTML .= '<input type="hidden" name="CATALOG_old_CURRENCY['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_CURRENCY_".$CatGroup["ID"]].'">';
-							$sHTML .= '<input type="hidden" name="CATALOG_PRICE_ID['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_PRICE_ID_".$CatGroup["ID"]].'">';
-							$sHTML .= '<input type="hidden" name="CATALOG_QUANTITY_FROM['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_QUANTITY_FROM_".$CatGroup["ID"]].'">';
-							$sHTML .= '<input type="hidden" name="CATALOG_QUANTITY_TO['.$f_ID.']['.$CatGroup["ID"].']" value="'.$arRes["CATALOG_QUANTITY_TO_".$CatGroup["ID"]].'">';
-
-							$row->arRes['price']["CATALOG_GROUP_".$CatGroup["ID"]] = $sHTML;
-						}
-						unset($extraId);
-					}
+					$row->AddViewField('CATALOG_GROUP_'.$index, ' ');
+					$row->arRes['CATALOG_GROUP_'.$index] = ' ';
 				}
-				unset($CatGroup);
+				unset($index);
 			}
 			if (isset($arSelectedFieldsMap['CATALOG_MEASURE_RATIO']))
 			{
@@ -1762,7 +1776,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 		{
 			$arDocumentStates = CBPDocument::GetDocumentStates(
 				array("iblock", "CIBlockDocument", "iblock_".$intSubIBlockID),
-				array("iblock", "CIBlockDocument", $f_ID)
+				array("iblock", "CIBlockDocument", $itemId)
 			);
 
 			$arRes["CURRENT_USER_GROUPS"] = $USER->GetUserGroupArray();
@@ -1777,7 +1791,7 @@ if (!(false == B_ADMIN_SUBELEMENTS_LIST && $bCopy))
 				$canViewWorkflow = CIBlockDocument::CanUserOperateDocument(
 					CBPCanUserOperateOperation::ViewWorkflow,
 					$USER->GetID(),
-					$f_ID,
+					$itemId,
 					array("AllUserGroups" => $arRes["CURRENT_USER_GROUPS"], "DocumentStates" => $arDocumentStates, "WorkflowId" => $kk)
 				);
 				if (!$canViewWorkflow)
@@ -1875,7 +1889,7 @@ if (!empty($arRows))
 		CIBlockRights::RETURN_OPERATIONS
 	);
 	/** @var CAdminListRow $row */
-	foreach ($arRows as $f_ID => $row)
+	foreach ($arRows as $itemId => $row)
 	{
 		$edit_url = CIBlock::GetAdminSubElementEditLink(
 			$intSubIBlockID,
@@ -1931,9 +1945,9 @@ if (!empty($arRows))
 		if (isset($arSelectedFieldsMap["DETAIL_TEXT"]))
 			$row->AddViewField("DETAIL_TEXT", ($row->arRes["DETAIL_TEXT_TYPE"]=="text" ? htmlspecialcharsEx($row->arRes["DETAIL_TEXT"]) : HTMLToTxt($row->arRes["DETAIL_TEXT"])));
 
-		if (isset($arElementOps[$f_ID]) && isset($arElementOps[$f_ID]["element_edit"]))
+		if (isset($arElementOps[$itemId]) && isset($arElementOps[$itemId]["element_edit"]))
 		{
-			if (isset($arElementOps[$f_ID]) && isset($arElementOps[$f_ID]["element_edit_price"]))
+			if (isset($arElementOps[$itemId]) && isset($arElementOps[$itemId]["element_edit_price"]))
 			{
 				if (isset($row->arRes['price']) && is_array($row->arRes['price']))
 					foreach ($row->arRes['price'] as $price_id => $sHTML)
@@ -1949,7 +1963,7 @@ if (!empty($arRows))
 			if ($boolSubSearch)
 			{
 				$row->AddViewField("TAGS", htmlspecialcharsEx($row->arRes["TAGS"]));
-				$row->AddEditField("TAGS", InputTags("FIELDS[".$f_ID."][TAGS]", $row->arRes["TAGS"], $arSubIBlock["SITE_ID"]));
+				$row->AddEditField("TAGS", InputTags("FIELDS[".$itemId."][TAGS]", $row->arRes["TAGS"], $arSubIBlock["SITE_ID"]));
 			}
 			else
 			{
@@ -1961,39 +1975,39 @@ if (!empty($arRows))
 				if ($row->arRes['orig']['WF_NEW']=='Y' || $row->arRes['WF_STATUS_ID']=='1')
 					$row->AddViewField("WF_STATUS_ID", htmlspecialcharsEx($arWFStatus[$row->arRes['WF_STATUS_ID']]));
 				else
-					$row->AddViewField("WF_STATUS_ID", '<a href="'.$edit_url.'" title="'.GetMessage("IBEL_A_ED_TITLE").'">'.htmlspecialcharsEx($arWFStatus[$row->arRes['WF_STATUS_ID']]).'</a> / <a href="'.'iblock_element_edit.php?ID='.$row->arRes['orig']['ID'].(!isset($arElementOps[$f_ID]) || !isset($arElementOps[$f_ID]["element_edit_any_wf_status"])?'&view=Y':'').$sThisSectionUrl.'" title="'.GetMessage("IBEL_A_ED2_TITLE").'">'.htmlspecialcharsEx($arWFStatus[$row->arRes['orig']['WF_STATUS_ID']]).'</a>');
+					$row->AddViewField("WF_STATUS_ID", '<a href="'.$edit_url.'" title="'.GetMessage("IBEL_A_ED_TITLE").'">'.htmlspecialcharsEx($arWFStatus[$row->arRes['WF_STATUS_ID']]).'</a> / <a href="'.'iblock_element_edit.php?ID='.$row->arRes['orig']['ID'].(!isset($arElementOps[$itemId]) || !isset($arElementOps[$itemId]["element_edit_any_wf_status"])?'&view=Y':'').$sThisSectionUrl.'" title="'.GetMessage("IBEL_A_ED2_TITLE").'">'.htmlspecialcharsEx($arWFStatus[$row->arRes['orig']['WF_STATUS_ID']]).'</a>');
 			}
 			if (isset($arSelectedFieldsMap["PREVIEW_TEXT"]))
 			{
-				$sHTML = '<input type="radio" name="FIELDS['.$f_ID.'][PREVIEW_TEXT_TYPE]" value="text" id="'.$f_ID.'PREVIEWtext"';
+				$sHTML = '<input type="radio" name="FIELDS['.$itemId.'][PREVIEW_TEXT_TYPE]" value="text" id="'.$itemId.'PREVIEWtext"';
 				if ($row->arRes["PREVIEW_TEXT_TYPE"]!="html")
 					$sHTML .= ' checked';
-				$sHTML .= '><label for="'.$f_ID.'PREVIEWtext">text</label> /';
-				$sHTML .= '<input type="radio" name="FIELDS['.$f_ID.'][PREVIEW_TEXT_TYPE]" value="html" id="'.$f_ID.'PREVIEWhtml"';
+				$sHTML .= '><label for="'.$itemId.'PREVIEWtext">text</label> /';
+				$sHTML .= '<input type="radio" name="FIELDS['.$itemId.'][PREVIEW_TEXT_TYPE]" value="html" id="'.$itemId.'PREVIEWhtml"';
 				if ($row->arRes["PREVIEW_TEXT_TYPE"]=="html")
 					$sHTML .= ' checked';
-				$sHTML .= '><label for="'.$f_ID.'PREVIEWhtml">html</label><br>';
-				$sHTML .= '<textarea rows="10" cols="50" name="FIELDS['.$f_ID.'][PREVIEW_TEXT]">'.htmlspecialcharsbx($row->arRes["PREVIEW_TEXT"]).'</textarea>';
+				$sHTML .= '><label for="'.$itemId.'PREVIEWhtml">html</label><br>';
+				$sHTML .= '<textarea rows="10" cols="50" name="FIELDS['.$itemId.'][PREVIEW_TEXT]">'.htmlspecialcharsbx($row->arRes["PREVIEW_TEXT"]).'</textarea>';
 				$row->AddEditField("PREVIEW_TEXT", $sHTML);
 			}
 			if (isset($arSelectedFieldsMap["DETAIL_TEXT"]))
 			{
-				$sHTML = '<input type="radio" name="FIELDS['.$f_ID.'][DETAIL_TEXT_TYPE]" value="text" id="'.$f_ID.'DETAILtext"';
+				$sHTML = '<input type="radio" name="FIELDS['.$itemId.'][DETAIL_TEXT_TYPE]" value="text" id="'.$itemId.'DETAILtext"';
 				if ($row->arRes["DETAIL_TEXT_TYPE"]!="html")
 					$sHTML .= ' checked';
-				$sHTML .= '><label for="'.$f_ID.'DETAILtext">text</label> /';
-				$sHTML .= '<input type="radio" name="FIELDS['.$f_ID.'][DETAIL_TEXT_TYPE]" value="html" id="'.$f_ID.'DETAILhtml"';
+				$sHTML .= '><label for="'.$itemId.'DETAILtext">text</label> /';
+				$sHTML .= '<input type="radio" name="FIELDS['.$itemId.'][DETAIL_TEXT_TYPE]" value="html" id="'.$itemId.'DETAILhtml"';
 				if ($row->arRes["DETAIL_TEXT_TYPE"]=="html")
 					$sHTML .= ' checked';
-				$sHTML .= '><label for="'.$f_ID.'DETAILhtml">html</label><br>';
+				$sHTML .= '><label for="'.$itemId.'DETAILhtml">html</label><br>';
 
-				$sHTML .= '<textarea rows="10" cols="50" name="FIELDS['.$f_ID.'][DETAIL_TEXT]">'.htmlspecialcharsbx($row->arRes["DETAIL_TEXT"]).'</textarea>';
+				$sHTML .= '<textarea rows="10" cols="50" name="FIELDS['.$itemId.'][DETAIL_TEXT]">'.htmlspecialcharsbx($row->arRes["DETAIL_TEXT"]).'</textarea>';
 				$row->AddEditField("DETAIL_TEXT", $sHTML);
 			}
 			foreach ($row->arRes['props'] as $prop_id => $arEditHTML)
 				$row->AddEditField($prop_id, '<table id="tb'.$arEditHTML['table_id'].'" border=0 cellpadding=0 cellspacing=0><tr><td nowrap>'.implode("</td></tr><tr><td nowrap>", $arEditHTML['html']).'</td></tr></table>');
 
-			if (isset($arElementOps[$f_ID]["element_edit_price"]) && $boolCatalogPrice)
+			if (isset($arElementOps[$itemId]["element_edit_price"]) && $boolCatalogPrice)
 			{
 				if ($useStoreControl)
 				{
@@ -2024,10 +2038,10 @@ if (!empty($arRows))
 					unset($price);
 					if ($catalogPurchasInfoEdit && $boolSubCurrency)
 					{
-						$editFieldCode = '<input type="hidden" name="FIELDS_OLD['.$f_ID.'][CATALOG_PURCHASING_PRICE]" value="'.$row->arRes['CATALOG_PURCHASING_PRICE'].'">';
-						$editFieldCode .= '<input type="hidden" name="FIELDS_OLD['.$f_ID.'][CATALOG_PURCHASING_CURRENCY]" value="'.$row->arRes['CATALOG_PURCHASING_CURRENCY'].'">';
-						$editFieldCode .= '<input type="text" size="5" name="FIELDS['.$f_ID.'][CATALOG_PURCHASING_PRICE]" value="'.$row->arRes['CATALOG_PURCHASING_PRICE'].'">';
-						$editFieldCode .= '<select name="FIELDS['.$f_ID.'][CATALOG_PURCHASING_CURRENCY]">';
+						$editFieldCode = '<input type="hidden" name="FIELDS_OLD['.$itemId.'][CATALOG_PURCHASING_PRICE]" value="'.$row->arRes['CATALOG_PURCHASING_PRICE'].'">';
+						$editFieldCode .= '<input type="hidden" name="FIELDS_OLD['.$itemId.'][CATALOG_PURCHASING_CURRENCY]" value="'.$row->arRes['CATALOG_PURCHASING_CURRENCY'].'">';
+						$editFieldCode .= '<input type="text" size="5" name="FIELDS['.$itemId.'][CATALOG_PURCHASING_PRICE]" value="'.$row->arRes['CATALOG_PURCHASING_PRICE'].'">';
+						$editFieldCode .= '<select name="FIELDS['.$itemId.'][CATALOG_PURCHASING_CURRENCY]">';
 						foreach ($arCurrencyList as &$currencyCode)
 						{
 							$editFieldCode .= '<option value="'.$currencyCode.'"';
@@ -2119,7 +2133,7 @@ if (!empty($arRows))
 		}
 		if ($bCatalog && isset($arSelectedFieldsMap['CATALOG_MEASURE']))
 		{
-			if (isset($arElementOps[$f_ID]["element_edit_price"]) && $boolCatalogPrice)
+			if (isset($arElementOps[$itemId]["element_edit_price"]) && $boolCatalogPrice)
 			{
 				$row->AddSelectField('CATALOG_MEASURE', $measureList);
 			}
@@ -2180,8 +2194,8 @@ if (!empty($arRows))
 			$boolSubWorkFlow
 		)
 			{
-				if (isset($arElementOps[$f_ID])
-					&& isset($arElementOps[$f_ID]["element_edit_any_wf_status"])
+				if (isset($arElementOps[$itemId])
+					&& isset($arElementOps[$itemId]["element_edit_any_wf_status"])
 			)
 			{
 				$STATUS_PERMISSION = 2;
@@ -2207,8 +2221,8 @@ if (!empty($arRows))
 			else
 			{
 				if (
-					isset($arElementOps[$f_ID])
-					&& isset($arElementOps[$f_ID]["element_edit"])
+					isset($arElementOps[$itemId])
+					&& isset($arElementOps[$itemId]["element_edit"])
 					&& (2 <= $STATUS_PERMISSION)
 				)
 				{
@@ -2242,13 +2256,13 @@ if (!empty($arRows))
 				}
 
 				if (
-					isset($arElementOps[$f_ID])
-					&& isset($arElementOps[$f_ID]["element_delete"])
+					isset($arElementOps[$itemId])
+					&& isset($arElementOps[$itemId]["element_delete"])
 					&& (2 <= $STATUS_PERMISSION)
 				)
 				{
-					if (!isset($arElementOps[$f_ID]["element_edit_any_wf_status"]))
-						$intMinPerm = CIBlockElement::WF_GetStatusPermission($row->arRes["WF_STATUS_ID"], $f_ID);
+					if (!isset($arElementOps[$itemId]["element_edit_any_wf_status"]))
+						$intMinPerm = CIBlockElement::WF_GetStatusPermission($row->arRes["WF_STATUS_ID"], $itemId);
 					if (2 <= $intMinPerm)
 					{
 						if (!empty($arActions))
@@ -2269,7 +2283,7 @@ if (!empty($arRows))
 			$bWritePermission = CIBlockDocument::CanUserOperateDocument(
 				CBPCanUserOperateOperation::WriteDocument,
 				$USER->GetID(),
-				$f_ID,
+				$itemId,
 				array(
 					"IBlockId" => $intSubIBlockID,
 					"AllUserGroups" => $row->arRes["CURRENT_USER_GROUPS"],
@@ -2280,7 +2294,7 @@ if (!empty($arRows))
 			$bStartWorkflowPermission = CIBlockDocument::CanUserOperateDocument(
 				CBPCanUserOperateOperation::StartWorkflow,
 				$USER->GetID(),
-				$f_ID,
+				$itemId,
 				array(
 					"IBlockId" => $intSubIBlockID,
 					"AllUserGroups" => $row->arRes["CURRENT_USER_GROUPS"],
@@ -2296,7 +2310,7 @@ if (!empty($arRows))
 						"ICON" => "unlock",
 						"TEXT" => GetMessage("IBEL_A_UNLOCK"),
 						"TITLE" => GetMessage("IBEL_A_UNLOCK_ALT"),
-						"ACTION" => "if (confirm('".GetMessageJS("IBEL_A_UNLOCK_CONFIRM")."')) ".$lAdmin->ActionDoGroup($f_ID, "unlock", $sThisSectionUrl),
+						"ACTION" => "if (confirm('".GetMessageJS("IBEL_A_UNLOCK_CONFIRM")."')) ".$lAdmin->ActionDoGroup($itemId, "unlock", $sThisSectionUrl),
 					);
 				}
 			}
@@ -2324,15 +2338,15 @@ if (!empty($arRows))
 					"ICON" => "delete",
 					"TEXT" => GetMessage('MAIN_DELETE'),
 					"TITLE" => GetMessage("IBLOCK_DELETE_ALT"),
-					"ACTION" => "if (confirm('".GetMessageJS('IBLOCK_CONFIRM_DEL_MESSAGE')."')) ".$lAdmin->ActionDoGroup($f_ID, "delete", $sThisSectionUrl),
+					"ACTION" => "if (confirm('".GetMessageJS('IBLOCK_CONFIRM_DEL_MESSAGE')."')) ".$lAdmin->ActionDoGroup($itemId, "delete", $sThisSectionUrl),
 				);
 			}
 		}
 		else
 		{
 			if (
-				isset($arElementOps[$f_ID])
-				&& isset($arElementOps[$f_ID]["element_edit"])
+				isset($arElementOps[$itemId])
+				&& isset($arElementOps[$itemId]["element_edit"])
 			)
 			{
 				$arActions[] = array(
@@ -2347,8 +2361,8 @@ if (!empty($arRows))
 				$arActions[] = array('SEPARATOR' => 'Y');
 			}
 
-			if ($boolIBlockElementAdd && isset($arElementOps[$f_ID])
-				&& isset($arElementOps[$f_ID]["element_edit"]))
+			if ($boolIBlockElementAdd && isset($arElementOps[$itemId])
+				&& isset($arElementOps[$itemId]["element_edit"]))
 			{
 				$arActions[] = array(
 					"ICON" => "copy",
@@ -2358,8 +2372,8 @@ if (!empty($arRows))
 			}
 
 			if (
-				isset($arElementOps[$f_ID])
-				&& isset($arElementOps[$f_ID]["element_delete"])
+				isset($arElementOps[$itemId])
+				&& isset($arElementOps[$itemId]["element_delete"])
 			)
 			{
 				$arActions[] = array("SEPARATOR"=>true);
@@ -2374,6 +2388,93 @@ if (!empty($arRows))
 
 		if (!empty($arActions))
 			$row->AddActions($arActions);
+	}
+
+	if (!empty($priceTypeIndex) && !empty($productShowPrices))
+	{
+		$operateIdList = array_keys($productShowPrices);
+		sort($operateIdList);
+		foreach (array_chunk($operateIdList, 500) as $pageIds)
+		{
+			$iterator = Catalog\PriceTable::getList(array(
+				'select' => array('ID', 'PRODUCT_ID', 'CATALOG_GROUP_ID', 'PRICE', 'CURRENCY', 'EXTRA_ID', 'QUANTITY_FROM', 'QUANTITY_TO'),
+				'filter' => array(
+					'@CATALOG_GROUP_ID' => $priceTypeIndex,
+					'@PRODUCT_ID' => $pageIds,
+					array(
+						'LOGIC' => 'OR',
+						'<=QUANTITY_FROM' => 1,
+						'=QUANTITY_FROM' => null
+					),
+					array(
+						'LOGIC' => 'OR',
+						'>=QUANTITY_TO' => 1,
+						'=QUANTITY_TO' => null
+					)
+				),
+				'order' => ['PRODUCT_ID' => 'ASC', 'CATALOG_GROUP_ID' => 'ASC']
+			));
+			while ($row = $iterator->fetch())
+			{
+				$productId = (int)$row['PRODUCT_ID'];
+				$priceType = (int)$row['CATALOG_GROUP_ID'];
+				$extraId = (int)$row['EXTRA_ID'];
+
+				$price = \CCurrencyLang::CurrencyFormat($row['PRICE'], $row['CURRENCY'], true);
+
+				if ($extraId > 0)
+				{
+					$price .= ' <span title="'.
+						htmlspecialcharsbx(GetMessage(
+							'IBSEL_CATALOG_EXTRA_DESCRIPTION',
+							array('#VALUE#' => $arCatExtra[$extraId]['NAME'])
+						)).
+						'">(+'.$arCatExtra[$extraId]['PERCENTAGE'].'%)</span>';
+				}
+
+				$arRows[$productId]->AddViewField('CATALOG_GROUP_'.$priceType, $price);
+				$arRows[$productId]->arRes['CATALOG_GROUP_'.$priceType] = $price;
+				unset($price);
+				if (isset($productEditPrices[$productId]))
+				{
+					$currencyControl = '<select name="CATALOG_CURRENCY['.$productId.']['.$priceType.']" id="CATALOG_CURRENCY['.$productId.']['.$priceType.']"';
+					if ($priceType == $basePriceTypeId)
+						$currencyControl .= ' onchange="top.SubChangeBaseCurrency('.$productId.')"';
+					elseif ($extraId > 0)
+						$currencyControl .= ' disabled="disabled" readonly="readonly"';
+					$currencyControl .= '>';
+					foreach ($arCurrencyList as $currencyCode)
+					{
+						$currencyControl .= '<option value="'.$currencyCode.'"';
+						if ($currencyCode == $row['CURRENCY'])
+							$currencyControl .= ' selected';
+						$currencyControl .= '>'.$currencyCode.'</option>';
+					}
+					unset($currencyCode);
+					$currencyControl .= '</select>';
+
+					$priceControl = '<input type="text" size="9" id="CATALOG_PRICE['.$productId.']['.$priceType.']" name="CATALOG_PRICE['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['PRICE']).'"';
+					if ($priceType == $basePriceTypeId)
+						$priceControl .= ' onchange="top.SubChangeBasePrice('.$productId.')"';
+					elseif ($extraId > 0)
+						$priceControl .= ' disabled readonly';
+					$priceControl .= '> '.$currencyControl;
+					if ($extraId > 0)
+						$priceControl .= '<input type="hidden" id="CATALOG_EXTRA['.$productId.']['.$priceType.']" name="CATALOG_EXTRA['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['EXTRA_ID']).'">';
+
+					$priceControl .= '<input type="hidden" name="CATALOG_old_PRICE['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['PRICE']).'">';
+					$priceControl .= '<input type="hidden" name="CATALOG_old_CURRENCY['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['CURRENCY']).'">';
+					$priceControl .= '<input type="hidden" name="CATALOG_PRICE_ID['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['ID']).'">';
+					$priceControl .= '<input type="hidden" name="CATALOG_QUANTITY_FROM['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($row['QUANTITY_FROM']).'">';
+					$priceControl .= '<input type="hidden" name="CATALOG_QUANTITY_TO['.$productId.']['.$priceType.']" value="'.htmlspecialcharsbx($arRes['QUANTITY_TO']).'">';
+
+					$arRows[$productId]->AddEditField('CATALOG_GROUP_'.$priceType, $priceControl);
+					unset($priceControl, $currencyControl);
+				}
+			}
+			unset($row);
+			unset($iterator);
+		}
 	}
 
 	if($bCatalog && !empty($listItemId))
@@ -2543,7 +2644,7 @@ function ShowSkuGenerator(id)
 		}
 	}
 ?>
-	if(requriedFields != '')
+	if(requriedFields !== '')
 	{
 		requriedFields = '<? echo CUtil::JSEscape(GetMessage('IB_SE_L_REQUIRED_FIELDS_FIND')); ?>:\n' + requriedFields;
 		alert(requriedFields);
@@ -2592,32 +2693,25 @@ function ShowSkuGenerator(id)
 		top.arSubCatalogShowedGroups = [];
 		top.arSubExtra = [];
 		top.arSubCatalogGroups = [];
-		top.SubBaseIndex = "";
+		top.SubBaseIndex = <?=$basePriceTypeId;?>;
 		<?
-		if (!empty($arCatGroup))
+		if (!empty($priceTypeIndex))
 		{
 			$i = 0;
 			$j = 0;
-			foreach ($arCatGroup as &$CatalogGroups)
+			foreach($priceTypeIndex as $priceType)
 			{
-				if (isset($arSelectedFields["CATALOG_GROUP_".$CatalogGroups["ID"]]))
+				echo "top.arSubCatalogShowedGroups[".$i."]=".$priceType.";\n";
+				$i++;
+				if ($priceType != $basePriceTypeId)
 				{
-					echo "top.arSubCatalogShowedGroups[".$i."]=".$CatalogGroups["ID"].";\n";
-					$i++;
-				}
-				if ($CatalogGroups["BASE"] != "Y")
-				{
-					echo "top.arSubCatalogGroups[".$j."]=".$CatalogGroups["ID"].";\n";
+					echo "top.arSubCatalogGroups[".$j."]=".$priceType.";\n";
 					$j++;
 				}
-				else
-				{
-					echo "top.SubBaseIndex=".$CatalogGroups["ID"].";\n";
-				}
 			}
-			unset($CatalogGroups);
+			unset($priceType);
 		}
-		if (is_array($arCatExtra) && !empty($arCatExtra))
+		if (!empty($arCatExtra))
 		{
 			$i = 0;
 			foreach ($arCatExtra as &$CatExtra)

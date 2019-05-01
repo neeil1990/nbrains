@@ -7,10 +7,12 @@
 
 .main-ui-filter-inner-container {
 	position: relative;
-	margin: 0 0 100px;
+	margin: 0;
+	padding-bottom: 100px;
 	min-height: 100%;
 	width: 780px;
 	background: #fff;
+	box-sizing: border-box;
 }
 
 .main-ui-filter-inner-container:after {
@@ -396,7 +398,7 @@
 
 .main-ui-filter-bottom-controls {
 	position: absolute;
-	bottom: -100px;
+	bottom: 0;
 	left: 0;
 	max-width: 780px;
 	width: 100%;
@@ -769,3 +771,34 @@ select::-ms-expand {
 .main-ui-filter-range-group *:last-child { margin-right: 0 !important; }
 
 .main-ui-select[data-value*="\"VALUE\":\"RANGE\"}"] { max-width: 111px; }
+
+.main-ui-filter-error-message {
+	background-color: rgb(255, 87, 82);
+	color: rgb(255, 255, 255);
+	line-height: normal;
+	font-size: 13px;
+	position: absolute;
+	bottom: 45px;
+	right: 0;
+	border-radius: 4px;
+	padding: 10px 10px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	max-width: 176px;
+	display: block;
+	text-align: center;
+	cursor: default;
+}
+
+.main-ui-filter-error-message::before {
+	background-color: rgb(255, 87, 82);
+	content: "";
+	position: absolute;
+	width: 13px;
+	height: 13px;
+	bottom: 0;
+	left: 50%;
+	transform: translate3d(-50%, 50%, 0) rotate(45deg);
+}

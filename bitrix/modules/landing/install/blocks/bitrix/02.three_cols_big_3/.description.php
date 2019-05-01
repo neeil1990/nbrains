@@ -52,7 +52,7 @@ return array(
 	),
 	'style' => array(
 		'block' => array(
-			'type' => array('block-default-wo-background'),
+			'type' => array('block-default'),
 		),
 		'nodes' => array(
 			'.landing-block-node-left' => array(
@@ -86,6 +86,10 @@ return array(
 			'.landing-block-node-header' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_2_THREE_COLS_3_STYLE_LANDINGBLOCKNODEHEADER'),
 				'type' => 'border-color',
+			),
+			'.landing-block-node-right-img' => array(
+				'name' => Loc::getMessage('LANDING_BLOCK_2_THREE_COLS_3_NODES_LANDINGBLOCKNODERIGHTIMG'),
+				'type' => 'background-size',
 			),
 		),
 	),

@@ -2173,10 +2173,32 @@ function ImgShw(ID, width, height, alt)
 			}
 		}
 
+		$hLock = $io->OpenFile($sourceFile, "r+");
+		if ($hLock)
+		{
+			flock($hLock, LOCK_EX);
+			if ($io->FileExists($destinationFile))
+			{
+				CFile::ScaleImage($arSourceFileSizeTmp[0], $arSourceFileSizeTmp[1], $arSize, $resizeType, $bNeedCreatePicture, $arSourceSize, $arDestinationSize);
+				$arDestinationSizeTmp = CFile::GetImageSize($destinationFile);
+				if (
+					is_array($arDestinationSizeTmp)
+					&& $arDestinationSizeTmp[0] == $arDestinationSize["width"]
+					&& $arDestinationSizeTmp[1] == $arDestinationSize["height"]
+				)
+				{
+					flock($hLock, LOCK_UN);
+					fclose($hLock);
+					return true;
+				}
+			}
+		}
+
 		if(CFile::isEnabledTrackingResizeImage())
 		{
 			header("X-Bitrix-Resize-Image: {$arSize["width"]}_{$arSize["height"]}_{$resizeType}");
 		}
+
 		if (class_exists("imagick") && function_exists('memory_get_usage'))
 		{
 			//When memory limit reached we'll try to use ImageMagic
@@ -2369,9 +2391,19 @@ function ImgShw(ID, width, height, alt)
 				}
 			}
 
+			if ($hLock)
+			{
+				flock($hLock, LOCK_UN);
+				fclose($hLock);
+			}
 			return true;
 		}
 
+		if ($hLock)
+		{
+			flock($hLock, LOCK_UN);
+			fclose($hLock);
+		}
 		return false;
 	}
 
@@ -2964,6 +2996,8 @@ function ImgShw(ID, width, height, alt)
 						$src->get($filename);
 					}
 				}
+				\CMain::runFinalActionsInternal();
+				die();
 			}
 		}
 		CMain::FinalActions();

@@ -781,7 +781,7 @@ BX.ajax.loadJSON = function(url, data, callback, callback_failure)
 
 var prepareAjaxGetParameters = function(config)
 {
-	var getParameters = {};
+	var getParameters = config.getParameters || {};
 	if (BX.type.isNotEmptyString(config.analyticsLabel))
 	{
 		getParameters.analyticsLabel = config.analyticsLabel;
@@ -926,6 +926,7 @@ var buildAjaxPromiseToRestoreCsrf = function(config, withoutRestoringCsrf)
  * @param {?string|?Object} [config.analyticsLabel]
  * @param {string} [config.method='POST']
  * @param {Object} [config.data]
+ * @param {?Object} [config.getParameters]
  * @param {?Object} [config.headers]
  * @param {?Object} [config.timeout]
  * @param {Object} [config.navigation]
@@ -946,7 +947,8 @@ BX.ajax.runAction = function(action, config)
 		data: config.data,
 		timeout: config.timeout,
 		preparePost: config.preparePost,
-		headers: config.headers
+		headers: config.headers,
+		onrequeststart: config.onrequeststart
 	});
 };
 
@@ -960,6 +962,7 @@ BX.ajax.runAction = function(action, config)
  * @param {string} [config.method='POST']
  * @param {string} [config.mode='ajax'] Ajax or class.
  * @param {Object} [config.data]
+ * @param {?Object} [config.getParameters]
  * @param {?array} [config.headers]
  * @param {?number} [config.timeout]
  * @param {Object} [config.navigation]
@@ -982,7 +985,8 @@ BX.ajax.runComponentAction = function (component, action, config)
 		data: config.data,
 		timeout: config.timeout,
 		preparePost: config.preparePost,
-		headers: config.headers
+		headers: config.headers,
+		onrequeststart: (config.onrequeststart ? config.onrequeststart : null)
 	});
 };
 

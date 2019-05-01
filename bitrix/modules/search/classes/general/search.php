@@ -169,7 +169,8 @@ class CAllSearch extends CDBResult
 		}
 		elseif (
 			BX_SEARCH_VERSION > 1
-			&& count($this->Query->m_stemmed_words_id)
+			&& !empty($this->Query->m_stemmed_words_id)
+			&& is_array($this->Query->m_stemmed_words_id)
 			&& array_sum($this->Query->m_stemmed_words_id) === 0
 		)
 		{

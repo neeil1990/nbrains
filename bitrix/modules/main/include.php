@@ -98,7 +98,7 @@ if(!defined("BX_COMP_MANAGED_CACHE") && COption::GetOptionString("main", "compon
 require_once($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/filter_tools.php");
 require_once($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/ajax_tools.php");
 
-/*ZDUyZmZMzhmOTFiNWNkNTA3M2UwNGQ0MjI1MWFhMjBjMjJkMmU=*/$GLOBALS['____1167983806']= array(base64_decode('ZGV'.'m'.'aW'.'5l'));if(!function_exists(__NAMESPACE__.'\\___1927842445')){function ___1927842445($_1481884892){static $_341034387= false; if($_341034387 == false) $_341034387=array('R'.'U'.'5DT0RF','WQ==');return base64_decode($_341034387[$_1481884892]);}};class CBXFeatures{ public static function IsFeatureEnabled($_1447611862){ return true;} public static function IsFeatureEditable($_1447611862){ return true;} public static function SetFeatureEnabled($_1447611862, $_1328759304= true){} public static function SaveFeaturesSettings($_884436144, $_706555295){} public static function GetFeaturesList(){ return array();} public static function InitiateEditionsSettings($_1897273376){} public static function ModifyFeaturesSettings($_1897273376, $_1145430958){} public static function IsFeatureInstalled($_1447611862){ return true;}} $GLOBALS['____1167983806'][0](___1927842445(0), ___1927842445(1));/**/			//Do not remove this
+/*ZDUyZmZYzY5OWExYjE5ODg5YWU2YTU4ODViNjIzODk4ZTdhMTc=*/$GLOBALS['____1795577977']= array(base64_decode(''.'Z'.'G'.'Vma'.'W'.'5l'));if(!function_exists(__NAMESPACE__.'\\___1520880398')){function ___1520880398($_804977082){static $_36352258= false; if($_36352258 == false) $_36352258=array('RU5DT'.'0RF','W'.'Q==');return base64_decode($_36352258[$_804977082]);}};class CBXFeatures{ public static function IsFeatureEnabled($_746995223){ return true;} public static function IsFeatureEditable($_746995223){ return true;} public static function SetFeatureEnabled($_746995223, $_620529329= true){} public static function SaveFeaturesSettings($_76778044, $_906059949){} public static function GetFeaturesList(){ return array();} public static function InitiateEditionsSettings($_737526191){} public static function ModifyFeaturesSettings($_737526191, $_2082957848){} public static function IsFeatureInstalled($_746995223){ return true;}} $GLOBALS['____1795577977'][0](___1520880398(0), ___1520880398(1));/**/			//Do not remove this
 
 //component 2.0 template engines
 $GLOBALS["arCustomTemplateEngines"] = array();
@@ -427,7 +427,7 @@ if(!defined("NOT_CHECK_PERMISSIONS") || NOT_CHECK_PERMISSIONS!==true)
 		if($bRsaError == false)
 		{
 			if(!defined("ADMIN_SECTION") || ADMIN_SECTION !== true)
-				$USER_LID = LANG;
+				$USER_LID = SITE_ID;
 			else
 				$USER_LID = false;
 
@@ -441,15 +441,15 @@ if(!defined("NOT_CHECK_PERMISSIONS") || NOT_CHECK_PERMISSIONS!==true)
 			}
 			elseif($_REQUEST["TYPE"] == "SEND_PWD")
 			{
-				$arAuthResult = CUser::SendPassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_EMAIL"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"]);
+				$arAuthResult = CUser::SendPassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_EMAIL"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"], $_REQUEST["USER_PHONE_NUMBER"]);
 			}
 			elseif($_SERVER['REQUEST_METHOD'] == 'POST' && $_REQUEST["TYPE"] == "CHANGE_PWD")
 			{
-				$arAuthResult = $GLOBALS["USER"]->ChangePassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_CHECKWORD"], $_REQUEST["USER_PASSWORD"], $_REQUEST["USER_CONFIRM_PASSWORD"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"]);
+				$arAuthResult = $GLOBALS["USER"]->ChangePassword($_REQUEST["USER_LOGIN"], $_REQUEST["USER_CHECKWORD"], $_REQUEST["USER_PASSWORD"], $_REQUEST["USER_CONFIRM_PASSWORD"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"], true, $_REQUEST["USER_PHONE_NUMBER"]);
 			}
 			elseif(COption::GetOptionString("main", "new_user_registration", "N") == "Y" && $_SERVER['REQUEST_METHOD'] == 'POST' && $_REQUEST["TYPE"] == "REGISTRATION" && (!defined("ADMIN_SECTION") || ADMIN_SECTION!==true))
 			{
-				$arAuthResult = $GLOBALS["USER"]->Register($_REQUEST["USER_LOGIN"], $_REQUEST["USER_NAME"], $_REQUEST["USER_LAST_NAME"], $_REQUEST["USER_PASSWORD"], $_REQUEST["USER_CONFIRM_PASSWORD"], $_REQUEST["USER_EMAIL"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"]);
+				$arAuthResult = $GLOBALS["USER"]->Register($_REQUEST["USER_LOGIN"], $_REQUEST["USER_NAME"], $_REQUEST["USER_LAST_NAME"], $_REQUEST["USER_PASSWORD"], $_REQUEST["USER_CONFIRM_PASSWORD"], $_REQUEST["USER_EMAIL"], $USER_LID, $_REQUEST["captcha_word"], $_REQUEST["captcha_sid"], false, $_REQUEST["USER_PHONE_NUMBER"]);
 			}
 
 			if($_REQUEST["TYPE"] == "AUTH" || $_REQUEST["TYPE"] == "OTP")

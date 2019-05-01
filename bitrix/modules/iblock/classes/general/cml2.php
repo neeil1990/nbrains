@@ -144,7 +144,7 @@ class CIBlockCMLImport
 		}
 
 		if ($this->next_step["lang"])
-			$this->mess = IncludeModuleLangFile(__FILE__, $this->next_step["lang"], true);
+			$this->mess = Main\Localization\Loc::loadLanguageFile(__FILE__, $this->next_step["lang"]);
 
 		$this->arTempFiles = array();
 		$this->arLinkedProps = false;
@@ -171,7 +171,7 @@ class CIBlockCMLImport
 
 				foreach(array(LANGUAGE_ID, "en", "ru") as $lang)
 				{
-					$mess = IncludeModuleLangFile(__FILE__, $lang, true);
+					$mess = Main\Localization\Loc::loadLanguageFile(__FILE__, $lang);
 					if(strpos($header, "<".$mess["IBLOCK_XML2_COMMERCE_INFO"]) !== false)
 						return $lang;
 				}
@@ -709,7 +709,7 @@ class CIBlockCMLImport
 		{
 			foreach(array(LANGUAGE_ID, "en", "ru") as $lang)
 			{
-				$mess = IncludeModuleLangFile(__FILE__, $lang, true);
+				$mess = Main\Localization\Loc::loadLanguageFile(__FILE__, $lang);
 				if($ar["NAME"] === $mess["IBLOCK_XML2_COMMERCE_INFO"])
 				{
 					$this->mess = $mess;
@@ -2900,16 +2900,19 @@ class CIBlockCMLImport
 			if($this->bCatalog && $this->next_step["bOffer"])
 			{
 				$p = strpos($arXMLElement[$this->mess["IBLOCK_XML2_ID"]], "#");
-				if($p !== false)
+				if ($p !== false)
+				{
 					$link_xml_id = substr($arXMLElement[$this->mess["IBLOCK_XML2_ID"]], 0, $p);
-				else
-					$link_xml_id = $arXMLElement[$this->mess["IBLOCK_XML2_ID"]];
-				$arElement["PROPERTY_VALUES"][$this->PROPERTY_MAP["CML2_LINK"]] = array(
-					"n0" => array(
-						"VALUE" => $this->GetElementByXML_ID($this->arProperties[$this->PROPERTY_MAP["CML2_LINK"]]["LINK_IBLOCK_ID"], $link_xml_id),
-						"DESCRIPTION" => false,
-					),
-				);
+					$arElement["PROPERTY_VALUES"][$this->PROPERTY_MAP["CML2_LINK"]] = array(
+						"n0" => array(
+							"VALUE" => $this->GetElementByXML_ID(
+								$this->arProperties[$this->PROPERTY_MAP["CML2_LINK"]]["LINK_IBLOCK_ID"],
+								$link_xml_id
+							),
+							"DESCRIPTION" => false,
+						),
+					);
+				}
 			}
 
 			if(isset($arXMLElement[$this->mess["IBLOCK_XML2_NAME"]]))
@@ -3497,8 +3500,8 @@ class CIBlockCMLImport
 									"VALUE" => $prop_value[$this->mess["IBLOCK_XML2_VALUE"]],
 									"DESCRIPTION" => $prop_value[$this->mess["IBLOCK_XML2_DESCRIPTION"]],
 								);
+								$i++;
 							}
-							$i++;
 						}
 					}
 					else

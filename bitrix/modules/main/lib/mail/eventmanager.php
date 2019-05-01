@@ -220,7 +220,7 @@ class EventManager
 		$connection = \Bitrix\Main\Application::getConnection();
 		$datetime = $connection->getSqlHelper()->addSecondsToDateTime('-' . $periodInSeconds);
 
-		$strSql = "DELETE FROM b_event WHERE DATE_EXEC <= " . $datetime . "";
+		$strSql = "DELETE FROM b_event WHERE DATE_EXEC <= " . $datetime;
 		$connection->query($strSql);
 
 		return "CEvent::CleanUpAgent();";

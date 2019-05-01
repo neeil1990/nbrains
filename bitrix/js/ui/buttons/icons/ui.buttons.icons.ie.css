@@ -2,8 +2,24 @@
 .bx-ie .ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty,
 .bx-ie .ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty {
 	padding: 0;
-	min-width: 0;
+	min-width: 39px;
 }
+.bx-ie .ui-btn-xs.ui-btn[class*="ui-btn-icon-"]:not(input):empty,
+.bx-ie .ui-btn-xs.ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty,
+.bx-ie .ui-btn-xs.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty {
+	min-width: 26px;
+}
+.bx-ie .ui-btn-sm.ui-btn[class*="ui-btn-icon-"]:not(input):empty,
+.bx-ie .ui-btn-sm.ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty,
+.bx-ie .ui-btn-sm.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty {
+	min-width: 31px;
+}
+.bx-ie .ui-btn-lg.ui-btn[class*="ui-btn-icon-"]:not(input):empty,
+.bx-ie .ui-btn-lg.ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main:empty,
+.bx-ie .ui-btn-lg.ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main:empty {
+	min-width: 47px;
+}
+
 .bx-ie .ui-btn[class*="ui-btn-icon-"],
 .bx-ie .ui-btn-split[class*="ui-btn-icon-"] .ui-btn-main,
 .bx-ie .ui-btn-double[class*="ui-btn-icon-"] .ui-btn-main {

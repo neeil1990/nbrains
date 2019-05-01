@@ -8,10 +8,7 @@ use Bitrix\Main\Loader;
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\UI\Extension;
 
-Extension::load('ui.buttons');
-Extension::load('ui.buttons.icons');
-Extension::load('ui.alerts');
-Extension::load('ui.progressbar');
+Extension::load(['ui.buttons', 'ui.buttons.icons', 'ui.alerts', 'ui.progressbar',]);
 
 \CJSCore::init(array('landing_master'));
 \CJSCore::init('loader');
@@ -46,7 +43,9 @@ if ($externalImport)
 {
 	$externalImportPath = (string)\Bitrix\Main\Config\Option::get('crm', 'path_to_order_import_instagram');
 	if (empty($externalImportPath))
+	{
 		$externalImport = false;
+	}
 }
 if (!$externalImport)
 {
@@ -122,19 +121,26 @@ if ($externalImport)
                 </div>
             </div>
             <div class="preview-right">
-                <div class="landing-template-preview-info">
+                <div class="landing-template-preview-info" data-editable="true">
                     <div class="pagetitle-wrap">
                         <div class="pagetitle-inner-container">
-                            <div class="pagetitle">
-							<span id="pagetitle" class="pagetitle-item">
-								<?= \htmlspecialcharsbx($template['TITLE']);?>
-							</span>
+                            <div class="pagetitle landing-template-preview-title" id="landing-template-preview-title">
+								<span id="pagetitle" class="landing-template-preview-edit-title ui-editable-field-label-js">
+									<?= \htmlspecialcharsbx($template['TITLE']);?>
+								</span>
+								<input type="text" data-name="title" class="landing-template-preview-input-title landing-template-preview-edit-input ui-editable-field-input-js" value="<?= \htmlspecialcharsbx($template['TITLE']);?>" style="display: none;">
+								<span class="landing-template-preview-edit-btn ui-title-input-btn-js"></span>
                             </div>
                         </div>
                     </div>
 
                     <div class="landing-template-preview-description">
-                        <p><?= \htmlspecialcharsbx($template['DESCRIPTION']);?></p>
+                        <p id="landing-template-preview-description-text">
+							<span class="ui-editable-field-label-js"><?= \htmlspecialcharsbx($template['DESCRIPTION']);?></span>
+							<span class="landing-template-preview-edit-btn ui-title-input-btn-js"></span>
+							<textarea data-name="description" class="landing-template-preview-input-description landing-template-preview-edit-textarea ui-editable-field-input-js" style="display: none;"><?= \htmlspecialcharsbx($template['DESCRIPTION']);?></textarea>
+						</p>
+						<span class="landing-template-preview-notice"><?= Loc::getMessage('LANDING_PREVIEW_NOTICE'); ?></span>
                     </div>
 
 					<?if ($template['URL_PREVIEW']):?>
@@ -157,7 +163,6 @@ if ($externalImport)
 						</div>
 
 						<? // add USE SITE COLOR setting only for adding page in exist site?>
-						<? // always ACTIVE by default!?>
 						<? if ($arParams['SITE_ID']): ?>
 							<div class="landing-template-preview-sitecolor">
 								<div class="landing-template-preview-palette-sitecolor" data-name="theme_use_site">
@@ -165,7 +170,7 @@ if ($externalImport)
 										 data-src="<?= \htmlspecialcharsbx($template['URL_PREVIEW']); ?><?
 										 ?><?= strpos($template['URL_PREVIEW'],
 											 '?') === false ? '?' : '&amp;'; ?>theme=<?= $themeSite; ?>"
-										 class="landing-template-preview-palette-item active landing-template-preview-palette-item-sitecolor"
+										 class="landing-template-preview-palette-item landing-template-preview-palette-item-sitecolor <?=($themeCurr == 'USE_SITE') ? 'active' : ''?>"
 										 style="background-color: <?= $colors[$themeSite]['color'];?>"><span></span>
 									</div>
 								</div>
@@ -190,7 +195,7 @@ if ($externalImport)
 				<a href="<?=$importUrl;?>"
 						class="ui-btn ui-btn-success landing-template-preview-create-by-import"
 						data-create-url="<?=$uriSelect->getUri();?>"
-						value="<?=Loc::getMessage('LANDING_TPL_BUTTON_CREATE');?>">
+						title="<?=Loc::getMessage('LANDING_TPL_BUTTON_CREATE');?>">
 					<?=Loc::getMessage('LANDING_TPL_BUTTON_CREATE');?>
 				</a>
 				<span href="<?= $uriSelect->getUri(); ?>" class="ui-btn ui-btn-success landing-template-preview-create"
@@ -212,7 +217,7 @@ if ($externalImport)
 			{
 				?>
 				<a href="<?= $uriSelect->getUri(); ?>" class="ui-btn ui-btn-success landing-template-preview-create"
-				   value="<?= Loc::getMessage('LANDING_TPL_BUTTON_CREATE'); ?>">
+				   title="<?= Loc::getMessage('LANDING_TPL_BUTTON_CREATE'); ?>">
 					<?= Loc::getMessage('LANDING_TPL_BUTTON_CREATE'); ?>
 				</a href="<?= $uriSelect->getUri(); ?>">
 				<?
@@ -235,10 +240,22 @@ if ($externalImport)
 			LANDING_LOADER_WAIT: "<?= \CUtil::jsEscape(Loc::getMessage('LANDING_LOADER_WAIT'));?>"
 		}
 	});
+	var previewBlock = document.querySelector(".landing-template-preview-info");
 
+	if(previewBlock.dataset.editable) {
+		new BX.Landing.EditTitleForm(BX("landing-template-preview-title"), 300, true);
+		new BX.Landing.EditTitleForm(BX("landing-template-preview-description-text"), 0, true);
+	}
+
+	<?
+	if (!$createStore)
+	{
+	?>
 	BX.ready(function(){
 		new BX.Landing.SaveBtn(document.querySelector(".landing-template-preview-create"));
 	});
-
+	<?
+	}
+	?>
 </script>
 <?endif;?>

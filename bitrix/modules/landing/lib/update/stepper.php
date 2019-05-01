@@ -13,7 +13,9 @@ class Stepper
 	{
 		return array(
 			'Bitrix\Landing\Update\Block\NodeAttributes',
-			'Bitrix\Landing\Update\Block\NodeImg'
+			'Bitrix\Landing\Update\Block\NodeImg',
+			'Bitrix\Landing\Update\Block',
+			'Bitrix\Landing\Update\Domain\Check'
 		);
 	}
 	

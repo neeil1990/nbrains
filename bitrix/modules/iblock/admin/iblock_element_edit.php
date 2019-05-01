@@ -853,6 +853,24 @@ do{ //one iteration loop
 						}
 						include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/catalog/admin/templates/product_edit_validator.php");
 					}
+					if ($arShowTabs['sku'])
+					{
+						if ($bCopy || $ID == 0)
+						{
+							$arFilter = array(
+								'IBLOCK_ID' => $arMainCatalog['IBLOCK_ID'],
+								'=PROPERTY_'.$arMainCatalog['SKU_PROPERTY_ID'] => '-'.$str_TMP_ID
+							);
+							if ((int)CIBlockElement::GetList(
+								array(),
+								$arFilter,
+								array()
+							) == 0)
+							{
+								$strWarning .= GetMessage('IBLOCK_ELEMENT_OFFERS_IS_ABSENT').'<br>';
+							}
+						}
+					}
 					if ($arShowTabs['product_set'])
 					{
 						CCatalogAdminProductSetEdit::setProductFormParams(array('TYPE' => CCatalogProductSet::TYPE_SET));
@@ -3661,7 +3679,7 @@ if (
 	echo
 		BeginNote(),
 		GetMessage("IBEL_E_IBLOCK_MANAGE_HINT"),
-		' <a href="'.$selfFolderUrl.'iblock_edit.php?type='.htmlspecialcharsbx($type).'&amp;lang='.LANGUAGE_ID.'&amp;ID='.$IBLOCK_ID.'&amp;admin=Y&amp;return_url='.urlencode($selfFolderUrl.CIBlock::GetAdminElementEditLink($IBLOCK_ID, $ID, array("WF" => ($WF=="Y"? "Y": null), "find_section_section" => $find_section_section, "return_url" => (strlen($return_url)>0? $return_url: null)))).'">',
+		' <a href="'.$selfFolderUrl.'iblock_edit.php?type='.htmlspecialcharsbx($type).'&amp;lang='.LANGUAGE_ID.'&amp;ID='.$IBLOCK_ID.'&amp;admin=Y&amp;return_url='.urlencode($selfFolderUrl.CIBlock::GetAdminElementEditLink($IBLOCK_ID, $ID, array("WF" => ($WF=="Y"? "Y": null), "find_section_section" => $find_section_section, "IBLOCK_SECTION_ID" => $find_section_section, "return_url" => (strlen($return_url)>0? $return_url: null)))).'">',
 		GetMessage("IBEL_E_IBLOCK_MANAGE_HINT_HREF"),
 		'</a>',
 		EndNote()

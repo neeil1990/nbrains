@@ -33,6 +33,12 @@ class LandingBaseFormComponent extends LandingBaseComponent
 	protected $postCode = 'fields';
 
 	/**
+	 * POST fields.
+	 * @var null
+	 */
+	protected $postFields = null;
+
+	/**
 	 * Local version of table map with available fields for change.
 	 * @return array
 	 */
@@ -49,28 +55,31 @@ class LandingBaseFormComponent extends LandingBaseComponent
 	 */
 	protected function request($var, $strict = false)
 	{
-		static $request = null;
-
-		if ($request === null)
+		if ($this->postFields === null)
 		{
-			$context = \Bitrix\Main\Application::getInstance()->getContext();
-			$request = $context->getRequest();
-			if (isset($request[$this->postCode]))
+			$this->postFields = parent::request($this->postCode);
+			if ($this->postFields === '')
 			{
-				$request = $request[$this->postCode];
+				$this->postFields = null;
 			}
 		}
 
-		if ($strict)
+		if (is_array($this->postFields))
 		{
-			if (array_key_exists($var, $request))
+			if ($strict)
 			{
-				return $request[$var];
+				if (array_key_exists($var, $this->postFields))
+				{
+					return $this->postFields[$var];
+				}
+				return false;
 			}
-			return false;
+			return (isset($this->postFields[$var]) ? $this->postFields[$var] : '');
 		}
-
-		return isset($request[$var]) ? $request[$var] : '';
+		else
+		{
+			return parent::request($var);
+		}
 	}
 
 	/**
@@ -199,8 +208,8 @@ class LandingBaseFormComponent extends LandingBaseComponent
 
 	/**
 	 * Get hooks for current entity.
-	 * @param string $class Get hooks from this class.
-	 * @param int $id Get hooks from this entity id.
+	 * @param string|bool $class Get hooks from this class.
+	 * @param int|bool $id Get hooks from this entity id.
 	 * @return array
 	 */
 	protected function getHooks($class = false, $id = false)

@@ -47,7 +47,7 @@
 	};
 	BX.addCustomEvent(window, 'OnUCFormSubmit', function(){ setText(''); });
 
-	BXMobileApp.addCustomEvent("main.post.form/text", function(text){
+	BX.addCustomEvent("main.post.form/text", function(text){
 		text = BX.type.isArray(text) ? text[0] : text;
 		setText(text);
 	});
@@ -641,6 +641,17 @@
 		return false;
 	};
 
+	window.mobileIOSVersion = function() {
+		if (/iP(hone|od|ad)/.test(navigator.platform)) {
+			var v = (navigator.appVersion).match(/OS (\d+)_(\d+)_?(\d+)?/);
+			return [parseInt(v[1], 10), parseInt(v[2], 10), parseInt(v[3] || 0, 10)];
+		}
+		else
+		{
+			return false;
+		}
+	};
+
 	var init = function(window) {
 		BX.MPL = function(params, staticParams, formParams)
 		{
@@ -736,7 +747,7 @@
 				text = BX.util.htmlspecialchars(text).replace(/\n/gi, "<br />");
 				text = text.replace(/\001/, '').
 					replace(/(\[\/user\])/gi, "\001").
-					replace(/\[user=(\d+)\]([^\001]?.+)(\001)/gi, "$2").
+					replace(/\[user=(\d+)\]([^\001].+?)(\001)/gi, "$2").
 					replace(/\001/, "[/user]");
 
 				var html = window.fcParseTemplate(
@@ -753,9 +764,29 @@
 
 				var node = container,
 					curPos = BX.pos(node),
-					top = (curPos.top);
+					top = (curPos.top),
+					size = BX.GetWindowInnerSize(),
+					iosPatchNeeded = false,
+					iosPatchDelta = 0,
+					iOSVersion = window.mobileIOSVersion();
 
-				window.scrollTo(0, top);
+				if (
+					window.platform == "ios"
+					&& BX.type.isArray(iOSVersion)
+				)
+				{
+					iOSVersion = iOSVersion[0];
+					iosPatchNeeded = (iOSVersion >= 11 && inner.keyBoardIsShown);
+					iosPatchDelta = 260;
+				}
+
+				if (
+					!iosPatchNeeded
+					|| (top > (size.innerHeight - iosPatchDelta)) // out of visible area
+				)
+				{
+					window.scrollTo(0, top - iosPatchDelta);
+				}
 
 				(new BX["easing"]({
 					duration : 500,
@@ -765,7 +796,14 @@
 					step : function(state){
 						node.style.height = state.height + "px";
 						node.style.opacity = state.opacity / 100;
-						window.scrollTo(0, top + state.height);
+
+						if (
+							!iosPatchNeeded
+							|| ((top + state.height) > (size.innerHeight - iosPatchDelta)) // out of visible area
+						)
+						{
+							window.scrollTo(0, (top + state.height - iosPatchDelta));
+						}
 					},
 					complete : function(){
 						if (node.style.display !== 'none')
@@ -903,6 +941,10 @@
 		BX.MPL.getInstance = function(entity_xml_id) {
 			return repo['list'][entity_xml_id];
 		};
+
+		BX.MPL.recalcMoreButtonCommentsList = function() {};
+		BX.MPL.recalcMoreButtonComment = function() {};
+		BX.MPL.recalcMoreButtonCommentById = function() {};
 
 		BX.addCustomEvent(window, "OnUCHasBeenDestroyed", function(ENTITY_XML_ID) {
 			delete repo["list"][ENTITY_XML_ID];

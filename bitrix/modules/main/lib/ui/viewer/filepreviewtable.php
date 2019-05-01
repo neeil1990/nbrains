@@ -119,10 +119,10 @@ final class FilePreviewTable extends DataManager
 			return;
 		}
 
+		self::$alreadyDeleted[$file['ID']] = true;
+
 		\CFile::delete($file['PREVIEW_ID']);
 		\CFile::delete($file['PREVIEW_IMAGE_ID']);
-
-		self::$alreadyDeleted[$file['ID']] = true;
 	}
 
 	/**
@@ -139,7 +139,7 @@ final class FilePreviewTable extends DataManager
 		{
 			return;
 		}
-		
+
 		$file = self::getRow([
 			'filter' => [
 				'=FILE_ID' => $bfile['ID'],

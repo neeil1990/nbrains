@@ -1,7 +1,7 @@
-    <section class="landing-block container-fluid px-0">
+    <section class="landing-block container-fluid px-0 g-theme-business-bg-blue-dark-v2">
         <div class="row no-gutters">
 
-            <div class="landing-block-node-left col-md-6 col-lg-4 order-2 order-md-1 g-theme-business-bg-blue-dark-v2">
+            <div class="landing-block-node-left col-md-6 col-lg-4 order-2 order-md-1">
                 <div class="js-carousel g-pb-90"
                      data-infinite="true"
 					 data-autoplay="true"

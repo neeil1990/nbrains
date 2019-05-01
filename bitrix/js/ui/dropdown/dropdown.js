@@ -70,7 +70,7 @@
 					this.getPopupWindow().show();
 
 				}.bind(this));
-				this.targetElement.addEventListener("click", function()
+				this.targetElement.addEventListener("click", function(e)
 				{
                     if (this.isDisabled)
                     {
@@ -89,7 +89,7 @@
 
 					if(this.popupWindow)
 					{
-						BX.PreventDefault();
+						BX.PreventDefault(e);
 					}
 
 					this.getPopupWindow().show();
@@ -138,7 +138,7 @@
 									this.getPopupWindow().show();
 								}
 								else {
-									BX.PreventDefault();
+									BX.PreventDefault(e);
 								}
 							}
 						}.bind(this),
@@ -266,6 +266,16 @@
 					}
 				}
 			},
+			cancelCreationOnBlur: function()
+			{
+				if(!this.enableCreation)
+				{
+					this.targetElement.addEventListener("blur", function()
+					{
+						this.resetInputValue();
+					}.bind(this));
+				}
+			},
 			onDocumentClick: function()
 			{
 				if((this.CurrentItem && this.CurrentItem.title.length !== this.targetElement.value.length)
@@ -291,11 +301,6 @@
 			{
 				this.setDefaultItems(items);
 				this.setItems(items);
-				for (var i = 0; i < items.length; i++)
-				{
-					items[i].searchField = items[i].title + items[i].subtitle + items[i].phone + items[i].email;
-					items[i].searchField = items[i].searchField.toLowerCase();
-				}
 			},
 			setItems: function(items)
 			{
@@ -355,12 +360,12 @@
 			{
 				return BX.ajax.runAction(
 					this.searchAction,
-					{ data: { search: target, options: this.searchOptions } }
+					{ data: { searchQuery: target, options: this.searchOptions } }
 				).then(this.onSearchRequestSuccess.bind(this));
 			},
 			onSearchRequestSuccess: function(results)
 			{
-				return BX.prop.getArray(results, "data", []);
+				return BX.prop.getArray(BX.prop.getObject(results, "data", {}), "items", []);
 			},
 			getFooterItems: function()
 			{
@@ -553,16 +558,13 @@
 
 				this.getItems().forEach(function(item)
 				{
-					var email;
-					var phone;
+					var attrs = BX.prop.getObject(item, "attributes", {});
 
-					if(Array.isArray(item.email)) {
-						email = item.email[0].value;
-					}
+					var phones = BX.prop.getArray(attrs, "phone", []);
+					var emails = BX.prop.getArray(attrs, "email", []);
 
-					if(Array.isArray(item.phone)) {
-						phone = item.phone[0].value;
-					}
+					var phone = phones.length > 0 ? phones[0].value : "";
+					var email = emails.length > 0 ? emails[0].value : "";
 
 					item.node = BX.create('div', {
 						attrs: {
@@ -580,24 +582,24 @@
 								attrs: {
 									className: 'ui-dropdown-item-subname'
 								},
-								text: item.subtitle
+								text: item.subTitle || ''
 							}),
 							BX.create('div', {
 								attrs: {
 									className: 'ui-dropdown-contact-info'
 								},
 								children: [
-									item.phone ? BX.create('div', {
+									phone !== "" ? BX.create('div', {
 										attrs: {
 											className: 'ui-dropdown-contact-info-item ui-dropdown-item-phone'
 										},
-										text: phone ? phone : item.phone
+										text: phone
 									}) : null,
-									item.email ? BX.create('div', {
+									email !== "" ? BX.create('div', {
 										attrs: {
 											className: 'ui-dropdown-contact-info-item ui-dropdown-item-email'
 										},
-										text: email ? email : item.email
+										text: email
 									}) : null
 								]
 							})
@@ -842,6 +844,7 @@
 
 				return items[items.length - 1];
 			},
+
 			getItemByIndex: function(index)
 			{
 				var items = this.getItems();
@@ -850,21 +853,6 @@
 					return items[index];
 				}
 				return null;
-			},
-			setNewItemsForTest: function()
-			{
-				var newItems = [
-					{ title: "Pasha", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "Lesha", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "Kolya", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "UserName", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "UserName", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "UserName", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "UserName", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" },
-					{ title: "UserName", subtitle: "developer", phone: "+7 965 954-64-24,", email: "rosros@mail.ru" }
-				];
-				this.updateItemsList(newItems);
-				return this.getItems();
 			},
 
 			handleItemClick: function(item, event)
@@ -911,7 +899,7 @@
 						}
 						else
 						{
-							BX.PreventDefault();
+							BX.PreventDefault(e);
 						}
 					}
 
@@ -980,6 +968,3 @@
 		};
 
 })();
-
-// var cl = BX.getClass("BX.Crm.ClientEditorEntityPanel");
-// var obj = new cl({});

@@ -382,7 +382,7 @@ class CAllIBlockProperty
 			if(strpos("0123456789", substr($arFields["CODE"], 0, 1))!==false)
 				$this->LAST_ERROR .= GetMessage("IBLOCK_PROPERTY_CODE_FIRST_LETTER").": ".$arFields["CODE"]."<br>";
 			if(preg_match("/[^A-Za-z0-9_]/",  $arFields["CODE"]))
-				$this->LAST_ERROR .= GetMessage("IBLOCK_PROPERTY_WRONG_CODE")."<br>";
+				$this->LAST_ERROR .= GetMessage("IBLOCK_PROPERTY_WRONG_CODE").": ".$arFields["CODE"]."<br>";
 		}
 
 		if(!$bFormValidate)

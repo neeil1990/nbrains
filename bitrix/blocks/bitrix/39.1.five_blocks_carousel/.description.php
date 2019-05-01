@@ -44,21 +44,21 @@ return array(
 			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICON'),
 			'type' => 'icon',
 		),
-		'.landing-block-node-card-icon2' => array(
-			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICON'),
-			'type' => 'icon',
-		),
-		'.landing-block-node-card-icon3' => array(
-			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICON'),
-			'type' => 'icon',
-		),
 		'.landing-block-node-card-icon-text1' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICONTEXT'),
 			'type' => 'text',
 		),
+		'.landing-block-node-card-icon2' => array(
+			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICON'),
+			'type' => 'icon',
+		),
 		'.landing-block-node-card-icon-text2' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICONTEXT'),
 			'type' => 'text',
+		),
+		'.landing-block-node-card-icon3' => array(
+			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICON'),
+			'type' => 'icon',
 		),
 		'.landing-block-node-card-icon-text3' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_5_BLOCKS_CAROUSEL_NODES_LANDINGBLOCKNODECARDICONTEXT'),

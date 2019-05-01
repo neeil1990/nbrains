@@ -575,6 +575,7 @@
 		BX.UI.Viewer.Item.apply(this, arguments);
 
 		this.playerId = 'audio-playerId_' + this.generateUniqueId();
+		this.svgMask = null;
 	};
 
 	BX.UI.Viewer.Audio.prototype =
@@ -654,9 +655,10 @@
 		render: function ()
 		{
 			this.player = new BX.Fileman.Player(this.playerId, {
-				width: 400,
-				height: 30,
+				width: 320,
+				height: 52,
 				isAudio: true,
+				skin: 'vjs-viewer-audio-player-skin',
 				sources: [{
 					src: this.src,
 					type: 'audio/mp3'
@@ -1139,6 +1141,7 @@
 		this.scale = options.scale || 1.4;
 		this.pdfDocument = null;
 		this.pdfPages = {};
+		this.pdfRenderedPages = {};
 		this.lastRenderedPdfPage = null;
 		this.contentNode = null;
 		this.previewHtml = null;
@@ -1330,9 +1333,14 @@
 
 		renderDocumentPage: function(pdf, pageNumber)
 		{
-			var promise = new BX.Promise();
+			if (this.pdfRenderedPages[pageNumber])
+			{
+				return;
+			}
 
+			this.pdfRenderedPages[pageNumber] = true;
 			this.getDocumentPage(pdf, pageNumber).then(function (page) {
+
 				var canvas = this.createCanvasPage();
 				var viewport = page.getViewport(this.scale);
 				canvas.height = viewport.height;
@@ -1348,8 +1356,6 @@
 
 				this.controller.hideLoading();
 			}.bind(this));
-
-			return promise;
 		},
 
 		createCanvasPage: function ()
@@ -1395,6 +1401,7 @@
 
 		beforeHide: function()
 		{
+			this.pdfRenderedPages = [];
 			BX.unbind(window, 'mousemove', this._handleControls);
 		},
 

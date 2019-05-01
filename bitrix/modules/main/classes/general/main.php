@@ -2828,7 +2828,7 @@ abstract class CAllMain
 		{
 			$response = Main\Context::getCurrent()->getResponse();
 
-			if(is_array($_SESSION['SPREAD_COOKIE']))
+			if(isset($_SESSION['SPREAD_COOKIE']) && is_array($_SESSION['SPREAD_COOKIE']))
 			{
 				foreach($_SESSION['SPREAD_COOKIE'] as $cookie)
 				{

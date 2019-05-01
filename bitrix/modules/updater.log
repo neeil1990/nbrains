@@ -1,0 +1,716 @@
+2019-05-01 17:16:35 -  - exec CUpdateClient::GetUpdatesList
+2019-05-01 17:16:35 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:35 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.1.3&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.2&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:16:35 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:36 -  - TIME GetUpdatesList(request) 0.19 sec
+2019-05-01 17:16:36 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:52 -  - exec CUpdateClient::UpdateUpdate
+2019-05-01 17:16:52 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:52 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.1.3&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.2&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y&query_type=updateupdate
+2019-05-01 17:16:52 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:53 -  - TIME UpdateUpdate(request) 1.643 sec
+2019-05-01 17:16:53 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:16:53 -  - TIME UnGzipArchive 0.016 sec
+2019-05-01 17:16:53 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:53 - CURV - Update updated successfully!
+2019-05-01 17:16:53 - UPD_SUCCESS - Update system updated
+2019-05-01 17:16:53 -  - exec CUpdateClient::GetUpdatesList
+2019-05-01 17:16:53 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:53 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.2&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:16:53 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:54 -  - TIME GetUpdatesList(request) 0.219 sec
+2019-05-01 17:16:54 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:58 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:58 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:58 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.2&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:16:58 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:58 -  - TIME LoadModulesUpdates(request) 0.196 sec
+2019-05-01 17:16:58 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:58 - S - STEP
+2019-05-01 17:16:58 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:16:58 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:58 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:58 -  - loadFile
+2019-05-01 17:16:58 - U - RETURN
+2019-05-01 17:16:58 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:16:58 -  - TIME UnGzipArchive 0.035 sec
+2019-05-01 17:16:58 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720218/fileman/updater18.5.300.php'
+2019-05-01 17:16:58 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720218/fileman/updater18.5.300.php': CopyFiles(install/components, components)
+2019-05-01 17:16:58 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720218/fileman/updater18.5.300.php': CopyFiles(install/js, js)
+2019-05-01 17:16:58 -  - TIME UpdateStepModules 0.042 sec
+2019-05-01 17:16:58 - UPD_SUCCESS - Updated: fileman (18.5.300)<br><li>Исправлена ошибка автоматического запуска видео в браузере в живой ленте. <li>Прочие незначительные исправления.
+2019-05-01 17:16:59 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:59 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:59 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.300&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:16:59 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:59 -  - TIME LoadModulesUpdates(request) 0.201 sec
+2019-05-01 17:16:59 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:59 - S - STEP
+2019-05-01 17:16:59 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:16:59 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:59 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:59 -  - loadFile
+2019-05-01 17:16:59 - U - RETURN
+2019-05-01 17:16:59 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:16:59 -  - TIME UnGzipArchive 0.003 sec
+2019-05-01 17:16:59 -  - TIME UpdateStepModules 0.002 sec
+2019-05-01 17:16:59 - UPD_SUCCESS - Updated: fileman (18.5.350)<br><li>Исправлена ошибка при сохранении свойства типа видео.
+2019-05-01 17:16:59 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:59 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:16:59 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.350&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:16:59 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:16:59 -  - TIME LoadModulesUpdates(request) 0.192 sec
+2019-05-01 17:16:59 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:59 - S - STEP
+2019-05-01 17:16:59 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:16:59 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:16:59 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:16:59 -  - loadFile
+2019-05-01 17:17:00 - U - RETURN
+2019-05-01 17:17:00 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:00 -  - TIME UnGzipArchive 0.021 sec
+2019-05-01 17:17:00 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720220/fileman/updater18.5.400.php'
+2019-05-01 17:17:00 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720220/fileman/updater18.5.400.php': CopyFiles(install/js, js)
+2019-05-01 17:17:00 -  - TIME UpdateStepModules 0.032 sec
+2019-05-01 17:17:00 - UPD_SUCCESS - Updated: fileman (18.5.400)<br><li>Исправлена ошибка кодировки языковых фраз в просмотрщике pdf. <li>Исправлена ошибка построения пути к файлу в облаке для медиабиблиотеки. <li>Исправлена ошибка проверки пользовательского поля типа видео.
+2019-05-01 17:17:00 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:00 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:00 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.2&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:00 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:00 -  - TIME LoadModulesUpdates(request) 0.188 sec
+2019-05-01 17:17:00 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:00 - S - STEP
+2019-05-01 17:17:00 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:00 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:00 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:00 -  - loadFile
+2019-05-01 17:17:01 - U - RETURN
+2019-05-01 17:17:01 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:01 -  - TIME UnGzipArchive 0.074 sec
+2019-05-01 17:17:01 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720221/iblock/updater18.6.100/index.php'
+2019-05-01 17:17:01 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720221/iblock/updater18.6.100/index.php': CopyFiles(install/components, components)
+2019-05-01 17:17:01 -  - TIME UpdateStepModules 0.115 sec
+2019-05-01 17:17:01 - UPD_SUCCESS - Updated: iblock (18.6.100)<br><li>Исправлены ошибки в базовых шаблонах компонентов catalog.item, catalog.section, catalog.element. <li>Исправлены ошибки в шаблонах компонентов для сайтов Битрикс24. <li>Компонент new.line теперь проверяет привязку инфоблоков к сайту. <li>В списках элементов административного раздела исправлен фильтр по свойствам типа \"Привязка к элементам\" для случая, когда в свойстве не указан инфоблок привязки. <li>Незначительные исправления административных страниц модуля. <li>В xml-импорте инфоблока торговых предложений неверно устанавливался тип товара.
+2019-05-01 17:17:01 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:01 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:01 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.0&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:01 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:01 -  - TIME LoadModulesUpdates(request) 0.202 sec
+2019-05-01 17:17:01 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:01 - S - STEP
+2019-05-01 17:17:01 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:02 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:02 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:02 -  - loadFile
+2019-05-01 17:17:02 - U - RETURN
+2019-05-01 17:17:02 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:02 -  - TIME UnGzipArchive 0.006 sec
+2019-05-01 17:17:02 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720222/search/updater18.5.100.php'
+2019-05-01 17:17:02 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720222/search/updater18.5.100.php': CopyFiles(install/components, components)
+2019-05-01 17:17:02 -  - TIME UpdateStepModules 0.011 sec
+2019-05-01 17:17:02 - UPD_SUCCESS - Updated: search (18.5.100)<br><li>Исправлен ряд ошибок.
+2019-05-01 17:17:02 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:02 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:02 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.100&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:02 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:02 -  - TIME LoadModulesUpdates(request) 0.217 sec
+2019-05-01 17:17:02 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:02 - S - STEP
+2019-05-01 17:17:02 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:02 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:02 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:02 -  - loadFile
+2019-05-01 17:17:02 - U - RETURN
+2019-05-01 17:17:02 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:02 -  - TIME UnGzipArchive 0.002 sec
+2019-05-01 17:17:02 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720222/search/updater18.5.200/index.php'
+2019-05-01 17:17:02 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720222/search/updater18.5.200/index.php': CopyFiles(install/components, components)
+2019-05-01 17:17:02 -  - TIME UpdateStepModules 0.005 sec
+2019-05-01 17:17:02 - UPD_SUCCESS - Updated: search (18.5.200)<br><li>Исправлена ошибка подсветки строки поиска в результатах компонента search.title.
+2019-05-01 17:17:02 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:02 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:02 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.5.1&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:02 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:03 -  - TIME LoadModulesUpdates(request) 0.196 sec
+2019-05-01 17:17:03 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:03 - S - STEP
+2019-05-01 17:17:03 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:03 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:03 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:03 -  - loadFile
+2019-05-01 17:17:03 - U - RETURN
+2019-05-01 17:17:03 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:03 -  - TIME UnGzipArchive 0.001 sec
+2019-05-01 17:17:03 -  - TIME UpdateStepModules 0.005 sec
+2019-05-01 17:17:03 - UPD_SUCCESS - Updated: seo (18.5.100)<br><li>В установщик модуля добавлена установка и удаление компонентов.
+2019-05-01 17:17:03 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:03 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:03 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.5.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:03 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:03 -  - TIME LoadModulesUpdates(request) 0.199 sec
+2019-05-01 17:17:03 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:03 - S - STEP
+2019-05-01 17:17:03 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:03 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:03 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:03 -  - loadFile
+2019-05-01 17:17:03 - U - RETURN
+2019-05-01 17:17:03 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:03 -  - TIME UnGzipArchive 0.007 sec
+2019-05-01 17:17:03 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720223/seo/updater18.6.0.php'
+2019-05-01 17:17:03 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720223/seo/updater18.6.0.php': CopyFiles(install/components, components)
+2019-05-01 17:17:03 -  - TIME UpdateStepModules 0.024 sec
+2019-05-01 17:17:03 - UPD_SUCCESS - Updated: seo (18.6.0)<br><li>Добавлена реализация сервиса аналитики для построения отчетов сквозной аналитики.
+2019-05-01 17:17:03 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:03 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:03 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.6.0&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:03 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:04 -  - TIME LoadModulesUpdates(request) 0.231 sec
+2019-05-01 17:17:04 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:04 - S - STEP
+2019-05-01 17:17:04 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:04 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:04 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:04 -  - loadFile
+2019-05-01 17:17:04 - U - RETURN
+2019-05-01 17:17:04 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:04 -  - TIME UnGzipArchive 0.001 sec
+2019-05-01 17:17:04 -  - TIME UpdateStepModules 0.002 sec
+2019-05-01 17:17:04 - UPD_SUCCESS - Updated: seo (18.6.100)<br><li>Исправлена проблема подключения сервиса Google Ads в сквозной аналитике.
+2019-05-01 17:17:04 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:04 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:04 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.0.3&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:04 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:04 -  - TIME LoadModulesUpdates(request) 0.198 sec
+2019-05-01 17:17:04 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:04 - S - STEP
+2019-05-01 17:17:04 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:04 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:04 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:04 -  - loadFile
+2019-05-01 17:17:04 - U - RETURN
+2019-05-01 17:17:04 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:04 -  - TIME UnGzipArchive 0.005 sec
+2019-05-01 17:17:04 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720224/socialservices/updater18.5.0.php'
+2019-05-01 17:17:04 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720224/socialservices/updater18.5.0.php': CopyFiles(install/components, components)
+2019-05-01 17:17:04 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720224/socialservices/updater18.5.0.php': CopyFiles(install/tools, tools)
+2019-05-01 17:17:04 -  - TIME UpdateStepModules 0.012 sec
+2019-05-01 17:17:04 - UPD_SUCCESS - Updated: socialservices (18.5.0)<br><li>Изменения в авторизации ВКонтакте. 
+2019-05-01 17:17:04 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:04 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:04 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.5.0&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:04 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:05 -  - TIME LoadModulesUpdates(request) 0.192 sec
+2019-05-01 17:17:05 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:05 - S - STEP
+2019-05-01 17:17:05 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:05 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:05 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:05 -  - loadFile
+2019-05-01 17:17:05 - U - RETURN
+2019-05-01 17:17:05 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:05 -  - TIME UnGzipArchive 0.002 sec
+2019-05-01 17:17:05 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720225/socialservices/updater18.5.100.php'
+2019-05-01 17:17:05 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720225/socialservices/updater18.5.100.php': CopyFiles(install/components, components)
+2019-05-01 17:17:05 -  - TIME UpdateStepModules 0.004 sec
+2019-05-01 17:17:05 - UPD_SUCCESS - Updated: socialservices (18.5.100)<br><li>Исправлена ссылка на редактирование Битрикс24.Паспорта.
+2019-05-01 17:17:05 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:05 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:05 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.1&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:05 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:05 -  - TIME LoadModulesUpdates(request) 0.194 sec
+2019-05-01 17:17:05 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:05 - S - STEP
+2019-05-01 17:17:05 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:05 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:05 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:05 -  - loadFile
+2019-05-01 17:17:06 - U - RETURN
+2019-05-01 17:17:06 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:06 -  - TIME UnGzipArchive 0.003 sec
+2019-05-01 17:17:06 -  - TIME UpdateStepModules 0.003 sec
+2019-05-01 17:17:06 - UPD_SUCCESS - Updated: highloadblock (18.5.100)<br><li>Исправлены незначительные ошибки административных страниц модуля. <li>Исправлены ошибки свойств типа \"Справочник\".
+2019-05-01 17:17:06 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:06 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:06 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.6&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:06 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:06 -  - TIME LoadModulesUpdates(request) 0.199 sec
+2019-05-01 17:17:06 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:06 - S - STEP
+2019-05-01 17:17:06 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:06 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:06 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:06 -  - loadFile
+2019-05-01 17:17:06 - U - RETURN
+2019-05-01 17:17:06 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:06 -  - TIME UnGzipArchive 0.006 sec
+2019-05-01 17:17:06 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720226/rest/updater18.5.7.php'
+2019-05-01 17:17:06 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720226/rest/updater18.5.7.php': CopyFiles(install/components, components)
+2019-05-01 17:17:06 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720226/rest/updater18.5.7.php': CopyFiles(install/js, js)
+2019-05-01 17:17:06 -  - TIME UpdateStepModules 0.014 sec
+2019-05-01 17:17:06 - UPD_SUCCESS - Updated: rest (18.5.7)<br><li>Добавлена возможность использования поля USER_TYPE в методах user.get и user.search. <li>Незначительные исправления.
+2019-05-01 17:17:06 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:06 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:06 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.3&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:06 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:06 -  - TIME LoadModulesUpdates(request) 0.209 sec
+2019-05-01 17:17:06 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:06 - S - STEP
+2019-05-01 17:17:06 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:06 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:06 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:06 -  - loadFile
+2019-05-01 17:17:07 - U - RETURN
+2019-05-01 17:17:07 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:07 -  - TIME UnGzipArchive 0.002 sec
+2019-05-01 17:17:07 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720227/ui/updater18.5.4.php'
+2019-05-01 17:17:07 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720227/ui/updater18.5.4.php': CopyFiles(install/js, js)
+2019-05-01 17:17:07 -  - TIME UpdateStepModules 0.004 sec
+2019-05-01 17:17:07 - UPD_SUCCESS - Updated: ui (18.5.4)<br><li>Рефакторинг поиска, переход на новый API. 
+2019-05-01 17:17:07 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:07 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:07 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.5.16&bitm_ui=18.5.4&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:07 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:07 -  - TIME LoadModulesUpdates(request) 0.199 sec
+2019-05-01 17:17:07 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:07 - S - STEP
+2019-05-01 17:17:07 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:07 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:07 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:07 -  - loadFile
+2019-05-01 17:17:08 - U - RETURN
+2019-05-01 17:17:08 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:09 -  - TIME UnGzipArchive 0.532 sec
+2019-05-01 17:17:09 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php'
+2019-05-01 17:17:09 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:09 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php': CopyFiles(install/components, components)
+2019-05-01 17:17:09 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php': CopyFiles(install/js, js)
+2019-05-01 17:17:09 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php': CopyFiles(install/templates, templates)
+2019-05-01 17:17:09 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720228/landing/updater18.6.0.php': CopyFiles(install/images, images)
+2019-05-01 17:17:10 -  - TIME UpdateStepModules 1.149 sec
+2019-05-01 17:17:10 - UPD_SUCCESS - Updated: landing (18.6.0)<br><li>Добавлена поддержка удаления фоновых изображений. <li>Добавлены новые блоки. <li>При создании сайта и страницы в предпросмотре можно изменить название и описание будущей страницы. <li>В настройки сайта и страницы добавлена возможность указания пикселей Facebook и ВКонтакт. <li>На опубликованную страницу автоматически добавляется тег canonical. <li>Фильтрация в списке сайтов дополнена полнотекстовым по имени домена и идентификатору, а в списке страниц по символьному коду и идентификатору. <li>В интерфейс смены домена (облачные версии) добавлена автоматическая проверка домена на доступность. <li>В настройках модуля (коробочная версия) добавлена возможность указать свой шаблон главного модуля для каждого сайта. <li>Новое оформление панели текстового редактора. <li>В форме редактирования сайта пункты выбора 404й страницы и страницы для закрытия сайта теперь показываюься даже при одной странице сайта. <li>Улучшена поддержка группировки нод. <li>При PHP-блоке с ошибкой система теперь выводит заглушку блока. <li>Изменен код подключения Яндекс.Метрики. <li>Оптимизация публикации многостраничных сайтов. <li>Битрикс24 добавлена возможность смены языка сайта независимо от языка портала. <li>Битрикс24: при смене имени домена теперь пишется о лимите на длину и том, занят ли домен, а также информация. <li>Битрикс24: при смене имени домена при дублировании имени домена теперь проверяется, нет ли сайтов домена в корзине. <li>Магазины: в настройки каталога добалена возможность указать согласие на обработку перс. данных. <li>Магазины: на главной странице каталога теперь выводится фильтр, если в настройках каталога задана ограничивающая категория. <li>Разработчикам: новый функционал обновления верстки уже добавленных блоков (https://dev.bitrix24.ru/company/personal/user/3/blog/2091/ ). <li>Разработчикам: коробочная версия адаптирована под возможность создавать свои шаблоны главного модуля для Сайтов24. <li>Разработчикам: улучшена работа с ЧПУ. <li>Разработчикам: добавлена поддержка class.php в блоке. <li>Разработчикам: добавлена поддержка конфигурационного файла шаблона. <li>Разработчикам: улучшено поведение блока с некоторыми компонентами. <li>Разработчикам: тип поля контента блоков изменен на mediumtext. <li>Разработчикам: новый хук HEADBLOCK_CSS_FILE – ссылка на CSS-файл. <li>Разработчикам: добавлено событие onGetThemeColors для возможности влиять на список тем. <li>Разработчикам: добавлена возможность регистрировать обработку обновления уже добавленных блоков. <li>Разработчикам: добавлена поддержка параметров textOnly и allowFormEdit для нод. <li>Разработчикам: новый метод в коробочной версии Iblock::getElementUrl. <li>Разработчикам: улучшен экспорт сайта, убраны лишние поля, идентификаторы файлов теперь формируются в пути. <li>Разработчикам: изменена схема подключения скриптов вендора, из-за которой не подключались сторонние библиотеки jQuery (коробочная версия). <li>Разработчикам: поддержка папки /local. <li>Разработчикам: REST: добавлена возможность локализации блоков и шаблонов. <li>Разработчикам: REST: метод landing.landing.getlist теперь смотрит на параметр select. <li>Разработчикам: REST: для места встраивания в редактировании блока добавлена поддержка команды refreshBlock. <li>Разработчикам: REST: исправлена ошибка с некорректным получением полей DATE_MODIFY и DATE_CREATE в списочных методах. <li>Разработчикам: REST: усилена проверка типов параметров методов. <li>Усилена проверка на имена загружаемых картинок. <li>Оптимизация блоков, содержащих компоненты. <li>Оптимизация CSS тем. <li>Исправлена ошибка, при которой неудачно редактировались фоновые картинки блоков. <li>Исправлена ошибка, при которой отключенный сайт был недоступен в том числе и к предпросмотру. <li>Исправлено отображение favicon в системе Яндекс. <li>Небольшие корректировки API перемещения и копирования блоков. <li>Корректировка прелоадера в списке сайтов и страниц. <li>В интерфейсе изменения главной страницы добавлена ссылка на изменение настроек сайта. <li>Улучшение и исправление верстки в блоках. Некоторые улучшения и исправления интерфейса редактора. <li>Улучшено отображение встраиваемых веб-форм. <li>Исправлены ошибки в инсталляторе модуля. <li>Исправлена ошибка с битой ссылкой на страницу сравнения в детальной карточке магазина. <li>В БУС в настройках карточки товара некорректно выводились свойства. <li>Исправлена ошибка с доступностью страницы папки, если папка была удалена в корзину. <li>Исправлена ошибка невозможности удаления папки из корзины по истечению срока. 
+2019-05-01 17:17:10 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:10 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:10 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.8&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.8&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.4&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:10 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:10 -  - TIME LoadModulesUpdates(request) 0.197 sec
+2019-05-01 17:17:10 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:10 - S - STEP
+2019-05-01 17:17:10 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:10 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:10 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:10 -  - loadFile
+2019-05-01 17:17:12 - U - RETURN
+2019-05-01 17:17:12 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:13 -  - TIME UnGzipArchive 0.597 sec
+2019-05-01 17:17:13 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720232/ui/updater18.5.5.php'
+2019-05-01 17:17:13 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720232/ui/updater18.5.5.php': CopyFiles(install/components, components)
+2019-05-01 17:17:13 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720232/ui/updater18.5.5.php': CopyFiles(install/js, js)
+2019-05-01 17:17:13 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720232/main/updater18.1.9.php'
+2019-05-01 17:17:13 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720232/main/updater18.1.9.php': CopyFiles(install/components, components)
+2019-05-01 17:17:13 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720232/main/updater18.1.9.php': CopyFiles(install/js, js)
+2019-05-01 17:17:13 -  - TIME UpdateStepModules 0.806 sec
+2019-05-01 17:17:13 - UPD_SUCCESS - Updated: main (18.1.9)<br><li>Переход на использование расширения ui.selector. <li>Новый шаблон постраничной навигации на Bootstrap v.4. <li>Исправлена ошибка сохранения постраничной навигации в списке пользователей. <li>Исправлена работа парсера html в библиотеке DOM для php версии 7.3. 
+2019-05-01 17:17:13 - UPD_SUCCESS - Updated: ui (18.5.5)<br><li>Добавлено расширение ui.selector, отвечающее за диалог выбора сущностей. <li>Незначительные исправления в функционале всплывающих карточек сотрудников. <li>Обновление структуры расширения ui.icons. <li>Обновлена поддержка старых браузеров для расширения ui.buttons. <li>Добавлен класс .ui-btn-empty, аналог :empty. <li>ui.buttons.icons: исправлены известные ошибки. <li>Добавлено несколько новых иконок в ui.buttons.icon. <li>Исправлено несколько ошибок в ui.viewer. <li>Исправлено несколько ошибок в ui.disk. <li>Обновлена библиотека ui.viewer: добавлен просмотр документов, видео и аудио файлов. 
+2019-05-01 17:17:14 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:14 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:14 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.9&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.9&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:14 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:14 -  - TIME LoadModulesUpdates(request) 0.191 sec
+2019-05-01 17:17:14 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:14 - S - STEP
+2019-05-01 17:17:14 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:14 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:14 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:14 -  - loadFile
+2019-05-01 17:17:14 - U - RETURN
+2019-05-01 17:17:14 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:14 -  - TIME UnGzipArchive 0.038 sec
+2019-05-01 17:17:14 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720234/main/updater18.1.10.php'
+2019-05-01 17:17:14 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720234/main/updater18.1.10.php': CopyFiles(install/components, components)
+2019-05-01 17:17:14 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720234/main/updater18.1.10.php': CopyFiles(install/js, js)
+2019-05-01 17:17:14 -  - TIME UpdateStepModules 0.058 sec
+2019-05-01 17:17:14 - UPD_SUCCESS - Updated: main (18.1.10)<br><li>Исправлены интерфейсные ошибки в файловом диалоге. <li>Исправлена ошибка поиска пользователя в благодарностях. <li>Исправлены другие интерфейсные ошибки. 
+2019-05-01 17:17:15 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:15 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:15 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.1.10&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.1.10&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:15 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:15 -  - TIME LoadModulesUpdates(request) 0.21 sec
+2019-05-01 17:17:15 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:15 - S - STEP
+2019-05-01 17:17:15 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:15 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:15 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:15 -  - loadFile
+2019-05-01 17:17:16 - U - RETURN
+2019-05-01 17:17:16 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:16 -  - TIME UnGzipArchive 0.12 sec
+2019-05-01 17:17:16 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720236/main/updater18.5.0/index.php'
+2019-05-01 17:17:16 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720236/main/updater18.5.0/index.php': CopyFiles(install/components, components)
+2019-05-01 17:17:16 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720236/main/updater18.5.0/index.php': CopyFiles(install/admin, admin)
+2019-05-01 17:17:16 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720236/main/updater18.5.0/index.php': CopyFiles(install/panel, panel)
+2019-05-01 17:17:16 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720236/main/updater18.5.0/index.php': CopyFiles(install/js, js)
+2019-05-01 17:17:16 -  - TIME UpdateStepModules 0.247 sec
+2019-05-01 17:17:16 - UPD_SUCCESS - Updated: main (18.5.0)<br><li>В настройках модуля добавлена возможность выбрать СМС-службу для отправки СМС (требуется модуль messageservice). <li>Добавлены типы и шаблоны СМС-событий. <li>Добавлена возможность регистрации пользователей по номеру телефона (опция в настройках модуля). <li>В компоненты main.register, main.profile, system.auth.registration, system.auth.changepasswd, system.auth.forgotpasswd добавлена поддержка регистрации по номеру телефона. <li>Исправлен ряд интерфейсных ошибок. <li>Улучшена поддержка PHP 7.3. 
+2019-05-01 17:17:16 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:16 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:16 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.0&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.0&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:16 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:16 -  - TIME LoadModulesUpdates(request) 0.197 sec
+2019-05-01 17:17:16 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:16 - S - STEP
+2019-05-01 17:17:16 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:16 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:16 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:16 -  - loadFile
+2019-05-01 17:17:18 - U - RETURN
+2019-05-01 17:17:18 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:18 -  - TIME UnGzipArchive 0.178 sec
+2019-05-01 17:17:18 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720238/main/updater18.5.50.php'
+2019-05-01 17:17:18 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720238/main/updater18.5.50.php': CopyFiles(install/js, js)
+2019-05-01 17:17:18 -  - TIME UpdateStepModules 0.245 sec
+2019-05-01 17:17:18 - UPD_SUCCESS - Updated: main (18.5.50)<br><li>Исправлена ошибка обрезки изображения в редакторе. <li>Исправлена ошибка в контекстных меню.
+2019-05-01 17:17:18 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:18 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:18 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.50&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.50&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:18 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:18 -  - TIME LoadModulesUpdates(request) 0.193 sec
+2019-05-01 17:17:18 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:18 - S - STEP
+2019-05-01 17:17:18 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:18 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:18 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:18 -  - loadFile
+2019-05-01 17:17:18 - U - RETURN
+2019-05-01 17:17:18 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:18 -  - TIME UnGzipArchive 0.001 sec
+2019-05-01 17:17:18 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720238/main/updater18.5.75.php'
+2019-05-01 17:17:21 -  - TIME UpdateStepModules 2.122 sec
+2019-05-01 17:17:21 - UPD_SUCCESS - Updated: main (18.5.75)<br><li>Улучшена обработка черного списка получателей писем.
+2019-05-01 17:17:21 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:21 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:21 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.75&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.75&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:21 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:21 -  - TIME LoadModulesUpdates(request) 0.203 sec
+2019-05-01 17:17:21 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:21 - S - STEP
+2019-05-01 17:17:21 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:21 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:21 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:21 -  - loadFile
+2019-05-01 17:17:22 - U - RETURN
+2019-05-01 17:17:22 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:23 -  - TIME UnGzipArchive 0.367 sec
+2019-05-01 17:17:23 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php'
+2019-05-01 17:17:23 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': CopyFiles(install/components, components)
+2019-05-01 17:17:23 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': CopyFiles(install/js, js)
+2019-05-01 17:17:23 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': CopyFiles(install/gadgets, gadgets)
+2019-05-01 17:17:23 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': CopyFiles(install/css, css)
+2019-05-01 17:17:23 - CRUPDCDF2 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': Query(INSERT INTO b_agent (MODULE_ID, SORT, NAME, ACTIVE, AGENT_INTERVAL, IS_PERIOD, NEXT_EXEC) VALUES('main', 100, 'CUser::CleanUpAgent();', 'Y', 60*60*24, 'N', '2019-05-02 04:20:00'), )
+2019-05-01 17:17:23 - CRUPDCDF2 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': Query(INSERT INTO b_agent (MODULE_ID, SORT, NAME, ACTIVE, AGENT_INTERVAL, IS_PERIOD, NEXT_EXEC) VALUES('main', 100, 'CUser::DeactivateAgent();', 'Y', 60*60*24, 'N', '2019-05-02 04:25:00'), )
+2019-05-01 17:17:23 - CRUPDCDF2 - Run updater '/bitrix/updates/update_m1556720242/main/updater18.5.100.php': Query(INSERT INTO b_agent (MODULE_ID, SORT, NAME, ACTIVE, AGENT_INTERVAL, IS_PERIOD, NEXT_EXEC) VALUES('main', 100, 'CEventLog::CleanUpAgent();', 'Y', 60*60*24, 'N', '2019-05-02 04:30:00'), )
+2019-05-01 17:17:23 -  - TIME UpdateStepModules 0.442 sec
+2019-05-01 17:17:23 - UPD_SUCCESS - Updated: main (18.5.100)<br><li>В настройках модуля добавлена опция \"Деактивировать давно не заходивших пользователей (дней)\". <li>В политике безопасности группы добавлены настройки \"Количество попыток ввода пароля до временной блокировки пользователя\" и \"Период блокировки пользователя (минут)\". <li>На корпоративном портале теперь можно ставить лайки даже при нулевом авторитете. <li>Прочтение нотификаций, связанных с комментариями, теперь осуществляется сразу при открытии детальной страницы поста в мобильном приложении. <li>Добавлена возможность отключить редактирование для конкретной ячейки грида. <li>Добавлена валидация дат в фильтрах main.ui.filter. <li>Добавлена блокировка на одновременное масштабирование изображений. <li>Добавлена поддержка полей типа dest_selector в фильтрах при передаче значений в GET-запросах. <li>Исправлена ошибка при публикации упоминаний двух и более сотрудников в комментарии в мобильном приложении. <li>Исправлен ряд интерфейсных ошибок. 
+2019-05-01 17:17:23 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:23 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:23 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.100&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.100&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:23 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:23 -  - TIME LoadModulesUpdates(request) 0.194 sec
+2019-05-01 17:17:23 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:23 - S - STEP
+2019-05-01 17:17:23 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:23 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:23 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:23 -  - loadFile
+2019-05-01 17:17:24 - U - RETURN
+2019-05-01 17:17:24 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:24 -  - TIME UnGzipArchive 0.002 sec
+2019-05-01 17:17:24 -  - TIME UpdateStepModules 0.002 sec
+2019-05-01 17:17:24 - UPD_SUCCESS - Updated: main (18.5.150)<br><li>Исправлена работа управляемого кеша на первом хите после очистки закешированных данных. <li>Исправлена ошибка предоставления доступа к списку пользователей в административной панели.
+2019-05-01 17:17:24 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:24 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:24 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.150&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.150&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:24 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:24 -  - TIME LoadModulesUpdates(request) 0.187 sec
+2019-05-01 17:17:24 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:24 - S - STEP
+2019-05-01 17:17:24 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:24 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:24 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:24 -  - loadFile
+2019-05-01 17:17:24 - U - RETURN
+2019-05-01 17:17:24 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:24 -  - TIME UnGzipArchive 0.006 sec
+2019-05-01 17:17:24 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720244/main/updater18.5.180.php'
+2019-05-01 17:17:24 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720244/main/updater18.5.180.php': CopyFiles(install/components, components)
+2019-05-01 17:17:24 -  - TIME UpdateStepModules 0.008 sec
+2019-05-01 17:17:24 - UPD_SUCCESS - Updated: main (18.5.180)<br><li>Исправлена ошибка отображения селектора пользователей для БУС.
+2019-05-01 17:17:24 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:24 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:24 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.100&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:24 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:25 -  - TIME LoadModulesUpdates(request) 0.203 sec
+2019-05-01 17:17:25 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:25 - S - STEP
+2019-05-01 17:17:25 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:25 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:25 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:25 -  - loadFile
+2019-05-01 17:17:25 - U - RETURN
+2019-05-01 17:17:25 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:25 -  - TIME UnGzipArchive 0.063 sec
+2019-05-01 17:17:25 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720245/iblock/updater18.6.200/index.php'
+2019-05-01 17:17:25 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720245/iblock/updater18.6.200/index.php': CopyFiles(install/components, components)
+2019-05-01 17:17:25 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720245/iblock/updater18.6.200/index.php': CopyFiles(install/gadgets, gadgets)
+2019-05-01 17:17:25 -  - TIME UpdateStepModules 0.068 sec
+2019-05-01 17:17:25 - UPD_SUCCESS - Updated: iblock (18.6.200)<br><li>Расширены возможности выборки, фильтрации и сортировки по данным товаров, ценам и остаткам на складах в методе CIBlockElement::GetList. <li>Улучшена производительность административных страниц модуля. <li>Улучшена производительность компонентов-наследников класса \\Bitrix\\Iblock\\Component\\Base (catalog.top, catalog.section, catalog.element). <li>Исправлена ошибка генерации SEO-тегов элементов. <li>Исправлена ошибка добавления свойств товара в корзину. <li>Исправлены ошибки административных страниц модуля. <li>Добавлена возможность дополнительной фильтрации (пользовательский фильтр) в компоненты catalog.smart.filter, catalog.section.list. <li>Улучшена совместимость с php 7.3. <li>Исправлена ошибка работы класса \\Bitrix\\Iblock\\Component\\Base с инфоблоками, не содержащими товары. <li>Исправлена работа шаблона flat компонента bitrix:news. <li>Компонент catalog.search может работать без модуля поиска (search).
+2019-05-01 17:17:25 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:25 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:25 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.200&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:25 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:26 -  - TIME LoadModulesUpdates(request) 0.198 sec
+2019-05-01 17:17:26 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:26 - S - STEP
+2019-05-01 17:17:26 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:26 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:26 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:26 -  - loadFile
+2019-05-01 17:17:26 - U - RETURN
+2019-05-01 17:17:26 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:26 -  - TIME UnGzipArchive 0.006 sec
+2019-05-01 17:17:26 -  - TIME UpdateStepModules 0.004 sec
+2019-05-01 17:17:26 - UPD_SUCCESS - Updated: iblock (18.6.300)<br><li>Исправлена ошибка показа кнопки подписки для отсутствующих товаров.
+2019-05-01 17:17:26 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:26 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:26 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.300&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:26 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:26 -  - TIME LoadModulesUpdates(request) 0.192 sec
+2019-05-01 17:17:26 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:26 - S - STEP
+2019-05-01 17:17:26 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:26 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:26 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:26 -  - loadFile
+2019-05-01 17:17:27 - U - RETURN
+2019-05-01 17:17:27 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:27 -  - TIME UnGzipArchive 0.005 sec
+2019-05-01 17:17:27 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720247/iblock/updater18.6.400/index.php'
+2019-05-01 17:17:27 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720247/iblock/updater18.6.400/index.php': CopyFiles(install/components, components)
+2019-05-01 17:17:27 -  - TIME UpdateStepModules 0.006 sec
+2019-05-01 17:17:27 - UPD_SUCCESS - Updated: iblock (18.6.400)<br><li>Для простых товаров нельзя было указать количество при добавлении в корзину. <li>Исправлены ошибки компонент catalog.brandblock, catalog.compare.result.
+2019-05-01 17:17:27 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:27 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:27 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.0.1&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:27 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:27 -  - TIME LoadModulesUpdates(request) 0.201 sec
+2019-05-01 17:17:27 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:27 - S - STEP
+2019-05-01 17:17:27 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:27 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:27 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:27 -  - loadFile
+2019-05-01 17:17:27 - U - RETURN
+2019-05-01 17:17:27 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:27 -  - TIME UnGzipArchive 0.002 sec
+2019-05-01 17:17:27 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720247/b24connector/updater18.5.0.php'
+2019-05-01 17:17:27 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720247/b24connector/updater18.5.0.php': CopyFiles(install/components, components)
+2019-05-01 17:17:27 -  - TIME UpdateStepModules 0.004 sec
+2019-05-01 17:17:27 - UPD_SUCCESS - Updated: b24connector (18.5.0)<br><li>Изменено расположение виджета онлайн-чата в исходном коде страницы.
+2019-05-01 17:17:27 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:27 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:27 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.5&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:27 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:27 -  - TIME LoadModulesUpdates(request) 0.198 sec
+2019-05-01 17:17:27 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:27 - S - STEP
+2019-05-01 17:17:27 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:27 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:27 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:27 -  - loadFile
+2019-05-01 17:17:28 - U - RETURN
+2019-05-01 17:17:28 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:28 -  - TIME UnGzipArchive 0.019 sec
+2019-05-01 17:17:28 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720248/ui/updater18.5.6.php'
+2019-05-01 17:17:28 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720248/ui/updater18.5.6.php': CopyFiles(install/components, components)
+2019-05-01 17:17:28 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720248/ui/updater18.5.6.php': CopyFiles(install/js, js)
+2019-05-01 17:17:28 -  - TIME UpdateStepModules 0.036 sec
+2019-05-01 17:17:28 - UPD_SUCCESS - Updated: ui (18.5.6)<br><li>Добавлены иконки аренды номеров для контакт-центра.
+2019-05-01 17:17:28 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:28 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:28 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.6&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:28 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:28 -  - TIME LoadModulesUpdates(request) 0.195 sec
+2019-05-01 17:17:28 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:28 - S - STEP
+2019-05-01 17:17:28 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:28 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:28 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:28 -  - loadFile
+2019-05-01 17:17:29 - U - RETURN
+2019-05-01 17:17:29 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:29 -  - TIME UnGzipArchive 0.113 sec
+2019-05-01 17:17:29 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720249/ui/updater18.5.100.php'
+2019-05-01 17:17:29 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720249/ui/updater18.5.100.php': CopyFiles(install/js, js)
+2019-05-01 17:17:29 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720249/ui/updater18.5.100.php': CopyFiles(install/components, components)
+2019-05-01 17:17:29 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720249/ui/updater18.5.100.php': CopyFiles(install/js, js)
+2019-05-01 17:17:29 -  - TIME UpdateStepModules 0.23 sec
+2019-05-01 17:17:29 - UPD_SUCCESS - Updated: ui (18.5.100)<br><li>Библиотеки Vue, Vuex, VuexRouter больше не определяются в глобальной области видимости, доступ к ним осуществляется через префикс BX (BX.Vue, BX.Vuex, BX.VuexRouter).
+2019-05-01 17:17:30 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:30 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:30 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.100&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:30 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:30 -  - TIME LoadModulesUpdates(request) 0.203 sec
+2019-05-01 17:17:30 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:30 - S - STEP
+2019-05-01 17:17:30 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:30 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:30 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:30 -  - loadFile
+2019-05-01 17:17:30 - U - RETURN
+2019-05-01 17:17:30 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:30 -  - TIME UnGzipArchive 0.004 sec
+2019-05-01 17:17:30 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720250/ui/updater18.5.150.php'
+2019-05-01 17:17:30 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720250/ui/updater18.5.150.php': CopyFiles(install/js, js)
+2019-05-01 17:17:30 -  - TIME UpdateStepModules 0.006 sec
+2019-05-01 17:17:30 - UPD_SUCCESS - Updated: ui (18.5.150)<br><li>Исправлена ошибка, когда не открывалась ссылка на изображении при использовании просмотрщика. 
+2019-05-01 17:17:30 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:30 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:30 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.0&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:30 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:30 -  - TIME LoadModulesUpdates(request) 0.196 sec
+2019-05-01 17:17:30 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:30 - S - STEP
+2019-05-01 17:17:30 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:30 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:30 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:30 -  - loadFile
+2019-05-01 17:17:31 - U - RETURN
+2019-05-01 17:17:31 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:32 -  - TIME UnGzipArchive 0.261 sec
+2019-05-01 17:17:32 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720251/landing/updater18.6.1.php'
+2019-05-01 17:17:32 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720251/landing/updater18.6.1.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:32 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720251/landing/updater18.6.1.php': CopyFiles(install/components, components)
+2019-05-01 17:17:32 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720251/landing/updater18.6.1.php': CopyFiles(install/js, js)
+2019-05-01 17:17:32 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720251/landing/updater18.6.1.php': CopyFiles(install/templates, templates)
+2019-05-01 17:17:32 -  - TIME UpdateStepModules 0.42 sec
+2019-05-01 17:17:32 - UPD_SUCCESS - Updated: landing (18.6.1)<br><li>В блок корзины добавлена настройка скрытия поля ввода купона. <li>Разработчикам: REST: css-стили блоков теперь подключаются в конце блока head. <li>Разработчикам: REST: улучшен импорт-экспорт шаблонов. <li>Исправления и улучшеия в верстке некоторых блоков. <li>Исправлена ошибка с невозможностью использовать повторно домен сайта после его удаления. <li>Исправлена ошибка при изменении дизайна блока, иногда приводящая к потере картинки. <li>Исправлена ошибка, из-за которой мог не отображаться индикатор загрузки при загрузке изображения из внешней библиотеки. <li>Исправлена ошибка, из-за которой могли не отправляться запросы на сохранение при инлайн редактировании. <li>Исправлена ошибка удаления модуля, при которой не удалялись компоненты модуля.
+2019-05-01 17:17:32 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:32 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:32 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.1&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:32 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:32 -  - TIME LoadModulesUpdates(request) 0.196 sec
+2019-05-01 17:17:32 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:32 - S - STEP
+2019-05-01 17:17:32 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:32 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:32 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:32 -  - loadFile
+2019-05-01 17:17:33 - U - RETURN
+2019-05-01 17:17:33 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:33 -  - TIME UnGzipArchive 0.001 sec
+2019-05-01 17:17:33 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720253/landing/updater18.6.2.php'
+2019-05-01 17:17:33 -  - TIME UpdateStepModules 0.037 sec
+2019-05-01 17:17:33 - UPD_SUCCESS - Updated: landing (18.6.2)<br><li>Техническое обновление.
+2019-05-01 17:17:33 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:33 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:33 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.2&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:33 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:33 -  - TIME LoadModulesUpdates(request) 0.21 sec
+2019-05-01 17:17:33 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:33 - S - STEP
+2019-05-01 17:17:33 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:33 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:33 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:33 -  - loadFile
+2019-05-01 17:17:33 - U - RETURN
+2019-05-01 17:17:33 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:33 -  - TIME UnGzipArchive 0.003 sec
+2019-05-01 17:17:33 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720253/landing/updater18.6.3.php'
+2019-05-01 17:17:33 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720253/landing/updater18.6.3.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:33 -  - TIME UpdateStepModules 0.046 sec
+2019-05-01 17:17:33 - UPD_SUCCESS - Updated: landing (18.6.3)<br><li>Техническое обновление.
+2019-05-01 17:17:33 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:33 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:33 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.3&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:33 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:33 -  - TIME LoadModulesUpdates(request) 0.197 sec
+2019-05-01 17:17:33 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:33 - S - STEP
+2019-05-01 17:17:33 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:33 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:33 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:33 -  - loadFile
+2019-05-01 17:17:34 - U - RETURN
+2019-05-01 17:17:34 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:34 -  - TIME UnGzipArchive 0.016 sec
+2019-05-01 17:17:34 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720254/landing/updater18.6.4.php'
+2019-05-01 17:17:34 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720254/landing/updater18.6.4.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:34 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720254/landing/updater18.6.4.php': CopyFiles(install/templates, templates)
+2019-05-01 17:17:34 -  - TIME UpdateStepModules 0.028 sec
+2019-05-01 17:17:34 - UPD_SUCCESS - Updated: landing (18.6.4)<br><li>Техническое обновление.
+2019-05-01 17:17:34 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:34 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:34 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.4&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:34 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:34 -  - TIME LoadModulesUpdates(request) 0.19 sec
+2019-05-01 17:17:34 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:34 - S - STEP
+2019-05-01 17:17:34 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:34 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:34 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:34 -  - loadFile
+2019-05-01 17:17:35 - U - RETURN
+2019-05-01 17:17:35 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:35 -  - TIME UnGzipArchive 0.059 sec
+2019-05-01 17:17:35 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.50.php'
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.50.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.50.php': CopyFiles(install/js, js)
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.50.php': CopyFiles(install/templates, templates)
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.50.php': CopyFiles(install/components, components)
+2019-05-01 17:17:35 -  - TIME UpdateStepModules 0.144 sec
+2019-05-01 17:17:35 - UPD_SUCCESS - Updated: landing (18.6.50)<br><li>Техническое обновление.
+2019-05-01 17:17:35 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:35 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:35 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.50&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:35 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:35 -  - TIME LoadModulesUpdates(request) 0.199 sec
+2019-05-01 17:17:35 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:35 - S - STEP
+2019-05-01 17:17:35 - LMU01 - LoadModulesUpdates-Step
+2019-05-01 17:17:35 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:35 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:35 -  - loadFile
+2019-05-01 17:17:35 - U - RETURN
+2019-05-01 17:17:35 -  - exec CUpdateClient::UnGzipArchive
+2019-05-01 17:17:35 -  - TIME UnGzipArchive 0.004 sec
+2019-05-01 17:17:35 - CSURUS1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.75.php'
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.75.php': CopyFiles(install/components, components)
+2019-05-01 17:17:35 - CRUPDCF1 - Run updater '/bitrix/updates/update_m1556720255/landing/updater18.6.75.php': CopyFiles(install/blocks, blocks)
+2019-05-01 17:17:35 -  - TIME UpdateStepModules 0.021 sec
+2019-05-01 17:17:35 - UPD_SUCCESS - Updated: landing (18.6.75)<br><li>Техническое обновление.
+2019-05-01 17:17:35 -  - exec CUpdateClient::LoadModulesUpdates
+2019-05-01 17:17:35 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:35 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.75&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:35 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:36 -  - TIME LoadModulesUpdates(request) 0.195 sec
+2019-05-01 17:17:36 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:36 - STEP - Finish - NOUPDATES
+2019-05-01 17:17:36 - STEP - Finish - NOUPDATES
+2019-05-01 17:17:42 -  - exec CUpdateClient::GetUpdatesList
+2019-05-01 17:17:42 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:42 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.75&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:42 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:43 -  - TIME GetUpdatesList(request) 0.204 sec
+2019-05-01 17:17:43 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:57 -  - exec CUpdateClient::GetUpdatesList
+2019-05-01 17:17:57 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:57 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.75&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:57 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:57 -  - TIME GetUpdatesList(request) 0.208 sec
+2019-05-01 17:17:57 -  - exec CUpdateClient::ParseServerData
+2019-05-01 17:17:59 -  - exec CUpdateClient::GetUpdatesList
+2019-05-01 17:17:59 -  - exec CUpdateClient::CollectRequestData
+2019-05-01 17:17:59 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.ru&CHHB=nbrains.ru&CSAB=87.236.16.91&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.21&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_iblock=18.6.400&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_seo=18.6.100&bitm_compression=16.0.0&bitm_translate=18.0.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_search=18.5.200&bitm_landing=18.6.75&bitm_ui=18.5.150&bitm_socialservices=18.5.100&bitm_messageservice=18.0.3&bitm_b24connector=18.5.0&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitl_ru=&bitl_en=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2019-05-01 17:17:59 -  - exec CUpdateClient::GetHTTPPage
+2019-05-01 17:17:59 -  - TIME GetUpdatesList(request) 0.204 sec
+2019-05-01 17:17:59 -  - exec CUpdateClient::ParseServerData

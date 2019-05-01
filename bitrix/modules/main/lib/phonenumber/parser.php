@@ -176,11 +176,11 @@ class Parser
 		$result = new PhoneNumber();
 		$result->setRawNumber($phoneNumber);
 
-		$formattedPhoneNumber = $this->extractFormattedPhoneNumber($phoneNumber);
-		if(!$this->isViablePhoneNumber($formattedPhoneNumber))
+		if(!$this->isViablePhoneNumber($phoneNumber))
 		{
 			return $result;
 		}
+		$formattedPhoneNumber = $this->extractFormattedPhoneNumber($phoneNumber);
 
 		list($extensionSeparator, $extension) = $this->stripExtension($formattedPhoneNumber);
 		$result->setNationalNumber($formattedPhoneNumber);

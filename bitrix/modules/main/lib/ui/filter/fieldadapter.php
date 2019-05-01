@@ -73,7 +73,8 @@ class FieldAdapter
 					$sourceField["time"],
 					$sourceField["exclude"],
 					$sourceField["include"],
-					$sourceField["allow_years_switcher"]
+					$sourceField["allow_years_switcher"],
+					$sourceField["messages"]
 				);
 				break;
 
@@ -163,7 +164,8 @@ class FieldAdapter
 					$sourceField["name"],
 					$sourceField["placeholder"],
 					(!empty($sourceField["params"]) && !empty($sourceField["params"]["multiple"]) && $sourceField["params"]["multiple"] == "Y"),
-					(!empty($sourceField["params"]) && is_array($sourceField["params"]) ? $sourceField["params"] : array())
+					(!empty($sourceField["params"]) && is_array($sourceField["params"]) ? $sourceField["params"] : array()),
+					(isset($sourceField["lightweight"]) ? $sourceField["lightweight"] : false)
 				);
 				break;
 

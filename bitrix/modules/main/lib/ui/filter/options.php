@@ -430,11 +430,10 @@ class Options
 					$result["rows"][] = $id;
 				}
 			}
-			else if ($type == "custom_entity")
+			else if ($type == "custom_entity" || $type == "dest_selector")
 			{
-				if ($request[$valueId] !== null && ($request[$nameId] !== null || $request[$labelId]))
+				if ($request[$id] !== null && ($request[$nameId] !== null || $request[$labelId]))
 				{
-					$result["fields"][$valueId] = $request[$valueId];
 					$result["fields"][$labelId] = $request[$nameId] !== null ? $request[$nameId] : $request[$labelId];
 					$result["fields"][$id] = $request[$id];
 					$result["rows"][] = $id;
@@ -1022,11 +1021,19 @@ class Options
 					(strtoupper($request->get("with_preset")) == "Y") ||
 					(strtoupper($params["with_preset"]) == "Y")
 				);
+				$currentPresetId = $this->getCurrentFilterId();
 
-				if (($useRequest && ($isApplyFilter || $isClearFilter) && !$isWithPreset) || $useRequest === false)
+				if (
+					($useRequest
+						&& ($isApplyFilter || $isClearFilter)
+						&& (!$isWithPreset || $currentPresetId === static::DEFAULT_FILTER)
+					)
+					|| $useRequest === false
+				)
 				{
 					$_SESSION["main.ui.filter"][$this->id]["filter"] = $presetId;
 				}
+
 			}
 
 			if (!is_array($this->options["filters"][$presetId]))

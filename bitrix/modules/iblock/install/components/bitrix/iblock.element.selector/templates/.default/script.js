@@ -18,6 +18,7 @@ BX.Iblock.IblockElementSelector = (function ()
 		this.lastElements = parameters.lastElements;
 		this.inputName = parameters.inputName;
 		this.onlyRead = parameters.onlyRead === 'Y';
+		this.adminSection = (parameters.admin === 'Y' ? 'Y' : 'N');
 
 		this.init();
 	};
@@ -111,7 +112,8 @@ BX.Iblock.IblockElementSelector = (function ()
 			this.displayTab('search');
 			BX.addClass(BX(this.selectorId+'_search'), 'ies-content-find-content-selected');
 
-			this.url = this.ajaxUrl + '?sessid='+BX.bitrix_sessid()+'&mode=search&iblockId='+this.iblockId+'&string='+
+			this.url = this.ajaxUrl + '?sessid='+BX.bitrix_sessid()
+				+'&mode=search&iblockId='+this.iblockId+'&admin='+this.adminSection+'&string='+
 				encodeURIComponent(this.searchInput.value);
 			this.requestTimeout = setTimeout(BX.proxy(this.request, this), 400);
 		}
@@ -552,7 +554,7 @@ BX.Iblock.IblockElementSelector = (function ()
 						})
 					);
 				}
-				listSelectedElements += '['+parseInt(selectedElement.id)+']'+BX.util.htmlspecialchars(selectedElement.name);
+				listSelectedElements += BX.util.htmlspecialchars(selectedElement.name);
 				if(!this.multiple && !this.onlyRead)
 				{
 					listSelectedElements += '<span class="ies-content-delete-icon" onclick="BX.Iblock[\''+this.jsObject+

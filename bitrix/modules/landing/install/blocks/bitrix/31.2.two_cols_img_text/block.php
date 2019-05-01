@@ -1,7 +1,7 @@
 <section class="landing-block g-bg-gray-dark-v3 ">
 	<div>
 		<div class="row mx-0">
-			<div class="landing-block-node-img col-md-6 g-min-height-300 g-bg-img-hero g-px-0 g-bg-size-contain--xs g-bg-size-cover--sm order-2 order-md-1"
+			<div class="landing-block-node-img col-md-6 g-min-height-300 g-bg-img-hero g-px-0 order-2 order-md-1"
 				 style="background-image: url(https://cdn.bitrix24.site/bitrix/images/landing/business/1200x960/img1.jpg);"></div>
 			
 			<div class="col-md-6 text-center text-md-left g-py-50 g-py-100--md g-px-15 g-px-50--md order-1 order-md-2">

@@ -8,6 +8,8 @@ use Bitrix\Main\IO\Directory;
 
 class Extension
 {
+	private static $jsCoreInited = false;
+
 	public static function load($extNames)
 	{
 		if (!is_array($extNames))
@@ -32,6 +34,15 @@ class Extension
 			static::registerAssets($extName, $extension);
 
 			return true;
+		}
+
+		if (preg_match("/^((?P<MODULE_ID>[\w\.]+):)?(?P<EXT_NAME>[\w\.\-]+)$/", $extName, $matches))
+		{
+			if (strlen($matches['MODULE_ID']) > 0 && $matches['MODULE_ID'] !== 'main')
+			{
+				\Bitrix\Main\Loader::includeModule($matches['MODULE_ID']);
+			}
+			$extName = $matches['EXT_NAME'];
 		}
 
 		return \CJSCore::isExtRegistered($extName);
@@ -107,7 +118,9 @@ class Extension
 			$path .= "/".$namespace;
 		}
 
-		return \getLocalPath($path, BX_PERSONAL_ROOT);
+		$localPath = \getLocalPath($path);
+
+		return is_string($localPath) && !empty($localPath) ? $localPath : null;
 	}
 
 	public static function getHtml($extName)
@@ -137,14 +150,36 @@ class Extension
 		$extensions = [];
 		if ($withDependency)
 		{
-			$resultList = [];
 			$alreadyResolved = $skipCoreJS? ['core']: [];
 
-			$extensions = self::getDependencyListRecursive($extName, true, true, $resultList, $alreadyResolved);
+			$extNameList = is_array($extName)? $extName: [$extName];
+			foreach ($extNameList as $extName)
+			{
+				if (in_array($extName, $alreadyResolved))
+				{
+					continue;
+				}
+
+				self::getDependencyListRecursive($extName, true, true, $extensions, $alreadyResolved);
+			}
 		}
 		else
 		{
-			$extensions[] = [$extName, self::getConfig($extName)];
+			$alreadyResolved = $skipCoreJS? ['core']: [];
+			$extNameList = is_array($extName)? $extName: [$extName];
+			foreach ($extNameList as $extName)
+			{
+				if (in_array($extName, $alreadyResolved))
+				{
+					continue;
+				}
+				else
+				{
+					$alreadyResolved[] = $extName;
+				}
+
+				$extensions[] = [$extName, self::getConfig($extName)];
+			}
 		}
 
 		foreach ($extensions as $index => $extension)
@@ -195,7 +230,7 @@ class Extension
 		{
 			foreach (['js', 'css', 'lang', 'lang_additional', 'layout', 'options'] as $key)
 			{
-				if (array_key_exists($key, $extension[1]))
+				if (is_array($extension[1]) && array_key_exists($key, $extension[1]))
 				{
 					if (is_array($extension[1][$key]))
 					{
@@ -222,14 +257,25 @@ class Extension
 			{
 				$config = self::getCoreConfigForDependencyList($name, $storeConfig, $resultList, $alreadyResolved);
 			}
+			else
+			{
+				$alreadyResolved[] = $name;
+			}
 		}
-
-		$alreadyResolved[] = $name;
+		else
+		{
+			$alreadyResolved[] = $name;
+		}
 
 		if ($config && !empty($config['rel']))
 		{
 			foreach ($config['rel'] as $dependencyName)
 			{
+				if(in_array($dependencyName, $alreadyResolved))
+				{
+					continue;
+				}
+
 				$dependencyConfig = self::getConfig($dependencyName);
 				if ($dependencyConfig === null)
 				{
@@ -292,6 +338,20 @@ class Extension
 
 	private static function getCoreConfigForDependencyList($name, $storeConfig = false, &$resultList = [], &$alreadyResolved = [])
 	{
+		$alreadyResolved[] = $name;
+
+		if (preg_match("/^((?P<MODULE_ID>[\w\.]+):)?(?P<EXT_NAME>[\w\.\-]+)$/", $name, $matches))
+		{
+			if (strlen($matches['MODULE_ID']) > 0 && $matches['MODULE_ID'] !== 'main')
+			{
+				\Bitrix\Main\Loader::includeModule($matches['MODULE_ID']);
+			}
+
+			$name = $matches['EXT_NAME'];
+
+			$alreadyResolved[] = $name;
+		}
+
 		$config = \CJSCore::getExtInfo($name);
 		if ($config)
 		{

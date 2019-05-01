@@ -4162,7 +4162,7 @@ class CAllSQLWhere
 				}
 				else
 				{
-					$FIELD_VALUE[] = '';
+					$FIELD_VALUE[] = 'NULL';
 				}
 			}
 		}
@@ -4180,7 +4180,7 @@ class CAllSQLWhere
 		}
 		else
 		{
-			$FIELD_VALUE = '';
+			$FIELD_VALUE = 'NULL';
 		}
 
 		switch($operation)

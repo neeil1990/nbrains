@@ -57,6 +57,10 @@ return array(
 				'name' => Loc::getMessage('LANDING_BLOCK_51_2_COUNTDOWN_04--NUMBER_TEXT'),
 				'type' => array('color', 'font-family'),
 			),
+			'.landing-block-node-img' => array(
+				'name' => Loc::getMessage('LANDING_BLOCK_51_2_COUNTDOWN_04--IMG'),
+				'type' => 'background-attachment',
+			),
 		),
 	),
 	'attrs' => array(

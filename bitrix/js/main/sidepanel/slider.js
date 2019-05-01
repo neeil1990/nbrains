@@ -1217,8 +1217,7 @@ BX.SidePanel.Slider.prototype =
 	 */
 	animateOpening: function()
 	{
-		BX.addClass(this.getOverlay(), "side-panel-overlay-open");
-		BX.addClass(this.getContainer(), "side-panel-container-open");
+		BX.addClass(this.getOverlay(), "side-panel-overlay-open side-panel-overlay-opening");
 
 		if (this.isPrintable())
 		{
@@ -1280,6 +1279,8 @@ BX.SidePanel.Slider.prototype =
 		{
 			this.currentParams = this.endParams;
 
+			BX.removeClass(this.getOverlay(), "side-panel-overlay-opening");
+
 			this.firePageEvent("onBeforeOpenComplete");
 			this.fireFrameEvent("onBeforeOpenComplete");
 
@@ -1295,8 +1296,7 @@ BX.SidePanel.Slider.prototype =
 		{
 			this.currentParams = this.startParams;
 
-			BX.removeClass(this.getOverlay(), "side-panel-overlay-open");
-			BX.removeClass(this.getContainer(), "side-panel-container-open");
+			BX.removeClass(this.getOverlay(), "side-panel-overlay-open side-panel-overlay-opening");
 
 			this.getContainer().style.removeProperty("width");
 			this.getContainer().style.removeProperty("right");

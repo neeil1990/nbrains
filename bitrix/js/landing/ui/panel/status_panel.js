@@ -20,7 +20,12 @@
 	{
 		BX.Landing.UI.Panel.BasePanel.apply(this, arguments);
 		addClass(this.layout, "landing-ui-panel-status");
-		document.body.appendChild(this.layout);
+
+		if (!!document.body.querySelector('.landing-edit-mode'))
+		{
+			document.body.appendChild(this.layout);
+		}
+
 		this.runInterval();
 		this.updateTime();
 	};

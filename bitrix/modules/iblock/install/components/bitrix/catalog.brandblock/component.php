@@ -232,6 +232,8 @@ if ($this->startResultCache(false, $additionalCache))
 		$fieldsList = $entityDataClass::getMap();
 		if (count($fieldsList) === 1 && isset($fieldsList['ID']))
 			$fieldsList = $entityDataClass::getEntity()->getFields();
+		if (!isset($fieldsList['UF_XML_ID']))
+			continue;
 
 		$directoryOrder = array();
 		if (isset($fieldsList['UF_SORT']))

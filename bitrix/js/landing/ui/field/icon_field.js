@@ -20,6 +20,11 @@
 		this.uploadButton.layout.innerText = BX.message("LANDING_ICONS_FIELD_BUTTON_REPLACE");
 		this.editButton.layout.hidden = true;
 		this.clearButton.layout.hidden = true;
+
+		if (BX.Landing.UI.Panel.Icon.getInstance().libraries.length === 0)
+		{
+			this.uploadButton.disable();
+		}
 	};
 
 	BX.Landing.UI.Field.Icon.prototype = {

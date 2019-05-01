@@ -190,8 +190,8 @@ class Translation
 			if (self::allowConvertEncoding())
 			{
 				if ($targetEncoding === null)
-			{
-				$targetEncoding = self::getCurrentEncoding();
+				{
+					$targetEncoding = self::getCurrentEncoding();
 				}
 				$sourceEncoding = self::getSourceEncoding($language);
 				self::$needConvertEncoding[$language] = ($targetEncoding != $sourceEncoding);
@@ -199,6 +199,32 @@ class Translation
 		}
 
 		return self::$needConvertEncoding[$language];
+	}
+
+
+	/**
+	 * Tells if need to convert encoding for certain file.
+	 *
+	 * @param string $langFile Language file path.
+	 *
+	 * @return bool
+	 */
+	public static function checkPathRestrictionConvertEncoding($langFile)
+	{
+		$needConvert = false;
+		if (self::allowConvertEncoding())
+		{
+			if (self::getDeveloperRepositoryPath() !== null)
+			{
+				$needConvert = (strpos($langFile, self::getDeveloperRepositoryPath()) === 0);
+			}
+			if (!$needConvert && self::useTranslationRepository())
+			{
+				$needConvert = (strpos($langFile, self::getTranslationRepositoryPath()) === 0);
+			}
+		}
+
+		return $needConvert;
 	}
 
 	/**
@@ -302,7 +328,24 @@ class Translation
 	 */
 	public static function convertLangPath($langFile, $language)
 	{
-		if (!self::useTranslationRepository() || empty($language) || self::isDefaultTranslationLang($language))
+		if (empty($language) || !(self::useTranslationRepository() || self::getDeveloperRepositoryPath() !== null))
+		{
+			return $langFile;
+		}
+
+		if (self::useTranslationRepository() && !self::isDefaultTranslationLang($language))
+		{
+			$modulePath = self::getTranslationRepositoryPath().'/'.$language.'/';
+		}
+		elseif (self::getDeveloperRepositoryPath() !== null)
+		{
+			$modulePath = self::getDeveloperRepositoryPath(). '/';
+		}
+		elseif (self::isDefaultTranslationLang($language))
+		{
+			$modulePath = Main\Application::getDocumentRoot(). '/bitrix/modules/';
+		}
+		else
 		{
 			return $langFile;
 		}
@@ -311,15 +354,19 @@ class Translation
 		{
 			$langFile = str_replace('\\', '/', $langFile);
 		}
+		if (strpos($langFile, '//') !== false)
+		{
+			$langFile = str_replace('//', '/', $langFile);
+		}
 
 		// linked
 		if (self::getDeveloperRepositoryPath() !== null)
 		{
-			if (strpos($langFile, self::getDeveloperRepositoryPath().'/') === 0)
+			if (strpos($langFile, self::getDeveloperRepositoryPath()) === 0)
 			{
 				$langFile = str_replace(
 					self::getDeveloperRepositoryPath(). '/',
-					self::getTranslationRepositoryPath(). '/'.$language.'/',
+					$modulePath,
 					$langFile
 				);
 
@@ -332,7 +379,7 @@ class Translation
 		{
 			$langFile = str_replace(
 				Main\Application::getDocumentRoot().'/bitrix/modules/',
-				self::getTranslationRepositoryPath().'/'.$language.'/',
+				$modulePath,
 				$langFile
 			);
 
@@ -341,18 +388,31 @@ class Translation
 
 		self::loadMap();
 
-		$langPathParts = explode('/', trim(str_replace(Main\Application::getDocumentRoot(), '', $langFile), '/'), 5);
+		$langPathParts = preg_split('#[/]+#', trim(str_replace(Main\Application::getDocumentRoot(), '', $langFile), '/'), 6);
 		if (empty($langPathParts) || $langPathParts[0] !== 'bitrix')
 		{
 			return $langFile;
 		}
 
-
-		switch ($langPathParts[1])
+		$testEntry = $langPathParts[1];
+		switch ($testEntry)
 		{
+			// bitrix/mobileapp/[moduleName] -> [moduleName]/install/mobileapp/[moduleName]
+			case 'mobileapp':
+				$moduleName = $langPathParts[2];
+				if (isset(self::$map[$moduleName][$testEntry], self::$map[$moduleName][$testEntry][$moduleName]))
+				{
+					$testEntry = 'mobileapp/'. $moduleName;
+					$langFile = str_replace(
+						Main\Application::getDocumentRoot().'/bitrix/mobileapp/'. $moduleName. '/',
+						$modulePath.''.$moduleName.'/install/mobileapp/'. $moduleName. '/',
+						$langFile
+					);
+				}
+				break;
+
 			// bitrix/templates/[templateName] -> [moduleName]/install/templates/[templateName]
 			case 'templates':
-				$testEntry = 'templates';
 				$templateName = $langPathParts[2];
 				foreach (self::$map as $moduleName => $moduleEntries)
 				{
@@ -360,14 +420,13 @@ class Translation
 					{
 						$langFile = str_replace(
 							Main\Application::getDocumentRoot().'/bitrix/templates/'.$templateName.'/',
-							self::getTranslationRepositoryPath().'/'.$language.'/'.$moduleName.'/install/templates/'. $templateName .'/',
+							$modulePath.''.$moduleName.'/install/templates/'. $templateName .'/',
 							$langFile
 						);
 						break;
 					}
 				}
 				break;
-
 
 			// bitrix/components/bitrix/[componentName] -> [moduleName]/install/components/bitrix/[componentName]
 			// bitrix/activities/bitrix/[activityName] -> [moduleName]/install/activities/bitrix/[activityName]
@@ -382,7 +441,6 @@ class Translation
 				{
 					break;
 				}
-				$testEntry = $langPathParts[1];
 				$searchEntryName = $langPathParts[3];
 				foreach (self::$map as $moduleName => $moduleEntries)
 				{
@@ -390,7 +448,7 @@ class Translation
 					{
 						$langFile = str_replace(
 							Main\Application::getDocumentRoot().'/bitrix/'.$testEntry.'/bitrix/'.$searchEntryName.'/',
-							self::getTranslationRepositoryPath().'/'.$language.'/'.$moduleName.'/install/'.$testEntry.'/bitrix/'. $searchEntryName. '/',
+							$modulePath.''.$moduleName.'/install/'.$testEntry.'/bitrix/'. $searchEntryName. '/',
 							$langFile
 						);
 						break;
@@ -400,15 +458,15 @@ class Translation
 
 			// bitrix/js/[moduleName]/[smth] -> [moduleName]/install/js/[moduleName]/[smth]
 			case 'js':
-				$testEntry = $langPathParts[1];
-				$searchEntryName = $langPathParts[3];
+				$libraryNamespace = $langPathParts[2];
+
 				foreach (self::$map as $moduleName => $moduleEntries)
 				{
-					if (isset(self::$map[$moduleName][$testEntry], self::$map[$moduleName][$testEntry][$searchEntryName]))
+					if (isset(self::$map[$moduleName][$testEntry], self::$map[$moduleName][$testEntry][$libraryNamespace]))
 					{
 						$langFile = str_replace(
-							Main\Application::getDocumentRoot().'/bitrix/'.$testEntry.'/'.$moduleName.'/'.$searchEntryName.'/',
-							self::getTranslationRepositoryPath().'/'.$language.'/'.$moduleName.'/install/'.$testEntry.'/'.$moduleName.'/'. $searchEntryName. '/',
+							Main\Application::getDocumentRoot().'/bitrix/'.$testEntry.'/'.$libraryNamespace.'/',
+							$modulePath.''.$moduleName.'/install/'.$testEntry.'/'.$libraryNamespace.'/',
 							$langFile
 						);
 						break;
@@ -418,7 +476,6 @@ class Translation
 
 			// bitrix/[moduleName]/payment/[paymentHandler] -> [moduleName]/payment/[paymentHandler]
 			case 'payment':
-				$testEntry = 'payment';
 				$searchEntryName = $langPathParts[3];
 				foreach (self::$map as $moduleName => $moduleEntries)
 				{
@@ -426,7 +483,7 @@ class Translation
 					{
 						$langFile = str_replace(
 							Main\Application::getDocumentRoot().'/bitrix/modules/'.$moduleName.'/'.$testEntry.'/',
-							self::getTranslationRepositoryPath().'/'.$language.'/'.$moduleName.'/'.$testEntry.'/',
+							$modulePath.''.$moduleName.'/'.$testEntry.'/',
 							$langFile
 						);
 						break;
@@ -442,7 +499,7 @@ class Translation
 	/**
 	 * Restore project map structure from file structure.
 	 *
-	 * @return bool
+	 * @return array
 	 */
 	public static function loadMap()
 	{
@@ -457,6 +514,7 @@ class Translation
 				'js',
 				'blocks',
 				'payment',
+				'mobileapp',
 			);
 			$bxRoot = Main\Application::getDocumentRoot(). '/bitrix/modules/';
 			$modulesList = new Main\IO\Directory($bxRoot);
@@ -471,13 +529,9 @@ class Translation
 						foreach ($testForExistence as $testEntry)
 						{
 							$testPath = $bxRoot. '/'. $moduleName. '/install/'. $testEntry;
-							if ($testEntry === 'templates')
+							if ($testEntry === 'templates' || $testEntry === 'mobileapp' || $testEntry === 'js')
 							{
 								$testPath .= '/';
-							}
-							elseif ($testEntry === 'js')
-							{
-								$testPath .= '/'. $moduleName. '/';
 							}
 							elseif ($testEntry === 'payment')
 							{
@@ -506,6 +560,6 @@ class Translation
 			}
 		}
 
-		return (count(self::$map) > 0);
+		return self::$map;
 	}
 }

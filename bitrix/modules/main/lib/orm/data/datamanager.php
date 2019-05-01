@@ -206,7 +206,7 @@ abstract class DataManager
 	 * @throws Main\ArgumentException
 	 * @throws Main\SystemException
 	 */
-	final public function createObject($setDefaultValues = true)
+	final public static function createObject($setDefaultValues = true)
 	{
 		return static::getEntity()->createObject($setDefaultValues);
 	}
@@ -216,7 +216,7 @@ abstract class DataManager
 	 * @throws Main\ArgumentException
 	 * @throws Main\SystemException
 	 */
-	final public function createCollection()
+	final public static function createCollection()
 	{
 		return static::getEntity()->createCollection();
 	}
@@ -230,7 +230,7 @@ abstract class DataManager
 	 * @throws Main\ArgumentException
 	 * @throws Main\SystemException
 	 */
-	final public function wakeUpObject($row)
+	final public static function wakeUpObject($row)
 	{
 		return static::getEntity()->wakeUpObject($row);
 	}
@@ -244,7 +244,7 @@ abstract class DataManager
 	 * @throws Main\ArgumentException
 	 * @throws Main\SystemException
 	 */
-	final public function wakeUpCollection($rows)
+	final public static function wakeUpCollection($rows)
 	{
 		return static::getEntity()->wakeUpCollection($rows);
 	}
@@ -271,6 +271,16 @@ abstract class DataManager
 	public static function isUtm()
 	{
 		return false;
+	}
+
+	/**
+	 * @param Query $query
+	 *
+	 * @return Query
+	 */
+	public static function setDefaultScope($query)
+	{
+		return $query;
 	}
 
 	/**
@@ -740,6 +750,11 @@ abstract class DataManager
 						if ($entity->getField($fieldName) instanceof ScalarField && $entity->getField($fieldName)->isPrimary())
 						{
 							// and ignore primary
+							trigger_error(sprintf(
+								'Primary of %s %s can not be changed. You can delete this row and add a new one',
+								static::getObjectClass(), Main\Web\Json::encode($object->primary)
+							), E_USER_WARNING);
+
 							continue;
 						}
 
@@ -937,12 +952,17 @@ abstract class DataManager
 		global $USER_FIELD_MANAGER;
 
 		$rows = array_values($rows);
+		$forceSeparateQueries = false;
 
 		if (!$ignoreEvents && count($rows) > 1 && strlen(static::getEntity()->getAutoIncrement()))
 		{
-			throw new Main\SystemException(
+			$forceSeparateQueries = true;
+
+			// change to warning
+			trigger_error(
 				'Multi-insert doesn\'t work with events as far as we can not get last inserted IDs that we need for the events. '.
-				'If you need event calling, use single add with foreach.'
+				'Insert query was forced to multiple separate queries.',
+				E_USER_WARNING
 			);
 		}
 
@@ -1024,7 +1044,7 @@ abstract class DataManager
 			// prepare sql
 			$allSqlData = [];
 
-			foreach ($allFields as $fields)
+			foreach ($allFields as $k => $fields)
 			{
 				// use save modifiers
 				$fieldsToDb = $fields;
@@ -1037,7 +1057,7 @@ abstract class DataManager
 
 				$dataReplacedColumn = static::replaceFieldName($fieldsToDb);
 
-				$allSqlData[] = $dataReplacedColumn;
+				$allSqlData[$k] = $dataReplacedColumn;
 			}
 
 			// save data
@@ -1045,9 +1065,21 @@ abstract class DataManager
 
 			$tableName = $entity->getDBTableName();
 			$identity = $entity->getAutoIncrement();
+			$ids = [];
 
 			// multi insert on db level
-			$id = $connection->addMulti($tableName, $allSqlData, $identity);
+			if ($forceSeparateQueries)
+			{
+				foreach ($allSqlData as $k => $sqlData)
+				{
+					// remember all ids
+					$ids[$k] = $connection->add($tableName, $sqlData, $identity);
+				}
+			}
+			else
+			{
+				$id = $connection->addMulti($tableName, $allSqlData, $identity);
+			}
 
 			if (count($allSqlData) > 1)
 			{
@@ -1103,6 +1135,7 @@ abstract class DataManager
 				foreach ($objects as $k => $object)
 				{
 					$fields = $allFields[$k];
+					$id = $forceSeparateQueries ? $ids[$k] : null;
 
 					static::callOnAfterAddEvent($object, $fields, $id);
 				}
@@ -1395,22 +1428,41 @@ abstract class DataManager
 				// one query
 				$update = $helper->prepareUpdate($tableName, $dataSample);
 				$where = [];
+				$isSinglePrimary = (count($entity->getPrimaryArray()) == 1);
 
-				// for single primary IN is better
 				foreach ($allSqlData as $k => $data)
 				{
 					$replacedPrimary = static::replaceFieldName($objects[$k]->primary);
 
-					$id = [];
-
-					foreach ($replacedPrimary as $primaryName => $primaryValue)
+					if ($isSinglePrimary)
 					{
-						$id[] = $helper->prepareAssignment($tableName, $primaryName, $primaryValue);
+						// for single primary IN is better
+						$primaryName = key($replacedPrimary);
+						$primaryValue = current($replacedPrimary);
+						$tableField = $entity->getConnection()->getTableField($tableName, $primaryName);
+
+						$where[] = $helper->convertToDb($primaryValue, $tableField);
 					}
-					$where[] = implode(' AND ', $id);
+					else
+					{
+						$id = [];
+
+						foreach ($replacedPrimary as $primaryName => $primaryValue)
+						{
+							$id[] = $helper->prepareAssignment($tableName, $primaryName, $primaryValue);
+						}
+						$where[] = implode(' AND ', $id);
+					}
 				}
 
-				$where = '('.join(') OR (', $where).')';
+				if ($isSinglePrimary)
+				{
+					$where = $helper->quote($entity->getPrimary()).' IN ('.join(', ', $where).')';
+				}
+				else
+				{
+					$where = '('.join(') OR (', $where).')';
+				}
 
 				$sql = "UPDATE ".$helper->quote($tableName)." SET ".$update[0]." WHERE ".$where;
 				$connection->queryExecute($sql, $update[1]);

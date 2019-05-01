@@ -213,13 +213,19 @@
 		 * !WARNING! if DeleteSanitizedTags = false and ApplyHtmlSpecChars = false
 		 * html will not be sanitized!
 		 * @param bool $bApply true|false
+		 * @deprecated
 		 */
 		public function ApplyHtmlSpecChars($bApply=true)
 		{
 			if($bApply)
+			{
 				$this->bHtmlSpecChars = true;
+			}
 			else
+			{
 				$this->bHtmlSpecChars = false;
+				trigger_error('It is strongly not recommended to use \CBXSanitizer::ApplyHtmlSpecChars(false)', E_USER_WARNING);
+			}
 		}
 
 		/**
@@ -460,13 +466,26 @@
 				return $attr[3];
 			}
 
+			$result = $attr[3];
 			$flags = ENT_QUOTES;
-			if ($attr[1] === 'style' && $attr[2] === '"')
+
+			if ($attr[1] === 'style')
 			{
 				$flags = ENT_COMPAT;
 			}
+			elseif ($attr[1] === 'href')
+			{
+				$result = str_replace('&', '##AMP##', $result);
+			}
 
-			return htmlspecialchars($attr[3], $flags, LANG_CHARSET, $this->bDoubleEncode);
+			$result = htmlspecialchars($result, $flags, LANG_CHARSET, $this->bDoubleEncode);
+
+			if ($attr[1] === 'href')
+			{
+				$result = str_replace('##AMP##', '&', $result);
+			}
+
+			return $result;
 		}
 
 		/**

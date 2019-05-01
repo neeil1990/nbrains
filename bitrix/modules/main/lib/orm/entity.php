@@ -47,11 +47,13 @@ class Entity
 	/** @var UField[] */
 	protected $u_fields;
 
-	protected
-		$references;
+	/** @var string Unique code */
+	protected $code;
 
-	protected static
-		$instances;
+	protected $references;
+
+	/** @var static[] */
+	protected static $instances;
 
 	/** @var bool */
 	protected $isClone = false;
@@ -712,11 +714,27 @@ class Entity
 		return $this->uf_id;
 	}
 
+	/**
+	 * @param Query $query
+	 *
+	 * @return Query
+	 */
+	public function setDefaultScope($query)
+	{
+		$dataClass = $this->className;
+		return $dataClass::setDefaultScope($query);
+	}
+
 	public static function isExists($name)
 	{
 		return class_exists(static::normalizeEntityClass($name));
 	}
 
+	/**
+	 * @param $entityName
+	 *
+	 * @return string|DataManager
+	 */
 	public static function normalizeEntityClass($entityName)
 	{
 		if (strtolower(substr($entityName, -5)) !== 'table')
@@ -732,32 +750,54 @@ class Entity
 		return $entityName;
 	}
 
+	public static function getEntityClassParts($class)
+	{
+		$class = static::normalizeEntityClass($class);
+		$lastPos = strrpos($class, '\\');
+
+		if($lastPos === 0)
+		{
+			//global namespace
+			$namespace = "";
+		}
+		else
+		{
+			$namespace = substr($class, 1, $lastPos-1);
+		}
+		$name = substr($class, $lastPos+1, -5);
+
+		return compact('namespace', 'name');
+	}
+
 	public function getCode()
 	{
-		$code = '';
-
-		// get absolute path to class
-		$class_path = explode('\\', strtoupper(ltrim($this->className, '\\')));
-
-		// cut class name to leave namespace only
-		$class_path = array_slice($class_path, 0, -1);
-
-		// cut Bitrix namespace
-		if ($class_path[0] === 'BITRIX')
+		if ($this->code === null)
 		{
-			$class_path = array_slice($class_path, 1);
+			$this->code = '';
+
+			// get absolute path to class
+			$class_path = explode('\\', strtoupper(ltrim($this->className, '\\')));
+
+			// cut class name to leave namespace only
+			$class_path = array_slice($class_path, 0, -1);
+
+			// cut Bitrix namespace
+			if ($class_path[0] === 'BITRIX')
+			{
+				$class_path = array_slice($class_path, 1);
+			}
+
+			// glue module name
+			if (count($class_path))
+			{
+				$this->code = join('_', $class_path).'_';
+			}
+
+			// glue entity name
+			$this->code .= strtoupper(Entity::camel2snake($this->getName()));
 		}
 
-		// glue module name
-		if (count($class_path))
-		{
-			$code = join('_', $class_path).'_';
-		}
-
-		// glue entity name
-		$code .= strtoupper(Entity::camel2snake($this->getName()));
-
-		return $code;
+		return $this->code;
 	}
 
 	public function getLangCode()
@@ -1013,11 +1053,14 @@ class Entity
 	}
 
 	/**
+	 * @param $dataClass
+	 *
 	 * @return EntityObject|string
 	 */
-	public function compileObjectClass()
+	public static function compileObjectClass($dataClass)
 	{
-		$dataClass = $this->getDataClass();
+		$dataClass = static::normalizeEntityClass($dataClass);
+		$classParts = static::getEntityClassParts($dataClass);
 
 		if (class_exists($dataClass::getObjectClass(), false)
 			&& is_subclass_of($dataClass::getObjectClass(), EntityObject::class))
@@ -1026,15 +1069,21 @@ class Entity
 			return $dataClass::getObjectClass();
 		}
 
-		$namespace = trim($this->getNamespace(), '\\');
 		$baseObjectClass = '\\'.EntityObject::class;
-		$objectClassName = static::getDefaultObjectClassName($this->getName());
+		$objectClassName = static::getDefaultObjectClassName($classParts['name']);
 
-		$eval = "namespace {$namespace} {";
+		$eval = "";
+		if($classParts['namespace'] <> '')
+		{
+			$eval .= "namespace {$classParts['namespace']} {";
+		}
 		$eval .= "class {$objectClassName} extends {$baseObjectClass} {";
 		$eval .= "static public \$dataClass = '{$dataClass}';";
 		$eval .= "}"; // end class
-		$eval .= "}"; // end namespace
+		if($classParts['namespace'] <> '')
+		{
+			$eval .= "}"; // end namespace
+		}
 
 		eval($eval);
 
@@ -1042,11 +1091,14 @@ class Entity
 	}
 
 	/**
+	 * @param $dataClass
+	 *
 	 * @return Collection|string
 	 */
-	public function compileCollectionClass()
+	public static function compileCollectionClass($dataClass)
 	{
-		$dataClass = $this->getDataClass();
+		$dataClass = static::normalizeEntityClass($dataClass);
+		$classParts = static::getEntityClassParts($dataClass);
 
 		if (class_exists($dataClass::getCollectionClass(), false)
 			&& is_subclass_of($dataClass::getCollectionClass(), Collection::class))
@@ -1055,15 +1107,21 @@ class Entity
 			return $dataClass::getCollectionClass();
 		}
 
-		$namespace = trim($this->getNamespace(), '\\');
 		$baseCollectionClass = '\\'.Collection::class;
-		$collectionClassName = static::getDefaultCollectionClassName($this->getName());
+		$collectionClassName = static::getDefaultCollectionClassName($classParts['name']);
 
-		$eval = "namespace {$namespace} {";
+		$eval = "";
+		if($classParts['namespace'] <> '')
+		{
+			$eval .= "namespace {$classParts['namespace']} {";
+		}
 		$eval .= "class {$collectionClassName} extends {$baseCollectionClass} {";
 		$eval .= "static public \$dataClass = '{$dataClass}';";
 		$eval .= "}"; // end class
-		$eval .= "}"; // end namespace
+		if($classParts['namespace'] <> '')
+		{
+			$eval .= "}"; // end namespace
+		}
 
 		eval($eval);
 

@@ -209,9 +209,11 @@ class CBitrixPlayer extends CBitrixComponent
 			// remove host
 			$discPath = $uri->getPathQuery();
 			// is it short uri ?
-			$res = \CBXShortUri::GetList(array(), array('SHORT_URI' => substr($discPath, 1)));
-			if ($arUri = $res->Fetch())
-				$discPath = $arUri['URI'];
+			$shortUri = \CBXShortUri::GetUri(substr($discPath, 1));
+			if($shortUri)
+			{
+				$discPath = $shortUri['URI'];
+			}
 			$hash = '';
 			if (preg_match($rewriteCondition, $discPath, $matches))
 			{
@@ -378,7 +380,7 @@ class CBitrixPlayer extends CBitrixComponent
 		$arTracks = false;
 
 		$ch = $arTree->children;
-		if (count($ch) > 0 && strtolower($ch[0]->name) == 'playlist')
+		if(is_array($ch) && count($ch) > 0 && strtolower($ch[0]->name) == 'playlist')
 		{
 			$pl = $ch[0];
 			$tracklist = $pl->children;

@@ -4,44 +4,48 @@
 	BX.namespace('BX.Filter');
 
 	BX.Filter.DestinationSelectorManager = {
+
 		fields: [],
 		controls: {},
 
-		onSelect: function(params)
+		onSelect: function(isNumeric, prefix, params)
 		{
+
 			if (
-				typeof params == 'undefined'
-				|| !BX.type.isNotEmptyString(params.name)
-				|| typeof params.item == 'undefined'
-				|| !BX.type.isNotEmptyString(params.type)
+				!BX.type.isNotEmptyObject(params)
+				|| !BX.type.isNotEmptyObject(params.item)
+				|| !BX.type.isNotEmptyString(params.selectorId)
 			)
 			{
 				return;
 			}
 
 			var
-				name = params.name,
-				type = params.type,
+				selectorId = params.selectorId,
 				item = params.item;
 
-			BX.SocNetLogDestination.obItemsSelected[name] = {};
-			BX.SocNetLogDestination.obItemsSelected[name][item.id] = type;
-
-			var control = BX.Filter.DestinationSelectorManager.controls[name];
+			var control = BX.Filter.DestinationSelectorManager.controls[selectorId];
 			if (control)
 			{
-				control.setData(BX.util.htmlspecialcharsback(item.name), item.id);
+				var value = item.id;
+
+				if (
+					BX.type.isNotEmptyString(isNumeric)
+					&& isNumeric == 'Y'
+					&& BX.type.isNotEmptyString(prefix)
+				)
+				{
+					var re = new RegExp('^' + prefix + '(\\d+)$');
+					var found = value.match(re);
+					if (BX.type.isArray(found))
+					{
+						value = found[1];
+					}
+				}
+
+				control.setData(BX.util.htmlspecialcharsback(item.name), value);
 				control.getLabelNode().value = '';
 				control.getLabelNode().blur();
-
-				if (BX.SocNetLogDestination.popupWindow != null)
-				{
-					BX.SocNetLogDestination.popupWindow.close();
-				}
-				if (BX.SocNetLogDestination.popupSearchWindow != null)
-				{
-					BX.SocNetLogDestination.popupSearchWindow.close();
-				}
 			}
 		},
 
@@ -49,15 +53,15 @@
 		{
 			if (
 				typeof params == 'undefined'
-				|| !BX.type.isNotEmptyString(params.name)
+				|| !BX.type.isNotEmptyString(params.selectorId)
 			)
 			{
 				return;
 			}
 
-			var name = params.name;
+			var selectorId = params.selectorId;
 
-			var item = BX.Filter.DestinationSelector.items[name];
+			var item = BX.Filter.DestinationSelector.items[selectorId];
 			if(item)
 			{
 				item.onDialogOpen();
@@ -68,15 +72,15 @@
 		{
 			if (
 				typeof params == 'undefined'
-				|| !BX.type.isNotEmptyString(params.name)
+				|| !BX.type.isNotEmptyString(params.selectorId)
 			)
 			{
 				return;
 			}
 
-			var name = params.name;
+			var selectorId = params.selectorId;
 
-			var item = BX.Filter.DestinationSelector.items[name];
+			var item = BX.Filter.DestinationSelector.items[selectorId];
 			if(item)
 			{
 				item.onDialogClose();
@@ -141,9 +145,7 @@
 		BX.addCustomEvent(window, "BX.Main.Filter:customEntityFocus", BX.delegate(this.onCustomEntitySelectorOpen, this));
 		BX.addCustomEvent(window, "BX.Main.Filter:customEntityBlur", BX.delegate(this.onCustomEntitySelectorClose, this));
 		BX.addCustomEvent(window, "BX.Main.Filter:onGetStopBlur", BX.delegate(this.onGetStopBlur, this));
-		BX.addCustomEvent(window, "BX.Main.Selector:beforeInitDialog", BX.delegate(this.onBeforeInitDialog, this));
-		BX.addCustomEvent(window, "BX.SocNetLogDestination:onBeforeSwitchTabFocus", BX.delegate(this.onBeforeSwitchTabFocus, this));
-		BX.addCustomEvent(window, "BX.SocNetLogDestination:onBeforeSelectItemFocus", BX.delegate(this.onBeforeSelectItemFocus, this));
+		BX.addCustomEvent(window, "BX.Main.SelectorV2:beforeInitDialog", BX.delegate(this.onBeforeInitDialog, this));
 		BX.addCustomEvent(window, "BX.Main.Filter:customEntityRemove", BX.delegate(this.onCustomEntityRemove, this));
 	};
 
@@ -156,7 +158,7 @@
 			var input = this.getSearchInput();
 			input.id = input.name;
 
-			BX.addCustomEvent(window, "BX.Main.Selector:afterInitDialog", BX.delegate(function(params) {
+			BX.addCustomEvent(window, "BX.Main.SelectorV2:afterInitDialog", BX.delegate(function(params) {
 				if (
 					typeof params.id != 'undefined'
 					|| params.id != this.id
@@ -191,9 +193,9 @@
 
 	BX.Filter.DestinationSelector.prototype.close = function()
 	{
-		if(typeof(BX.Main.selectorManager.controls[this.id]) !== "undefined")
+		if(typeof(BX.Main.selectorManagerV2.controls[this.id]) !== "undefined")
 		{
-			BX.Main.selectorManager.controls[this.id].closeDialog();
+			BX.Main.selectorManagerV2.controls[this.id].closeDialog();
 		}
 	};
 
@@ -255,31 +257,17 @@
 	{
 		if(this.fieldId === control.getId())
 		{
+			var instance = BX.UI.SelectorManager.instances[control.getId()];
 			if (
-				typeof control.hiddenInput != 'undefined'
+				instance
+				&& typeof control.hiddenInput != 'undefined'
 				&& typeof control.hiddenInput.value != 'undefined'
-				&& typeof BX.SocNetLogDestination.obItemsSelected[this.id] != 'undefined'
-				&& typeof BX.SocNetLogDestination.obItemsSelected[this.id][control.hiddenInput.value] != 'undefined'
+				&& BX.type.isNotEmptyObject(instance.itemsSelected)
+				&& typeof instance.itemsSelected[control.hiddenInput.value] != 'undefined'
 			)
 			{
-				delete BX.SocNetLogDestination.obItemsSelected[this.id][control.hiddenInput.value];
+				delete instance.itemsSelected[control.hiddenInput.value];
 			}
-		}
-	};
-
-	BX.Filter.DestinationSelector.prototype.onBeforeSwitchTabFocus = function(ob)
-	{
-		if(this.id === ob.id)
-		{
-			ob.blockFocus = true;
-		}
-	};
-
-	BX.Filter.DestinationSelector.prototype.onBeforeSelectItemFocus = function(ob)
-	{
-		if(this.id === ob.id)
-		{
-			ob.blockFocus = true;
 		}
 	};
 

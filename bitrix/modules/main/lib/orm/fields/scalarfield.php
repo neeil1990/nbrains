@@ -165,7 +165,7 @@ abstract class ScalarField extends Field implements IStorable
 	 */
 	public function getDefaultValue($row = null)
 	{
-		if (is_callable($this->default_value))
+		if (!is_string($this->default_value) && is_callable($this->default_value))
 		{
 			return call_user_func($this->default_value, $row);
 		}

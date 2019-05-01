@@ -57,8 +57,8 @@ class CAdminList
 
 	/**
 	 * @deprecated
-	 * @param $table_id
-	 * @param bool $sort
+	 * @param string $table_id
+	 * @param CAdminSorting|bool $sort
 	 */
 	public function CAdminList($table_id, $sort = false)
 	{
@@ -1044,6 +1044,11 @@ class CAdminListRow
 	var $pList;
 	var $isPublicMode = false;
 
+	/**
+	* CAdminListRow constructor.
+	* @param array &$aHeaders
+	* @param string $table_id
+	*/
 	public function __construct(&$aHeaders, $table_id)
 	{
 		$this->aHeaders = $aHeaders;
@@ -1053,7 +1058,10 @@ class CAdminListRow
 		$this->isPublicMode = (defined("PUBLIC_MODE") && PUBLIC_MODE == 1);
 	}
 
-	/** @deprecated */
+	/** @deprecated
+	* @param array &$aHeaders
+	* @param string $table_id
+	*/
 	public function CAdminListRow(&$aHeaders, $table_id)
 	{
 		self::__construct($aHeaders, $table_id);
@@ -1192,7 +1200,8 @@ class CAdminListRow
 
 	function AddActions($aActions)
 	{
-		$this->aActions = $aActions;
+		if (is_array($aActions))
+			$this->aActions = $aActions;
 	}
 
 	function __AttrGen($attr)
@@ -1212,35 +1221,21 @@ class CAdminListRow
 	function Display()
 	{
 		$sDefAction = $sDefTitle = "";
+
 		if(!$this->bEditMode)
 		{
-			global $adminSidePanelHelper;
-
 			if(!empty($this->link))
 			{
-				$sDefAction = ((is_object($adminSidePanelHelper) && $adminSidePanelHelper->isPublicSidePanel()) ?
-					"BX.adminSidePanel.onOpenPage('".CUtil::JSEscape($this->link)."');" :
-					"BX.adminPanel.Redirect([], '".CUtil::JSEscape($this->link)."', event);");
+				$sDefAction = $this->getActionLink($this->link);
 				$sDefTitle = $this->title;
 			}
 			else
 			{
-				$this->aActions = array_values($this->aActions);
 				foreach($this->aActions as $action)
 				{
 					if($action["DEFAULT"] == true)
 					{
-						if (!empty($action["ACTION"]))
-						{
-							$sDefAction = $action["ACTION"];
-						}
-						else
-						{
-							$sDefAction = ((is_object($adminSidePanelHelper) && $adminSidePanelHelper->isPublicSidePanel()) ?
-								"BX.adminSidePanel.onOpenPage('".CUtil::JSEscape($this->link)."');" :
-								"BX.adminPanel.Redirect([], '".CUtil::JSEscape($action["LINK"])."', event)");
-						}
-
+						$sDefAction = $this->getActionsItemLink($action);
 						$sDefTitle = (!empty($action["TITLE"])? $action["TITLE"] : $action["TEXT"]);
 						break;
 					}
@@ -1313,7 +1308,7 @@ class CAdminListRow
 				{
 					case "checkbox":
 						echo '<input type="hidden" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="N">';
-						echo '<input type="checkbox" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="Y"'.($val=='Y'?' checked':'').'>';
+						echo '<input type="checkbox" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="Y"'.($val=='Y' || $val === true?' checked':'').'>';
 						break;
 					case "select":
 						echo '<select name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']"'.$this->__AttrGen($field["edit"]["attributes"]).'>';
@@ -1352,7 +1347,7 @@ class CAdminListRow
 			}
 			else
 			{
-				if(!is_array($this->arRes[$id]))
+				if(is_string($this->arRes[$id]))
 					$val = trim($this->arRes[$id]);
 				else
 					$val = $this->arRes[$id];
@@ -1362,7 +1357,7 @@ class CAdminListRow
 					switch($field["view"]["type"])
 					{
 						case "checkbox":
-							if($val=='Y')
+							if($val == 'Y' || $val === true)
 								$val = htmlspecialcharsex(GetMessage("admin_lib_list_yes"));
 							else
 								$val = htmlspecialcharsex(GetMessage("admin_lib_list_no"));
@@ -1411,5 +1406,29 @@ class CAdminListRow
 ?>
 </tr>
 <?
+	}
+
+	/**
+	 * @param string $url
+	 * @return string
+	 */
+	protected function getActionLink($url)
+	{
+		global $adminSidePanelHelper;
+		if (is_object($adminSidePanelHelper) && $adminSidePanelHelper->isPublicSidePanel())
+			return "BX.adminSidePanel.onOpenPage('".CUtil::JSEscape($url)."');";
+		return "BX.adminPanel.Redirect([], '".CUtil::JSEscape($url)."', event);";
+	}
+
+	/**
+	* @param array $item
+	* @return bool
+	*/
+	protected function getActionsItemLink(array $item)
+	{
+		return (!empty($item["ACTION"])
+			? $item["ACTION"]
+			: $this->getActionLink($item["LINK"])
+		);
 	}
 }

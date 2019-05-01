@@ -222,6 +222,7 @@
 		 */
 		onChange: function(value)
 		{
+			this.externalLoader.show();
 			BX.Landing.Utils.urlToBlob(value.link)
 				.then(function(/* File|Blob */blob) {
 					blob.lastModifiedDate = new Date();

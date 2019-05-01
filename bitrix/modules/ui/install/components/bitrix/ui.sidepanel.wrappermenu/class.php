@@ -89,7 +89,14 @@ class UISidepanelMenuComponent extends \CBitrixComponent
 	 */
 	protected function prepareResult()
 	{
-		$this->arResult['TITLE'] = (string)$this->arParams['TITLE'];
+		if(isset($this->arParams['TITLE_HTML']))
+		{
+			$this->arResult['TITLE'] = (string)$this->arParams['~TITLE_HTML'];
+		}
+		else
+		{
+			$this->arResult['TITLE'] = (string)$this->arParams['TITLE'];
+		}
 		$this->arResult['ITEMS'] = array();
 		$this->arResult['ID'] = !empty($this->arParams['ID']) ? $this->arParams['ID'] : '';
 		foreach ($this->arParams['ITEMS'] as $item)

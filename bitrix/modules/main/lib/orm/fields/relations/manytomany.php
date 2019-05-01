@@ -199,7 +199,7 @@ class ManyToMany extends Relation
 	{
 		if ($this->mediatorEntity === null)
 		{
-			if (!empty($this->mediatorEntityName) && class_exists($this->mediatorEntityName))
+			if (!empty($this->mediatorEntityName) && Entity::has($this->mediatorEntityName))
 			{
 				$this->mediatorEntity = Entity::getInstance($this->mediatorEntityName);
 			}

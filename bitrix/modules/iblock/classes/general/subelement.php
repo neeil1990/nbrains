@@ -889,10 +889,13 @@ class CAdminSubListRow extends CAdminListRow
 						break;
 					}
 			}
+
+			$sDefAction = htmlspecialcharsbx($sDefAction);
+			$sDefTitle = htmlspecialcharsbx($sDefTitle);
 		}
 
 		$sMenuItems = '';
-		if (!empty($this->aActions))
+		if(!empty($this->aActions))
 			$sMenuItems = htmlspecialcharsbx(CAdminPopup::PhpToJavaScript($this->aActions));
 
 ?>
@@ -923,11 +926,8 @@ class CAdminSubListRow extends CAdminListRow
 		reset($this->pList->aVisibleHeaders);
 
 		$bVarsFromForm = ($this->bEditMode && is_array($this->pList->arUpdateErrorIDs) && in_array($this->id, $this->pList->arUpdateErrorIDs));
-		foreach($this->aHeaders as $id=>$header_props)
+		foreach($this->pList->aVisibleHeaders as $id=>$header_props)
 		{
-			if(!in_array($id, $this->pList->arVisibleColumns))
-				continue;
-
 			$field = $this->aFields[$id];
 			if($this->bEditMode && isset($field["edit"]))
 			{
@@ -939,9 +939,9 @@ class CAdminSubListRow extends CAdminListRow
 				$val_old = $this->arRes[$id];
 
 				echo '<td class="adm-list-table-cell',
-				(isset($header_props['align']) && $header_props['align']? ' align-'.$header_props['align']: ''),
-				(isset($header_props['valign']) && $header_props['valign']? ' valign-'.$header_props['valign']: ''),
-				($id === $last_id? ' adm-list-table-cell-last': ''),
+					(isset($header_props['align']) && $header_props['align']? ' align-'.$header_props['align']: ''),
+					(isset($header_props['valign']) && $header_props['valign']? ' valign-'.$header_props['valign']: ''),
+					($id === $last_id? ' adm-list-table-cell-last': ''),
 				'">';
 
 				if(is_array($val_old))
@@ -957,12 +957,12 @@ class CAdminSubListRow extends CAdminListRow
 				{
 					case "checkbox":
 						echo '<input type="hidden" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="N">';
-						echo '<input type="checkbox" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="Y"'.($val=='Y'?' checked':'').'>';
+						echo '<input type="checkbox" name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="Y"'.($val=='Y' || $val === true?' checked':'').'>';
 						break;
 					case "select":
 						echo '<select name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']"'.$this->__AttrGen($field["edit"]["attributes"]).'>';
 						foreach($field["edit"]["values"] as $k=>$v)
-							echo '<option value="'.htmlspecialcharsbx($k).'" '.($k==$val?' selected':'').'>'.htmlspecialcharsex($v).'</option>';
+							echo '<option value="'.htmlspecialcharsbx($k).'" '.($k==$val?' selected':'').'>'.htmlspecialcharsbx($v).'</option>';
 						echo '</select>';
 						break;
 					case "input":
@@ -974,7 +974,12 @@ class CAdminSubListRow extends CAdminListRow
 						if(!$field["edit"]["attributes"]["size"])
 							$field["edit"]["attributes"]["size"] = "10";
 						echo '<span style="white-space:nowrap;"><input type="text" '.$this->__AttrGen($field["edit"]["attributes"]).' name="FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']" value="'.htmlspecialcharsbx($val).'">';
-						echo CAdminCalendar::Calendar('FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']').'</span>';
+						echo CAdminCalendar::Calendar(
+								'FIELDS['.htmlspecialcharsbx($this->id).']['.htmlspecialcharsbx($id).']',
+								'',
+								'',
+								$field['edit']['useTime']
+							).'</span>';
 						break;
 					case "file":
 						echo CFileInput::Show(
@@ -991,16 +996,17 @@ class CAdminSubListRow extends CAdminListRow
 			}
 			else
 			{
-				if(!is_array($this->arRes[$id]))
+				if(is_string($this->arRes[$id]))
 					$val = trim($this->arRes[$id]);
 				else
 					$val = $this->arRes[$id];
-								if(isset($field["view"]))
+
+				if(isset($field["view"]))
 				{
 					switch($field["view"]["type"])
 					{
 						case "checkbox":
-							if($val=='Y')
+							if($val == 'Y' || $val === true)
 								$val = htmlspecialcharsex(GetMessage("admin_lib_list_yes"));
 							else
 								$val = htmlspecialcharsex(GetMessage("admin_lib_list_no"));
@@ -1008,6 +1014,8 @@ class CAdminSubListRow extends CAdminListRow
 						case "select":
 							if($field["edit"]["values"][$val])
 								$val = htmlspecialcharsex($field["edit"]["values"][$val]);
+							else
+								$val = htmlspecialcharsex($val);
 							break;
 						case "file":
 							if ($val > 0)
@@ -1044,7 +1052,9 @@ class CAdminSubListRow extends CAdminListRow
 				echo '</td>';
 			}
 		}
-		echo '</tr>';
+?>
+</tr>
+<?
 	}
 
 	function AddFieldNames($strFieldName,$strFieldType = 'HIDDEN')
@@ -1079,7 +1089,7 @@ class CAdminSubContextMenu extends CAdminContextMenu
 
 		foreach(GetModuleEvents("main", "OnAdminSubContextMenuShow", true) as $arEvent)
 		{
-			ExecuteModuleEventEx($arEvent, array(&$this->items));
+			ExecuteModuleEventEx($arEvent, array(&$this->items, &$this->additional_items));
 		}
 
 		$bFirst = true;
@@ -1109,7 +1119,7 @@ class CAdminSubContextMenu extends CAdminContextMenu
 
 		if (!((defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1)))
 		{
-			if (count($this->additional_items) > 0)
+			if (!empty($this->additional_items))
 			{
 				if($bFirst)
 				{

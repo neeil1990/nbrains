@@ -24,12 +24,13 @@ $entity_id = "USER";
 if(!($USER->CanDoOperation('view_subordinate_users') || $USER->CanDoOperation('view_all_users') || $USER->CanDoOperation('edit_all_users') || $USER->CanDoOperation('edit_subordinate_users')))
 	$APPLICATION->AuthForm(GetMessage("ACCESS_DENIED"));
 
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 use Bitrix\Main\UserTable;
 use Bitrix\Main\UserGroupTable;
 use Bitrix\Main\Entity\Query;
 use Bitrix\Main\DB\SqlExpression;
 use Bitrix\Main\Entity\ExpressionField;
-use Bitrix\Main\UI\PageNavigation;
 use Bitrix\Main\Text\HtmlFilter;
 use Bitrix\Main\Type\DateTime;
 
@@ -46,7 +47,7 @@ if($_REQUEST["action"] == "authorize" && check_bitrix_sessid() && $USER->CanDoOp
 
 $sTableID = "tbl_user";
 
-$oSort = new CAdminSorting($sTableID, "TIMESTAMP_X", "desc");
+$oSort = new CAdminSorting($sTableID, "ID", "desc");
 $lAdmin = new CAdminUiList($sTableID, $oSort);
 
 $bIntranetEdition = IsModuleInstalled("intranet");//(defined("INTRANET_EDITION") && INTRANET_EDITION == "Y");
@@ -362,11 +363,11 @@ if(($arID = $lAdmin->GroupAction()) && ($USER->CanDoOperation('edit_all_users') 
 			case "add_group":
 			case "remove_group":
 				if($gr_id <= 0)
-					continue;
+					break;
 				if($gr_id == 1 && !$USER->CanDoOperation('edit_php')) // not admin can't edit admins
-					continue;
+					break;
 				if ($USER->CanDoOperation('edit_subordinate_users') && !$USER->CanDoOperation('edit_all_users') && !in_array($gr_id, $arUserSubordinateGroups))
-					continue;
+					break;
 				if($_REQUEST['action'] == "add_group")
 					$arGroups[$gr_id] = array("GROUP_ID" => $gr_id);
 				else
@@ -376,7 +377,7 @@ if(($arID = $lAdmin->GroupAction()) && ($USER->CanDoOperation('edit_all_users') 
 			case "add_structure":
 			case "remove_structure":
 				if($struct_id <= 0)
-					continue;
+					break;
 
 				$dbUser = CUser::GetByID($ID);
 				$arUser = $dbUser->Fetch();
@@ -413,14 +414,14 @@ if(($arID = $lAdmin->GroupAction()) && ($USER->CanDoOperation('edit_all_users') 
 		$adminSidePanelHelper->sendSuccessResponse();
 	}
 }
-
 setHeaderColumn($lAdmin);
 
-$nav = new PageNavigation("pages-user-admin");
-$nav->setPageSize($lAdmin->getNavSize());
-$nav->initFromUri();
+$nav = $lAdmin->getPageNavigation("pages-user-admin");
+
+$totalCountRequest = $lAdmin->isTotalCountRequest();
+
 $userQuery = new Query(UserTable::getEntity());
-$listSelectFields = $lAdmin->getVisibleHeaderColumns();
+$listSelectFields = ($totalCountRequest ? [] : $lAdmin->getVisibleHeaderColumns());
 if (!in_array("ID", $listSelectFields))
 	$listSelectFields[] = "ID";
 
@@ -432,7 +433,7 @@ $userQuery->setSelect($listSelectFields);
 $sortBy = strtoupper($by);
 if(!UserTable::getEntity()->hasField($sortBy))
 {
-	$sortBy = "TIMESTAMP_X";
+	$sortBy = "ID";
 }
 $sortOrder = strtoupper($order);
 if($sortOrder <> "DESC" && $sortOrder <> "ASC")
@@ -440,10 +441,13 @@ if($sortOrder <> "DESC" && $sortOrder <> "ASC")
 	$sortOrder = "DESC";
 }
 $userQuery->setOrder(array($sortBy => $sortOrder));
-$userQuery->countTotal(true);
+if ($totalCountRequest)
+{
+	$userQuery->countTotal(true);
+}
 $userQuery->setOffset($nav->getOffset());
 if ($_REQUEST["mode"] !== "excel")
-	$userQuery->setLimit($nav->getLimit());
+	$userQuery->setLimit($nav->getLimit() + 1);
 
 $filterOption = new Bitrix\Main\UI\Filter\Options($sTableID);
 $filterData = $filterOption->getFilter($filterFields);
@@ -522,11 +526,12 @@ if (isset($arFilter["CHECK_SUBORDINATE"]) && is_array($arFilter["CHECK_SUBORDINA
 if ($arFilter["NOT_ADMIN"])
 {
 	$userGroupQuery = UserGroupTable::query();
-	$userGroupQuery->where("USER_ID", new SqlExpression("%s"));
-	$userGroupQuery->where("GROUP_ID", 1);
-	$userQuery->registerRuntimeField(
-		new ExpressionField("UGNA", "EXISTS(".$userGroupQuery->getQuery().")", "ID"));
-	$userQuery->whereNot("UGNA");
+	$userGroupQuery->addSelect("USER_ID");
+	$userGroupQuery->setGroup(["USER_ID"]);
+	$userGroupQuery = \Bitrix\Main\ORM\Entity::getInstanceByQuery($userGroupQuery);
+	$userQuery->registerRuntimeField("",
+		(new Reference("UGNA", $userGroupQuery, Join::on("this.ID", "ref.USER_ID")))->configureJoinType("inner")
+	);
 }
 if ($arFilter["INTRANET_USERS"] === "Y")
 {
@@ -560,7 +565,7 @@ if (isset($arFilter["GROUPS_ID"]))
 		$listGroupId[intval($groupId)] = intval($groupId);
 
 	$userGroupQuery = UserGroupTable::query();
-	$userGroupQuery->where("USER_ID", new SqlExpression("%s"));
+	$userGroupQuery->addSelect("USER_ID");
 	$userGroupQuery->whereIn("GROUP_ID", $listGroupId);
 	$nowTimeExpression = new SqlExpression(
 		$userGroupQuery->getEntity()->getConnection()->getSqlHelper()->getCurrentDateTimeFunction());
@@ -572,9 +577,11 @@ if (isset($arFilter["GROUPS_ID"]))
 		->whereNull("DATE_ACTIVE_TO")
 		->where("DATE_ACTIVE_TO", ">=", $nowTimeExpression)
 	);
-	$userQuery->registerRuntimeField(
-		new ExpressionField("UG", "EXISTS(".$userGroupQuery->getQuery().")", "ID"));
-	$userQuery->where("UG");
+	$userGroupQuery->setGroup(["USER_ID"]);
+	$userGroupQuery = \Bitrix\Main\ORM\Entity::getInstanceByQuery($userGroupQuery);
+	$userQuery->registerRuntimeField("",
+		(new Reference("UG", $userGroupQuery, Join::on("this.ID", "ref.USER_ID")))->configureJoinType("inner")
+	);
 }
 if (!empty($arFilter["KEYWORDS"]))
 {
@@ -624,11 +631,21 @@ foreach ($arFilter as $filterKey => $filterValue)
 
 $result = $userQuery->exec();
 
-$nav->setRecordCount($result->getCount());
-$lAdmin->setNavigation($nav, GetMessage("MAIN_USER_ADMIN_PAGES"), false);
+if ($totalCountRequest)
+{
+	$lAdmin->sendTotalCountResponse($result->getCount());
+}
 
+$n = 0;
+$pageSize = $lAdmin->getNavSize();
 while ($userData = $result->fetch())
 {
+	$n++;
+	if ($n > $pageSize)
+	{
+		break;
+	}
+
 	$userId = $userData["ID"];
 	$userEditUrl = "user_edit.php?lang=".LANGUAGE_ID."&ID=".$userId;
 	$row =& $lAdmin->addRow($userId, $userData, $userEditUrl);
@@ -716,6 +733,9 @@ while ($userData = $result->fetch())
 	$row->addActions($arActions);
 }
 
+$nav->setRecordCount($nav->getOffset() + $n);
+$lAdmin->setNavigation($nav, GetMessage("MAIN_USER_ADMIN_PAGES"), false);
+
 $aContext = Array();
 
 if ($USER->CanDoOperation('edit_subordinate_users') || $USER->CanDoOperation('edit_all_users'))
@@ -800,7 +820,7 @@ $APPLICATION->SetTitle(GetMessage("TITLE"));
 require($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/include/prolog_admin_after.php");
 
 $lAdmin->DisplayFilter($filterFields);
-$lAdmin->DisplayList();
+$lAdmin->DisplayList(["SHOW_COUNT_HTML" => true]);
 require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin.php");
 
 function setHeaderColumn(CAdminUiList $lAdmin)

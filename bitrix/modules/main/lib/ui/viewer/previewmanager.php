@@ -194,6 +194,12 @@ final class PreviewManager
 
 		if ($response instanceof \Bitrix\Main\Response)
 		{
+			/** @global \CMain $APPLICATION */
+			global $APPLICATION;
+
+			$APPLICATION->RestartBuffer();
+			while(ob_end_clean());
+
 			Application::getInstance()->end(0, $response);
 		}
 	}

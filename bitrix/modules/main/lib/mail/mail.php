@@ -69,10 +69,6 @@ class Mail
 		{
 			$this->trackLinkProtocol = $mailParams['LINK_PROTOCOL'];
 		}
-		else
-		{
-			$this->trackLinkProtocol = 'http';
-		}
 
 		if(array_key_exists('TRACK_READ', $mailParams) && !empty($mailParams['TRACK_READ']))
 		{
@@ -207,34 +203,47 @@ class Mail
 	 * Init settings.
 	 *
 	 * @return void
-	 * @throws \Bitrix\Main\ArgumentNullException
 	 */
 	public function initSettings()
 	{
 		if(defined("BX_MS_SMTP") && BX_MS_SMTP===true)
+		{
 			$this->settingServerMsSmtp = true;
+		}
 
 		if(Config\Option::get("main", "fill_to_mail", "N")=="Y")
+		{
 			$this->settingMailFillToEmail = true;
-
+		}
 		if(Config\Option::get("main", "convert_mail_header", "Y")=="Y")
+		{
 			$this->settingMailConvertMailHeader = true;
-
+		}
 		if(Config\Option::get("main", "send_mid", "N")=="Y")
+		{
 			$this->settingMailAddMessageId = true;
-
+		}
 		if(Config\Option::get("main", "CONVERT_UNIX_NEWLINE_2_WINDOWS", "N")=="Y")
+		{
 			$this->settingConvertNewLineUnixToWindows = true;
-
+		}
 		if(Config\Option::get("main", "attach_images", "N")=="Y")
+		{
 			$this->settingAttachImages = true;
-		
+		}
 		if(Config\Option::get("main", "mail_encode_base64", "N") == "Y")
+		{
 			$this->settingMailEncodeBase64 = true;
+		}
 
 		if(!isset($this->settingServerName) || strlen($this->settingServerName) <= 0)
 		{
 			$this->settingServerName = Config\Option::get("main", "server_name", "");
+		}
+
+		if (!$this->trackLinkProtocol)
+		{
+			$this->trackLinkProtocol = Config\Option::get("main", "mail_link_protocol") ?: "http";
 		}
 
 		$this->generateTextVersion = Config\Option::get("main", "mail_gen_text_version", "Y") === 'Y';

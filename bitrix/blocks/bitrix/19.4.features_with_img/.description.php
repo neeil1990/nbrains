@@ -86,5 +86,10 @@ return array(
 					'name' => Loc::getMessage('LANDING_BLOCK_19.4.FEATURES_WITH_IMG_NODES_LANDINGBLOCKNODECARD_TEXT'),
 					'type' => 'typo',
 				),
+			'.landing-block-node-text-container' =>
+				array(
+					'name' => Loc::getMessage('LANDING_BLOCK_19.4.FEATURES_WITH_IMG_NODES_LANDINGBLOCKNODETEXTCONTAINER'),
+					'type' => 'align-items',
+				),
 		),
 );

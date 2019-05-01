@@ -34,6 +34,7 @@ class CTextParser
 		"CODE" => "Y",
 		"FONT" => "Y",
 		"LIST" => "Y",
+		"EMOJI" => "Y",
 		"SMILES" => "Y",
 		"CLEAR_SMILES" => "N",
 		"NL2BR" => "N",
@@ -437,6 +438,12 @@ class CTextParser
 		}
 
 		$text = $this->post_convert_anchor_tag($text);
+
+
+		if ($this->allow["EMOJI"] != "N")
+		{
+			$text = \Bitrix\Main\Text\Emoji::decode($text);
+		}
 
 		$res = array_merge(
 			array(

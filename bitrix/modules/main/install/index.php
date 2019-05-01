@@ -9,7 +9,6 @@
 use Bitrix\Main\Localization\CultureTable;
 use Bitrix\Main\Service\GeoIp;
 
-
 IncludeModuleLangFile(__FILE__);
 
 class main extends CModule
@@ -90,6 +89,11 @@ class main extends CModule
 				$entity->enableFullTextIndex("SEARCH_DEPARTMENT_CONTENT");
 				$entity->enableFullTextIndex("SEARCH_ADMIN_CONTENT");
 			}
+		}
+
+		if(\Bitrix\Main\ORM\Fields\CryptoField::cryptoAvailable())
+		{
+			\Bitrix\Main\UserPhoneAuthTable::enableCrypto("OTP_SECRET");
 		}
 
 		$this->InstallTasks();
@@ -413,16 +417,22 @@ class main extends CModule
 		COption::SetOptionString("main", "optimize_css_files", "Y");
 		COption::SetOptionString("main", "optimize_js_files", "Y");
 
-		CAgent::AddAgent("CEvent::CleanUpAgent();","main", "N", 86400);
-		CAgent::AddAgent("CUser::CleanUpHitAuthAgent();","main", "N", 86400);
-		CAgent::AddAgent("CCaptchaAgent::DeleteOldCaptcha(3600);","main", "N", 3600);
-		CAgent::AddAgent("CUndo::CleanUpOld();", "main", "N", 86400);
-		CAgent::AddAgent("CUser::AuthActionsCleanUpAgent();", "main", "N", 86400, ConvertTimeStamp(strtotime(date('Y-m-d 04:15:00', time() + 86400)), 'FULL'));
-		if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/bitrix24'))
-			CAgent::AddAgent("CSiteCheckerTest::CommonTest();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:00:00', time() + 86400)), 'FULL'));
+		$nextDay = time() + 86400;
 		CAgent::AddAgent('\\Bitrix\\Main\\Analytics\\CounterDataTable::submitData();', "main", "N", 60);
-		CAgent::AddAgent('CUserCounter::DeleteOld();', "main", "N", 60*60*24);
-		CAgent::AddAgent('\\Bitrix\\Main\\UI\\Viewer\\FilePreviewTable::deleteOldAgent();', 'main');
+		CAgent::AddAgent("CCaptchaAgent::DeleteOldCaptcha(3600);","main", "N", 3600);
+		if (!file_exists($_SERVER['DOCUMENT_ROOT'].'/bitrix/modules/bitrix24'))
+		{
+			CAgent::AddAgent("CSiteCheckerTest::CommonTest();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:00:00', $nextDay)), 'FULL'));
+		}
+		CAgent::AddAgent("CEvent::CleanUpAgent();","main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:10:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CUser::CleanUpHitAuthAgent();","main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:15:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CUndo::CleanUpOld();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:20:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent('CUserCounter::DeleteOld();', "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:25:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent('\\Bitrix\\Main\\UI\\Viewer\\FilePreviewTable::deleteOldAgent();', 'main', "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 03:30:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CUser::AuthActionsCleanUpAgent();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 04:15:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CUser::CleanUpAgent();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 04:20:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CUser::DeactivateAgent();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 04:25:00', $nextDay)), 'FULL'));
+		CAgent::AddAgent("CEventLog::CleanUpAgent();", "main", "N", 86400, "", "Y", ConvertTimeStamp(strtotime(date('Y-m-d 04:30:00', $nextDay)), 'FULL'));
 
 		$eventManager = \Bitrix\Main\EventManager::getInstance();
 
@@ -1401,6 +1411,22 @@ class main extends CModule
 				'DESCRIPTION' => getMessage('MAIN_MAIL_CONFIRM_EVENT_TYPE_DESC'),
 				'SORT'        => 8,
 			);
+
+			//sms types
+			$arEventTypes[] = array(
+				'LID'         => $lid,
+				'EVENT_NAME'  => 'SMS_USER_CONFIRM_NUMBER',
+				'EVENT_TYPE'  => \Bitrix\Main\Mail\Internal\EventTypeTable::TYPE_SMS,
+				'NAME'        => GetMessage("main_install_sms_event_confirm_name"),
+				'DESCRIPTION' => GetMessage("main_install_sms_event_confirm_descr"),
+			);
+			$arEventTypes[] = array(
+				'LID'         => $lid,
+				'EVENT_NAME'  => 'SMS_USER_RESTORE_PASSWORD',
+				'EVENT_TYPE'  => \Bitrix\Main\Mail\Internal\EventTypeTable::TYPE_SMS,
+				'NAME'        => GetMessage("main_install_sms_event_restore_name"),
+				'DESCRIPTION' => GetMessage("main_install_sms_event_restore_descr"),
+			);
 		}
 
 		$type = new CEventType;
@@ -1487,6 +1513,38 @@ class main extends CModule
 		$message = new CEventMessage;
 		foreach ($arMessages as $arMessage)
 			$message->Add($arMessage);
+
+		//sms templates
+		$smsTemplates = [
+			[
+				"EVENT_NAME" => "SMS_USER_CONFIRM_NUMBER",
+				"ACTIVE" => true,
+				"SENDER" => "#DEFAULT_SENDER#",
+				"RECEIVER" => "#USER_PHONE#",
+				"MESSAGE" => GetMessage("main_install_sms_template_confirm_mess"),
+			],
+			[
+				"EVENT_NAME" => "SMS_USER_RESTORE_PASSWORD",
+				"ACTIVE" => true,
+				"SENDER" => "#DEFAULT_SENDER#",
+				"RECEIVER" => "#USER_PHONE#",
+				"MESSAGE" => GetMessage("main_install_sms_template_restore_mess"),
+			],
+		];
+
+		$entity = \Bitrix\Main\Sms\TemplateTable::getEntity();
+		$site = \Bitrix\Main\SiteTable::getEntity()->wakeUpObject("s1");
+
+		foreach($smsTemplates as $smsTemplate)
+		{
+			$template = $entity->createObject();
+			foreach($smsTemplate as $field => $value)
+			{
+				$template->set($field, $value);
+			}
+			$template->addToSites($site);
+			$template->save();
+		}
 
 		return true;
 	}

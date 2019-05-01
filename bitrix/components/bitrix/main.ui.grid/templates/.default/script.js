@@ -455,6 +455,11 @@
 		{
 			this.disableCheckAllCheckboxes();
 			this.getRows().editSelected();
+
+			if (this.getParam('ALLOW_PIN_HEADER'))
+			{
+				this.getPinHeader()._onGridUpdate();
+			}
 		},
 
 		editSelectedSave: function()
@@ -487,6 +492,82 @@
 						this.reloadTable('POST', data);
 					}
 				}.bind(this));
+
+				return;
+			}
+
+			if (this.getParam('HANDLE_RESPONSE_ERRORS'))
+			{
+				data[this.getActionKey()] = 'edit';
+
+				var self = this;
+				this.tableFade();
+
+				this.getData().request('', "POST", data, '', function(res) {
+					try
+					{
+						res = JSON.parse(res);
+					} catch(err) {
+						res = {messages: []};
+					}
+
+					if (res.messages.length)
+					{
+						self.arParams['MESSAGES'] = res.messages;
+						self.messages.show();
+
+						var editButton = self.getActionsPanel().getButtons()
+							.find(function(button) {
+								return button.id === "grid_edit_button_control";
+							});
+
+						self.tableUnfade();
+						BX.fireEvent(editButton, 'click');
+
+						return;
+					}
+
+					self.getRows().reset();
+					var bodyRows = this.getBodyRows();
+					self.getUpdater().updateHeadRows(this.getHeadRows());
+					self.getUpdater().updateBodyRows(bodyRows);
+					self.getUpdater().updateFootRows(this.getFootRows());
+					self.getUpdater().updatePagination(this.getPagination());
+					self.getUpdater().updateMoreButton(this.getMoreButton());
+					self.getUpdater().updateCounterTotal(this.getCounterTotal());
+
+					self.adjustEmptyTable(bodyRows);
+
+					self.bindOnRowEvents();
+
+					self.bindOnMoreButtonEvents();
+					self.bindOnClickPaginationLinks();
+					self.bindOnClickHeader();
+					self.bindOnCheckAll();
+					self.updateCounterDisplayed();
+					self.updateCounterSelected();
+					self.disableActionsPanel();
+					self.disableForAllCounter();
+
+					if (self.getParam('SHOW_ACTION_PANEL'))
+					{
+						self.getUpdater().updateGroupActions(this.getActionPanel());
+					}
+
+					if (self.getParam('ALLOW_COLUMNS_SORT'))
+					{
+						self.colsSortable.reinit();
+					}
+
+					if (self.getParam('ALLOW_ROWS_SORT'))
+					{
+						self.rowsSortable.reinit();
+					}
+
+					self.tableUnfade();
+
+					BX.onCustomEvent(window, 'Grid::updated', [self]);
+				});
 
 				return;
 			}
@@ -567,6 +648,11 @@
 		editSelectedCancel: function()
 		{
 			this.getRows().editSelectedCancel();
+
+			if (this.getParam('ALLOW_PIN_HEADER'))
+			{
+				this.getPinHeader()._onGridUpdate();
+			}
 		},
 
 		removeSelected: function()
@@ -757,6 +843,10 @@
 				if (BX.type.isFunction(callback))
 				{
 					callback();
+				}
+				if (self.getParam('ALLOW_PIN_HEADER'))
+				{
+					self.getPinHeader()._onGridUpdate();
 				}
 			});
 		},
@@ -952,6 +1042,42 @@
 
 			this.getResize().destroy();
 			this.getResize().init(this);
+		},
+
+		setStickedColumns: function(columns)
+		{
+			if (BX.type.isArray(columns))
+			{
+				var options = this.getUserOptions();
+				var actions = [
+					{
+						action: options.getAction('GRID_SET_STICKED_COLUMNS'),
+						stickedColumns: columns
+					}
+				];
+
+				options.batch(actions, function() {
+					this.reloadTable();
+				}.bind(this));
+			}
+		},
+
+		getStickedColumns: function()
+		{
+			var columns = [].slice.call(this.getHead().querySelectorAll('.main-grid-cell-head'));
+
+			return columns.reduce(function(acc, column) {
+				if (
+					BX.hasClass(column, 'main-grid-fixed-column')
+					&& !BX.hasClass(column, 'main-grid-cell-checkbox')
+					&& !BX.hasClass(column, 'main-grid-cell-action')
+				)
+				{
+					acc.push(column.dataset.name);
+				}
+
+				return acc;
+			}.bind(this), []);
 		},
 
 		stickyColumnByIndex: function(index)
@@ -1646,6 +1772,11 @@
 				self.bindOnCheckAll();
 				self.updateCounterDisplayed();
 				self.updateCounterSelected();
+
+				if (self.getParam('ALLOW_PIN_HEADER'))
+				{
+					self.getPinHeader()._onGridUpdate();
+				}
 
 				if (self.getParam('ALLOW_ROWS_SORT'))
 				{

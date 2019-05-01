@@ -3094,6 +3094,16 @@ function GetLangFileName($before, $after, $lang=false)
 
 	global $ALL_LANG_FILES;
 	$ALL_LANG_FILES[] = $before.$lang.$after;
+
+	if (\Bitrix\Main\Localization\Translation::allowConvertEncoding())
+	{
+		$langFile = \Bitrix\Main\Localization\Translation::convertLangPath($before. $lang. $after, $lang);
+		if(file_exists($langFile))
+		{
+			return $langFile;
+		}
+	}
+
 	if(file_exists($before.$lang.$after))
 		return $before.$lang.$after;
 	if(file_exists($before."en".$after))
@@ -3150,32 +3160,38 @@ function __IncludeLang($path, $bReturnArray=false, $bFileChecked=false)
 			$encodingCache[$language] = array($convertEncoding, $targetEncoding, $sourceEncoding);
 		}
 
+		$path = \Bitrix\Main\Localization\Translation::convertLangPath($path, LANGUAGE_ID);
+
 		$MESS = array();
 		if ($bFileChecked)
 		{
 			include($path);
 		}
-		else
+		elseif (file_exists($path))
 		{
-			$path = \Bitrix\Main\Localization\Translation::convertLangPath($path, LANGUAGE_ID);
-			if (file_exists($path))
-			{
-				include($path);
-			}
+			include($path);
 		}
 
-		foreach($MESS as $key => $val)
+		if (!empty($MESS))
 		{
 			if ($convertEncoding)
 			{
-				$val = \Bitrix\Main\Text\Encoding::convertEncoding($val, $sourceEncoding, $targetEncoding);
+				$convertEncoding = \Bitrix\Main\Localization\Translation::checkPathRestrictionConvertEncoding($path);
 			}
 
-			$MESS[$key] = $val;
-
-			if (!$bReturnArray)
+			foreach ($MESS as $key => $val)
 			{
-				$GLOBALS['MESS'][$key] = $val;
+				if ($convertEncoding)
+				{
+					$val = \Bitrix\Main\Text\Encoding::convertEncoding($val, $sourceEncoding, $targetEncoding);
+				}
+
+				$MESS[$key] = $val;
+
+				if (!$bReturnArray)
+				{
+					$GLOBALS['MESS'][$key] = $val;
+				}
 			}
 		}
 	}
@@ -4367,7 +4383,7 @@ function check_email($email, $bStrict=false)
 
 	//"." can't be in the beginning or in the end of local-part
 	//dot-atom-text = 1*atext *("." 1*atext)
-	if(preg_match("#^[".$atom."]+(\\.[".$atom."]+)*@(([-0-9a-z_]+\\.)+)([a-z0-9-]{2,20})$#i", $email))
+	if(preg_match("#^[".$atom."]+(\\.[".$atom."]+)*@(([-0-9a-z]+\\.)+)([a-z0-9-]{2,20})$#i", $email))
 	{
 		return true;
 	}
@@ -4575,10 +4591,13 @@ class CJSCore
 			self::$arCurrentlyLoadedExt['core'] = true;
 		}
 
-		foreach (self::$arAutoloadQueue as $extCode => $extParams)
+		if (self::$arCurrentlyLoadedExt['core'])
 		{
-			$ret .= self::_loadExt($extCode, $bReturn);
-			unset(self::$arAutoloadQueue[$extCode]);
+			foreach (self::$arAutoloadQueue as $extCode => $extParams)
+			{
+				$ret .= self::_loadExt($extCode, $bReturn);
+				unset(self::$arAutoloadQueue[$extCode]);
+			}
 		}
 
 		for ($i = 0, $len = count($arExt); $i < $len; $i++)
@@ -4831,7 +4850,18 @@ JS;
 	{
 		$ret = '';
 
-		$ext = preg_replace('/[^a-z0-9_\.\-]/i', '', $ext);
+		if (preg_match("/^((?P<MODULE_ID>[\w\.]+):)?(?P<EXT_NAME>[\w\.\-]+)$/", $ext, $matches))
+		{
+			if (strlen($matches['MODULE_ID']) > 0 && $matches['MODULE_ID'] !== 'main')
+			{
+				\Bitrix\Main\Loader::includeModule($matches['MODULE_ID']);
+			}
+			$ext = $matches['EXT_NAME'];
+		}
+		else
+		{
+			$ext = preg_replace('/[^a-z0-9_\.\-]/i', '', $ext);
+		}
 
 		if (!self::IsExtRegistered($ext))
 		{

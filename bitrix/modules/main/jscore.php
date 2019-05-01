@@ -137,7 +137,7 @@ $arJSCoreConfig = array(
 		'js' => $pathJS.'/core_avatar_editor.js',
 		'css' => $pathCSS.'/core_avatar_editor.css',
 		'lang' => $pathLang.'/js_core_avatar_editor.php',
-		'rel' => array('canvas', 'popup', 'dd', 'uploader'),
+		'rel' => array('canvas', 'popup', 'dd', 'uploader', 'webrtc'),
 	),
 	'canvas' => array(
 		'js' => $pathJS.'/core_canvas.js',
@@ -312,10 +312,11 @@ $arJSCoreConfig = array(
 		'rel' => array('ajax'),
 		'oninit' => function()
 		{
+			$templateId = (defined('SITE_TEMPLATE_ID') ? SITE_TEMPLATE_ID : '');
 			return array(
 				'lang_additional' => array(
-					'UF_SITE_TPL' => SITE_TEMPLATE_ID,
-					'UF_SITE_TPL_SIGN' => \Bitrix\Main\UserField\Dispatcher::instance()->getSignatureManager()->getSignature(SITE_TEMPLATE_ID),
+					'UF_SITE_TPL' => $templateId,
+					'UF_SITE_TPL_SIGN' => \Bitrix\Main\UserField\Dispatcher::instance()->getSignatureManager()->getSignature($templateId),
 				),
 			);
 		}
@@ -338,6 +339,11 @@ $arJSCoreConfig = array(
 		'js' => '/bitrix/js/main/loader/loader.js',
 		'css' => '/bitrix/js/main/loader/loader.css'
 	),
+	'phone_auth' => array(
+		'js' => $pathJS.'/core_phone_auth.js',
+		'lang' => $pathLang.'/js_core_phone_auth.php',
+		'rel' => array('ajax'),
+	),
 	'message' => array(
 		'js' => $pathJS.'/core_message.js',
 		'skip_core' => true,
@@ -355,7 +361,7 @@ $arJSCoreConfig = array(
 			'/bitrix/js/main/loadext/loadext.js',
 			'/bitrix/js/main/loadext/extension.js',
 		),
-		'rel' => array('main.polyfill.promise'),
+		'rel' => array('main.polyfill.promise', 'ajax'),
 		'autoload' => true,
 	),
 
@@ -374,6 +380,14 @@ $arJSCoreConfig = array(
 	),
 	'jquery2_src' => array(
 		'js' => '/bitrix/js/main/jquery/jquery-2.1.3.js',
+		'skip_core' => true,
+	),
+	'jquery3' => array(
+		'js' => '/bitrix/js/main/jquery/jquery-3.3.1.min.js',
+		'skip_core' => true,
+	),
+	'jquery3_src' => array(
+		'js' => '/bitrix/js/main/jquery/jquery-3.3.1.js',
 		'skip_core' => true,
 	),
 	'json' => array(

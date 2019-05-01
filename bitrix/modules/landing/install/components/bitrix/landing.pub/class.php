@@ -14,6 +14,7 @@ use \Bitrix\Landing\TemplateRef;
 use \Bitrix\Main\Localization\Loc;
 use \Bitrix\Main\EventManager;
 use \Bitrix\Main\Config\Option;
+use \Bitrix\Main\Application;
 
 Loc::loadMessages(__FILE__);
 
@@ -97,6 +98,35 @@ class LandingPubComponent extends LandingBaseComponent
 		else
 		{
 			return $domains['en'];
+		}
+	}
+
+	/**
+	 * Gets path for copyright link.
+	 * @return string
+	 */
+	protected function getCopyLinkPath()
+	{
+		$paths = array(
+			'ru' => '/features/sites.php',
+			'ua' => '/features/sites.php',
+			'by' => '/features/sites.php',
+			'kz' => '/features/sites.php',
+			'en' => '/features/sites.php',
+			'de' => '/features/sites.php',
+			'es' => '/features/sites.php',
+			'la' => '/features/sites.php',
+			'br' => '/features/sites.php',
+			'in' => '/features/sites.php',
+			'eu' => '/features/sites.php'
+		);
+		if (isset($paths[$this->zone]))
+		{
+			return $paths[$this->zone];
+		}
+		else
+		{
+			return '/';
 		}
 	}
 
@@ -242,9 +272,39 @@ class LandingPubComponent extends LandingBaseComponent
 		}
 		elseif ($landingUrl == 'favicon' || $landingUrl == 'favicon.php')
 		{
+			$path = '/bitrix/components/bitrix/landing.pub/favicon.ico';
+			$hooksSite = Hook::getForSite($siteId);
+			if (isset($hooksSite['FAVICON']))
+			{
+				$fields = $hooksSite['FAVICON']->getFields();
+				if (
+					isset($fields['PICTURE']) &&
+					$fields['PICTURE']->getValue()
+				)
+				{
+					$path = \CFile::getPath(
+						$fields['PICTURE']->getValue()
+					);
+				}
+			}
+
 			Manager::getApplication()->restartBuffer();
 			header('Content-type: image/x-icon');
-			echo file_get_contents(Manager::getDocRoot() . '/bitrix/components/bitrix/landing.pub/favicon.ico');
+
+			if (substr($path, 0, 1) == '/')
+			{
+				echo \Bitrix\Main\IO\File::getFileContents(
+					Manager::getDocRoot() . $path
+				);
+			}
+			else
+			{
+				$response = Application::getInstance()->getContext()->getResponse();
+				$client = new \Bitrix\Main\Web\HttpClient;
+				$contents = $client->get($path);
+				$response->addHeader('Content-Type', $client->getContentType());
+				$response->flush($contents);
+			}
 			die();
 		}
 
@@ -312,7 +372,10 @@ class LandingPubComponent extends LandingBaseComponent
 		self::$landingMain['SITE_ID'] = $site['ID'];
 
 		// site is down
-		if ($site['LANDING_ID_503'])
+		if (
+			$site['LANDING_ID_503'] &&
+			!$this->isPreviewMode
+		)
 		{
 			$this->setHttpStatusOnce($this::ERROR_STATUS_UNAVAILABLE);
 			return $site['LANDING_ID_503'];
@@ -346,6 +409,9 @@ class LandingPubComponent extends LandingBaseComponent
 
 			return $row['ID'];
 		};
+
+		// detect landing by sef rule
+		//'/' . $landingUrl . '/' . $landingSubUrl . '/'
 
 		// detect landing
 		$res = Landing::getList(array(
@@ -397,7 +463,10 @@ class LandingPubComponent extends LandingBaseComponent
 			{
 				if ($landingSubUrl)
 				{
-					if ($landing['FOLDER'] == 'Y')
+					if (
+						$landing['FOLDER'] == 'Y' &&
+						($landing['ACTIVE'] == 'Y' || $this->isPreviewMode)
+					)
 					{
 						// check landing in subfolder
 						$resSub = Landing::getList(array(
@@ -584,6 +653,7 @@ class LandingPubComponent extends LandingBaseComponent
 		$eventManager->addEventHandler('main', 'OnBeforeLocalRedirect',
 			function(&$url, $skipCheck, &$bExternal)
 			{
+				/* @var \Bitrix\Landing\Landing $landing*/
 				$landing = $this->arResult['LANDING'];
 				if (
 					Manager::isB24() &&
@@ -740,6 +810,75 @@ class LandingPubComponent extends LandingBaseComponent
 	}
 
 	/**
+	 * For replace some fields in sending letters.
+	 * @return void
+	 */
+	protected function onBeforeEventSend()
+	{
+		$eventManager = EventManager::getInstance();
+
+		$addEventHandler = function() use ($eventManager)
+		{
+			$eventManager->addEventHandler('main', 'OnBeforeMailSend',
+				function(\Bitrix\Main\Event $event)
+				{
+					/* @var \Bitrix\Landing\Landing $landing*/
+					$params = $event->getParameters();
+					$params = array_shift($params);
+					$landing = $this->arResult['LANDING'];
+					$sysPages = Syspage::get($landing->getSiteId());
+
+					// replace auth-link if personal section is exists
+					if (isset($sysPages['personal']['LANDING_ID']))
+					{
+						$personalLandingId = $sysPages['personal']['LANDING_ID'];
+						$params['BODY'] = preg_replace_callback(
+							'@(https|http)://([^/]+)/auth/index\.php\?' .
+							'change_password=yes&lang=([^&]+)&' .
+							'USER_CHECKWORD=([^&]+)&USER_LOGIN=([^\s"]+)@',
+							function ($matches) use($landing, $personalLandingId)
+							{
+								$url = $landing->getPublicUrl($personalLandingId);
+								if (substr($url, 0, 1) == '/')
+								{
+									$url = $matches[1] . '://' . $matches[2] . $url;
+								}
+								$url .= '?' . http_build_query([
+									'SECTION' => 'password_change',
+									'USER_CHECKWORD' => $matches[4],
+									'USER_LOGIN' => $matches[5]
+								]);
+								return $url;
+							},
+							$params['BODY']
+						);
+					}
+
+					return $params;
+				}
+			);
+		};
+
+		$eventManager->addEventHandler('main', 'OnBeforeEventSend',
+			function($fields, &$eventMessage) use($addEventHandler)
+			{
+				$need = ['USER_PASS_REQUEST'];
+				if (in_array($eventMessage['EVENT_NAME'], $need))
+				{
+					$addEventHandler();
+				}
+			}
+		);
+
+		$eventManager->addEventHandler('main', 'OnSendUserInfo',
+			function(&$params) use($addEventHandler)
+			{
+				$addEventHandler();
+			}
+		);
+	}
+
+	/**
 	 * Base executable method.
 	 * @return void
 	 */
@@ -804,6 +943,7 @@ class LandingPubComponent extends LandingBaseComponent
 				$landing = Landing::createInstance($lid);
 				$this->arResult['LANDING'] = $landing;
 				$this->arResult['DOMAIN'] = $this->getParentDomain();
+				$this->arResult['COPY_LINK'] = $this->getCopyLinkPath();
 				$this->arResult['ADV_CODE'] = $this->getAdvCode();
 
 				if ($landing->exist())
@@ -831,8 +971,8 @@ class LandingPubComponent extends LandingBaseComponent
 							{
 								$robotsContent .= ($robotsContent ? PHP_EOL : '');
 								$robotsContent .= 'Sitemap: ' .
-												  Site::getPublicUrl($landing->getSiteId()) .
-												  '/sitemap.xml';
+											  		Site::getPublicUrl($landing->getSiteId()) .
+											  		'/sitemap.xml';
 							}
 							// out
 							if ($robotsContent)
@@ -873,6 +1013,7 @@ class LandingPubComponent extends LandingBaseComponent
 				$this->onBeforeLocalRedirect();
 				$this->onSearchGetURL();
 				$this->onSaleBasketItemBeforeSaved();
+				$this->onBeforeEventSend();
 
 				// change view
 				Manager::setPageView(
@@ -892,11 +1033,12 @@ class LandingPubComponent extends LandingBaseComponent
 						\Bitrix\Crm\UI\Webpack\CallTracker::instance()->getEmbeddedScript()
 					);
 				}
-				
+
 				// set og url
 				Manager::setPageView(
 					'MetaOG',
-					'<meta name="og:url" content="' . $landing->getPublicUrl() . '" />'
+					'<meta name="og:url" content="' . $landing->getPublicUrl() . '" />' . "\n" .
+					'<link rel="canonical" href="' . $landing->getPublicUrl() . '"/>'
 				);
 			}
 			else

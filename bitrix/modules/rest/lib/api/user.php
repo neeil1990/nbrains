@@ -202,7 +202,6 @@ class User extends \IRestService
 		$order = $query['ORDER'];
 		$adminMode = false;
 
-
 		//getting resize preset before user data preparing
 		$resizePresets = [
 			"small"=>["width"=>150, "height" => 150],
@@ -237,7 +236,10 @@ class User extends \IRestService
 			$allowedUserFields[] = 'FIND';
 			$allowedUserFields[] = 'UF_DEPARTMENT_NAME';
 		}
-
+		if (Loader::includeModule('intranet'))
+		{
+			$allowedUserFields[] = 'USER_TYPE';
+		}
 
 		if(isset($query['FILTER']) && is_array($query['FILTER']))
 		{
@@ -497,7 +499,7 @@ class User extends \IRestService
 
 						\CIntranetInviteDialog::InviteUser(
 							$inviteFields,
-							(isset($userFields["MESSAGE_TEXT"])) ? htmlspecialcharsbx($userFields["MESSAGE_TEXT"]) : GetMessage("BX24_INVITE_DIALOG_INVITE_MESSAGE_TEXT")
+							(isset($userFields["MESSAGE_TEXT"])) ? htmlspecialcharsbx($userFields["MESSAGE_TEXT"]) : GetMessage("BX24_INVITE_DIALOG_INVITE_MESSAGE_TEXT_1")
 						);
 
 						if (
@@ -644,6 +646,12 @@ class User extends \IRestService
 
 	protected static function getUserData($userFields)
 	{
+		static $extranetModuleInstalled = null;
+		if ($extranetModuleInstalled === null)
+		{
+			$extranetModuleInstalled = ModuleManager::isModuleInstalled('extranet');
+		}
+
 		$res = array();
 		foreach(self::$allowedUserFields as $key)
 		{
@@ -653,7 +661,7 @@ class User extends \IRestService
 					$res[$key] = $userFields[$key] == 'Y';
 				break;
 				case 'PERSONAL_BIRTHDAY':
-					$res[$key] = \CRestUtil::ConvertDate($userFields[$key]);
+					$res[$key] = \CRestUtil::convertDate($userFields[$key]);
 				break;
 				case 'EXTERNAL_AUTH_ID':
 					$res['IS_NETWORK'] = $userFields[$key] == 'replica';

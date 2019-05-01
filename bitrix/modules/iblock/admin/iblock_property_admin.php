@@ -153,7 +153,7 @@ if($lAdmin->EditAction())
 
 if($arID = $lAdmin->GroupAction())
 {
-	if($_REQUEST['action_target']=='selected')
+	if (!empty($_REQUEST["action_all_rows_".$sTableID]) && $_REQUEST["action_all_rows_".$sTableID] === "Y")
 	{
 		$propertyIterator = Iblock\PropertyTable::getList(array(
 			'select' => array('ID'),

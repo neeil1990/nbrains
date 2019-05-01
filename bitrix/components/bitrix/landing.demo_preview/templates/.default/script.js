@@ -24,6 +24,8 @@
 		this.closeButton = document.querySelector(".landing-template-preview-close");
 		this.createButton = document.querySelector(".landing-template-preview-create");
 		this.createByImportButton = document.querySelector(".landing-template-preview-create-by-import");
+		this.title = document.querySelector(".landing-template-preview-input-title");
+		this.description = document.querySelector(".landing-template-preview-input-description");
 		this.palette = document.querySelector(".landing-template-preview-palette");
 		this.paletteSiteColor = document.querySelector(".landing-template-preview-palette-sitecolor");
 		this.imageContainer = document.querySelector(".preview-desktop-body-image");
@@ -83,6 +85,10 @@
 		},
 
 		onFrameLoad: function() {
+			if (this.createStore)
+			{
+				new BX.Landing.SaveBtn(document.querySelector(".landing-template-preview-create"));
+			}
 			this.IsLoadedFrame = true;
 		},
 
@@ -92,6 +98,11 @@
 			if(!active && this.paletteSiteColor)
 			{
 				active = this.paletteSiteColor.querySelector(".active");
+			}
+			// by default - first
+			if(!active)
+			{
+				active = this.palette.firstElementChild;
 			}
 
 			return active;
@@ -223,6 +234,8 @@
 				result[data(this.paletteSiteColor, "data-name")] = 'Y';
 			}
 			result[data(this.palette, "data-name")] = data(this.getActiveColorNode(), "data-value");
+			result[data(this.title, "data-name")] = this.title.value;
+			result[data(this.description, "data-name")] = this.description.value;
 
 			return result;
 		},
@@ -266,14 +279,16 @@
 
 				this.loaderContainer.appendChild(this.loaderText);
 				this.loaderContainer.appendChild(this.progressBar.getContainer());
-
 			}
 
 			if (this.isStore())
 			{
-				this.showLoader();
-				this.initCatalogParams();
-				this.createCatalog();
+				if (this.IsLoadedFrame)
+				{
+					this.showLoader();
+					this.initCatalogParams();
+					this.createCatalog();
+				}
 			}
 			else
 			{
@@ -302,11 +317,13 @@
 				this.hideLoader();
 				return;
 			}
-			BX.ajax.loadJSON(
-				this.ajaxUrl,
-				this.ajaxParams,
-				BX.proxy(this.createCatalogResult, this)
-			);
+			BX.ajax({
+				'method': 'POST',
+				'dataType': 'json',
+				'url': this.ajaxUrl,
+				'data':  BX.ajax.prepareData(this.ajaxParams),
+				'onsuccess': BX.proxy(this.createCatalogResult, this)
+			})
 		},
 
 		createCatalogResult: function(data)

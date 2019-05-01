@@ -30,7 +30,7 @@ return array(
 	'style' => array(
 		'.landing-block-node-text-container' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_49_2_TWO_COLS_TEXT_VIDEO_FIX--LANDINGBLOCKNODETEXT'),
-			'type' => array('animation'),
+			'type' => array('animation', 'align-items'),
 		),
 		'.landing-block-node-title' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_49_2_TWO_COLS_TEXT_VIDEO_FIX--LANDINGBLOCKNODETITLE'),

@@ -13,6 +13,11 @@
 		this.parent = null;
 		this.init(parent);
 	};
+
+	var errorMessages = new WeakMap();
+	var values = new WeakMap();
+
+
 	BX.Filter.Fields.prototype = {
 		init: function(parent)
 		{
@@ -1331,7 +1336,98 @@
 				group.mix.push("main-ui-filter-date-with-years-switcher");
 			}
 
-			return BX.decl(group);
-		}
+			var renderedField = BX.decl(group);
+			var inputFields = [].slice.call(renderedField.querySelectorAll(".main-ui-date-input"));
+
+			if (inputFields.length > 0)
+			{
+				inputFields.forEach(function(input) {
+					var handler = BX.debounce(this.onDateChange, 500, this);
+					input.addEventListener('change', handler);
+					input.addEventListener('input', handler);
+					var clearButton = input.parentNode.querySelector(".main-ui-control-value-delete");
+
+					if (clearButton)
+					{
+						clearButton.addEventListener('click', function() {
+							setTimeout(function() {
+								this.onDateChange({target: input});
+							}.bind(this));
+						}.bind(this));
+					}
+				}, this);
+			}
+
+			return renderedField;
+		},
+
+		onDateChange: function(event)
+		{
+			if (values.get(event.target) === event.target.value)
+			{
+				return;
+			}
+
+			values.set(event.target, event.target.value);
+
+			if (event.target.value === "")
+			{
+				this.hideDateError(event.target);
+				return;
+			}
+
+			BX.ajax
+				.runComponentAction("bitrix:main.ui.filter", "checkDateFormat", {
+					mode: 'ajax',
+					data: {
+						value: event.target.value
+					}
+				})
+				.then(function(result) {
+					if (!result.data.result)
+					{
+						this.showDateError(event.target);
+						return;
+					}
+
+					this.hideDateError(event.target);
+				}.bind(this));
+		},
+
+		showDateError: function(inputField)
+		{
+			inputField.style.borderColor = "#FF5752";
+
+			if (errorMessages.has(inputField))
+			{
+				BX.remove(errorMessages.get(inputField));
+			}
+
+			var dateErrorMessage = BX.create("div", {
+				attrs: {
+					"class": "main-ui-filter-error-message",
+					title: this.parent.params["MAIN_UI_FILTER__DATE_ERROR_TITLE"],
+				},
+				text: this.parent.params["MAIN_UI_FILTER__DATE_ERROR_LABEL"] + " " + BX.message("FORMAT_DATE"),
+			});
+
+			errorMessages.set(inputField, dateErrorMessage);
+
+			BX.insertAfter(dateErrorMessage, inputField);
+
+			inputField.dataset.isValid = false;
+		},
+
+		hideDateError: function(inputField)
+		{
+			inputField.style.borderColor = null;
+
+			if (errorMessages.has(inputField))
+			{
+				BX.remove(errorMessages.get(inputField));
+			}
+
+			inputField.dataset.isValid = true;
+		},
 	};
 })();

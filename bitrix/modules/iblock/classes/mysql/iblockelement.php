@@ -1,4 +1,6 @@
 <?
+use Bitrix\Main\Loader;
+
 class CIBlockElement extends CAllIBlockElement
 {
 	///////////////////////////////////////////////////////////////////
@@ -101,7 +103,7 @@ class CIBlockElement extends CAllIBlockElement
 				$zr
 				&& (
 					$zr["WF_LOCKED_BY"]==$USER_ID
-					|| (CModule::IncludeModule('workflow') && CWorkflow::IsAdmin())
+					|| (Loader::includeModule('workflow') && CWorkflow::IsAdmin())
 				)
 			)
 			{
@@ -542,25 +544,41 @@ class CIBlockElement extends CAllIBlockElement
 		//******************END OF FROM PART********************************************
 
 		$this->bCatalogSort = false;
-		if(count($arAddSelectFields)>0 || count($arAddWhereFields)>0 || count($arAddOrderByFields)>0)
+		if(!empty($arAddSelectFields) || !empty($arAddWhereFields) || !empty($arAddOrderByFields))
 		{
-			if(CModule::IncludeModule("catalog"))
+			if (Loader::includeModule("catalog"))
 			{
-				$res_catalog = CCatalogProduct::GetQueryBuildArrays($arAddOrderByFields, $arAddWhereFields, $arAddSelectFields);
-				if(
-					$sGroupBy==""
-					&& !$this->bOnlyCount
-					&& !isset($this->strField)
-				)
-					$sSelect .= $res_catalog["SELECT"]." ";
-				$sFrom .= str_replace("LEFT JOIN", "\n\t\t\tLEFT JOIN", $res_catalog["FROM"])."\n";
-				//$sWhere .= $res_catalog["WHERE"]." "; moved to MkFilter
-				if(is_array($res_catalog["ORDER"]) && count($res_catalog["ORDER"]))
+				$catalogQueryResult = \CProductQueryBuilder::makeQuery(array(
+					'select' => $arAddSelectFields,
+					'filter' => $arAddWhereFields,
+					'order' => $arAddOrderByFields
+				));
+				if (!empty($catalogQueryResult))
 				{
-					$this->bCatalogSort = true;
-					foreach($res_catalog["ORDER"] as $i=>$val)
-						$arSqlOrder[$i] = $val;
+					if (
+						!empty($catalogQueryResult['select'])
+						&& $sGroupBy==""
+						&& !$this->bOnlyCount
+						&& !isset($this->strField)
+					)
+					{
+						$sSelect .= ', '.implode(', ', $catalogQueryResult['select']).' ';
+					}
+					// filter set in CIBlockElement::MkFilter
+					if (!empty($catalogQueryResult['order']))
+					{
+						$this->bCatalogSort = true;
+						foreach ($catalogQueryResult['order'] as $index => $field)
+							$arSqlOrder[$index] = $field;
+						unset($field);
+						unset($index);
+					}
+					if (!empty($catalogQueryResult['join']))
+					{
+						$sFrom .= "\n\t\t\t".implode("\n\t\t\t", $catalogQueryResult['join'])."\n";
+					}
 				}
+				unset($catalogQueryResult);
 			}
 		}
 
@@ -838,7 +856,7 @@ class CIBlockElement extends CAllIBlockElement
 			return false;
 
 		$arIBlock = CIBlock::GetArrayByID($ar_element["IBLOCK_ID"]);
-		$bWorkFlow = $bWorkFlow && is_array($arIBlock) && ($arIBlock["WORKFLOW"] != "N") && CModule::IncludeModule("workflow");
+		$bWorkFlow = $bWorkFlow && is_array($arIBlock) && ($arIBlock["WORKFLOW"] != "N") && Loader::includeModule("workflow");
 
 		$ar_wf_element = $ar_element;
 

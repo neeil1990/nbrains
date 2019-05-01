@@ -75,7 +75,7 @@ return array(
 			'.landing-block-node-card-text-bg' =>
 				array(
 					'name' => Loc::getMessage('LANDING_BLOCK_37.3.TWO_COLS_BLOCKS_CAROUSEL_STYLE_LANDINGBLOCKNODECARDTEXTBG'),
-					'type' => 'box',
+					'type' => array('box', 'paddings'),
 				),
 			'.landing-block-node-card-label-left' =>
 				array(

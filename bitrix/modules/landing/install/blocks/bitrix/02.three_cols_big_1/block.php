@@ -1,4 +1,4 @@
-    <section class="container-fluid px-0 landing-block">
+    <section class="container-fluid px-0 landing-block g-theme-business-bg-blue-dark-v2">
         <div class="row no-gutters">
             <div class="landing-block-node-left-img g-min-height-300 col-lg-4 g-bg-img-hero order-3 order-lg-1" style="background-image: url(https://cdn.bitrix24.site/bitrix/images/landing/business/1600x1920/img2.jpg);"></div>
 
@@ -15,7 +15,7 @@
                 </div>
             </div>
 
-            <div class="landing-block-node-right col-md-6 col-lg-4 order-2 order-lg-3 g-theme-business-bg-blue-dark-v2">
+            <div class="landing-block-node-right col-md-6 col-lg-4 order-2 order-lg-3">
                 <div class="js-carousel g-pb-90"
 					 data-autoplay="true"
                      data-infinite="true"

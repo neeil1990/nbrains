@@ -40,7 +40,11 @@ return array(
 			'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_NODES_LANDINGBLOCKNODECARDTEXT'),
 			'type' => 'text',
 		),
-		'.landing-block-node-card-link' => array(
+		'.landing-block-node-card-link1' => array(
+			'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_NODES_LANDINGBLOCKNODECARDLINK'),
+			'type' => 'link',
+		),
+		'.landing-block-node-card-link2' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_NODES_LANDINGBLOCKNODECARDLINK'),
 			'type' => 'link',
 		),
@@ -60,11 +64,11 @@ return array(
 			),
 			'.landing-block-node-card-label-title' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_STYLE_LANDINGBLOCKNODECARDLABELTITLE'),
-				'type' => array('typo', 'box'),
+				'type' => array('typo', 'box', 'paddings'),
 			),
 			'.landing-block-node-card-label-text' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_STYLE_LANDINGBLOCKNODECARDLABELTEXT'),
-				'type' => array('typo', 'box'),
+				'type' => array('typo', 'box', 'paddings'),
 			),
 			'.landing-block-node-card-buttons1' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_01.BIG_WITH_TEXT_BLOCKS_2_STYLE_LANDINGBLOCKNODECARD_BUTTONS'),

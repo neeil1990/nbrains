@@ -737,22 +737,25 @@
 			var editObject, editor, height, contentContainer;
 
 			[].forEach.call(cells, function(current, index) {
-				try {
-					editObject = self.getCellEditDataByCellIndex(index);
-				} catch (err) {
-					throw new Error(err);
-				}
-
-				if (self.parent.getEditor().validateEditObject(editObject))
+				if (current.dataset.editable === 'true')
 				{
-					contentContainer = self.getContentContainer(current);
-					height = BX.height(contentContainer);
-					editor = self.parent.getEditor().getEditor(editObject, height);
+					try {
+						editObject = self.getCellEditDataByCellIndex(index);
+					} catch (err) {
+						throw new Error(err);
+					}
 
-					if (!self.getEditorContainer(current) && BX.type.isDomNode(editor))
+					if (self.parent.getEditor().validateEditObject(editObject))
 					{
-						current.appendChild(editor);
-						BX.hide(contentContainer);
+						contentContainer = self.getContentContainer(current);
+						height = BX.height(contentContainer);
+						editor = self.parent.getEditor().getEditor(editObject, height);
+
+						if (!self.getEditorContainer(current) && BX.type.isDomNode(editor))
+						{
+							current.appendChild(editor);
+							BX.hide(contentContainer);
+						}
 					}
 				}
 			});

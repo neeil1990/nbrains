@@ -504,7 +504,13 @@ class CRatings extends CAllRatings
 
 				$authorityRatingId	 = CRatings::GetAuthorityRating();
 				$arAuthorityUserProp = CRatings::GetRatingUserPropEx($authorityRatingId, $userId);
-				if ($arAuthorityUserProp['VOTE_WEIGHT'] <= 0)
+				if (
+					$arAuthorityUserProp['VOTE_WEIGHT'] < 0
+					|| (
+						$arAuthorityUserProp['VOTE_WEIGHT'] == 0
+						&& !IsModuleInstalled('intranet')
+					)
+				)
 				{
 					$arInfo = $cacheAllowVote[$userId] = array(
 						'RESULT' => false,
