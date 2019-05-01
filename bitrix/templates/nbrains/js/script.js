@@ -1902,6 +1902,12 @@
 			}
 		}
 
+		$(".partners img").hover(function(){
+			var staticImg = $(this).attr("src");
+			var hoverImg = $(this).data("img");
+			$(this).attr("src",hoverImg);
+			$(this).data("img",staticImg);
+		});
 	});
 
 }());

@@ -324,6 +324,7 @@ $APPLICATION->SetTitle('Главная');
                     0 => "NAME",
                     1 => "CODE",
                     2 => "PREVIEW_PICTURE",
+                    3 => "DETAIL_PICTURE",
                 ),
                 "IBLOCKS" => array("7"),
                 "IBLOCK_TYPE" => "contents",

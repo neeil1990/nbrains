@@ -52,9 +52,14 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 						<div class="rd-navbar-panel">
 							<button class="rd-navbar-toggle" data-rd-navbar-toggle=".rd-navbar-nav-wrap"><span></span></button>
 							<!-- RD Navbar Brand-->
-							<div class="rd-navbar-brand"><a class="brand" href="index.html">
-									<div class="brand__name"><img class="brand__logo-dark" src="<?=SITE_TEMPLATE_PATH?>/images/logo-default-95x80.png" alt="" width="95" height="80"/><img class="brand__logo-mobile" src="images/logo-mobile-170x50.png" alt="" width="170" height="50"/>
-									</div></a></div>
+							<div class="rd-navbar-brand">
+                                <a class="brand" href="/">
+									<div class="brand__name">
+                                        <img class="brand__logo-dark" src="<?=SITE_TEMPLATE_PATH?>/images/logo-default-95x80.png" alt="" width="95" height="80"/>
+                                        <img class="brand__logo-mobile" src="images/logo-mobile-170x50.png" alt="" width="170" height="50"/>
+                                    </div>
+                                </a>
+                            </div>
 						</div>
 						<div class="rd-navbar-body">
 							<!-- RD Navbar Aside-->
