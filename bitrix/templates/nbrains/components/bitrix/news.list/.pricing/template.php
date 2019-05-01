@@ -41,6 +41,7 @@ $this->setFrameMode(true);
 						<span class="top">00</span>
 					</div>
 				</div>
+                <p class="pricing-table__item-price-starting">Сумма от</p>
 				<ul class="pricing-table__item-features">
 					<?foreach($arItem["DISPLAY_PROPERTIES"]["DESCRIPTION_BOLD"]["VALUE"] as $value):?>
 						<?if($value):?>
