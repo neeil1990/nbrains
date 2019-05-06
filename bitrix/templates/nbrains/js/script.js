@@ -1353,6 +1353,7 @@
 						data[dataArray[i].name] = dataArray[i].value;
 					}
 
+
 					$.ajax({
 						data: data,
 						url: url,
@@ -1479,13 +1480,13 @@
 		if (plugins.rdMailForm.length) {
 			var i, j, k,
 					msg = {
-						'MF000': 'Successfully sent!',
-						'MF001': 'Recipients are not set!',
-						'MF002': 'Form will not work locally!',
-						'MF003': 'Please, define email field in your form!',
-						'MF004': 'Please, define type of your form!',
-						'MF254': 'Something went wrong with PHPMailer!',
-						'MF255': 'Aw, snap! Something went wrong.'
+						'MF000': 'Успешно отправлено!',
+						'MF001': 'Получатели не установлены!',
+						'MF002': 'Форма не будет работать локально!',
+						'MF003': 'Пожалуйста, укажите поле электронной почты в вашей форме!',
+						'MF004': 'Пожалуйста, определите тип вашей формы!',
+						'MF254': 'Что-то пошло не так с PHPMailer!',
+						'MF255': 'Вот блин! Что-то пошло не так.'
 					};
 
 			for (i = 0; i < plugins.rdMailForm.length; i++) {
@@ -1515,8 +1516,8 @@
 							if (captcha.length) {
 								var captchaToken = captcha.find('.g-recaptcha-response').val(),
 										captchaMsg = {
-											'CPT001': 'Please, setup you "site key" and "secret key" of reCaptcha',
-											'CPT002': 'Something wrong with google reCaptcha'
+											'CPT001': 'Пожалуйста, настройте «ключ сайта» и «секретный ключ» reCaptcha',
+											'CPT002': 'Что-то не так с Google ReCaptcha'
 										};
 
 								formHasCaptcha = true;

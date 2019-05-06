@@ -71,13 +71,13 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 											<li>
 												<dl class="list-terms-inline">
 													<dt>24/7 Support</dt>
-													<dd><a href="tel:#">1-800-700-6200</a></dd>
+													<dd><a href="tel:<?= tplvar('phone');?>"><?= tplvar('phone');?></a></dd>
 												</dl>
 											</li>
 											<li>
 												<dl class="list-terms-inline">
 													<dt>E-mail</dt>
-													<dd><a href="mailto:#">mail@demolink.org</a></dd>
+													<dd><a href="mailto:<?= tplvar('email');?>"><?= tplvar('email');?></a></dd>
 												</dl>
 											</li>
 											<li>
