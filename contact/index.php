@@ -32,28 +32,26 @@ $APPLICATION->SetTitle("Контакты");
                     <ul class="list-creative">
                         <li>
                             <dl class="list-terms-medium list-terms-medium_secondary">
-                                <dt>Address</dt>
-                                <dd><a href="#">212 Moore Ave, Brooklyn, NY, United States</a></dd>
+                                <dt>Адрес</dt>
+                                <dd><a href="#"><?= tplvar('street');?></a></dd>
                             </dl>
                         </li>
                         <li>
                             <dl class="list-terms-medium">
-                                <dt>Phones</dt>
+                                <dt>Телефон</dt>
                                 <dd>
                                     <ul class="list-comma">
-                                        <li><a href="tel:#">+1-800-700-6200 </a></li>
-                                        <li><a href="tel:#">+1-800-955-4567</a></li>
+                                        <li><a href="tel:<?= tplvar('phone');?>"><?= tplvar('phone');?></a></li>
                                     </ul>
                                 </dd>
                             </dl>
                         </li>
                         <li>
                             <dl class="list-terms-medium list-terms-medium_tertiary">
-                                <dt>E-mails</dt>
+                                <dt>Почта</dt>
                                 <dd>
                                     <ul class="list-comma">
-                                        <li><a href="mailto:#">support@demolink.org</a></li>
-                                        <li><a href="mailto:#">office@demolink.org</a></li>
+                                        <li><a href="mailto:<?= tplvar('email');?>"><?= tplvar('email');?></a></li>
                                     </ul>
                                 </dd>
                             </dl>
@@ -61,39 +59,15 @@ $APPLICATION->SetTitle("Контакты");
                     </ul>
                 </div>
                 <div class="col-md-10 col-lg-7 col-xl-6">
-                    <h3 class="text-center">Написать нам</h3>
-                    <!-- RD Mailform -->
-                    <form class="rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="/bat/rd-mailform.php">
-                        <div class="row align-items-md-end row-20">
-                            <div class="col-md-6">
-                                <div class="form-wrap">
-                                    <input class="form-input" id="contact-name" type="text" name="name" data-constraints="@Required">
-                                    <label class="form-label" for="contact-name">Your Name</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-wrap">
-                                    <input class="form-input" id="contact-phone" type="text" name="phone" data-constraints="@PhoneNumber">
-                                    <label class="form-label" for="contact-phone">Phone</label>
-                                </div>
-                            </div>
-                            <div class="col-sm-12">
-                                <div class="form-wrap">
-                                    <label class="form-label" for="contact-message">Your Message</label>
-                                    <textarea class="form-input" id="contact-message" name="message" data-constraints="@Required"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-wrap">
-                                    <input class="form-input" id="contact-email" type="email" name="email" data-constraints="@Email @Required">
-                                    <label class="form-label" for="contact-email">E-mail</label>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <button class="button button-block button-primary button-ujarak" type="submit">Send Message</button>
-                            </div>
-                        </div>
-                    </form>
+                    <?$APPLICATION->IncludeComponent(
+                        "nbrains:main.feedback",
+                        "",
+                        Array(
+                            "EVENT_NAME" => "FEEDBACK_FORM",
+                            "IBLOCK_ID" => "11",
+                            "IBLOCK_TYPE" => "forms"
+                        )
+                    );?>
                 </div>
             </div>
         </div>

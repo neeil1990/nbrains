@@ -438,19 +438,19 @@
 			var regularConstraintsMessages = [
 				{
 					type: regula.Constraint.Required,
-					newMessage: "The text field is required."
+					newMessage: "Текстовое поле обязательно для заполнения."
 				},
 				{
 					type: regula.Constraint.Email,
-					newMessage: "The email is not a valid email."
+					newMessage: "Адрес электронной почты не является действительным."
 				},
 				{
 					type: regula.Constraint.Numeric,
-					newMessage: "Only numbers are required"
+					newMessage: "Требуются только цифры."
 				},
 				{
 					type: regula.Constraint.Selected,
-					newMessage: "Please choose an option."
+					newMessage: "Пожалуйста, выберите опцию."
 				}
 			];
 
@@ -1486,7 +1486,7 @@
 						'MF003': 'Пожалуйста, укажите поле электронной почты в вашей форме!',
 						'MF004': 'Пожалуйста, определите тип вашей формы!',
 						'MF254': 'Что-то пошло не так с PHPMailer!',
-						'MF255': 'Вот блин! Что-то пошло не так.'
+						'MF255': 'Оу! Что-то пошло не так.'
 					};
 
 			for (i = 0; i < plugins.rdMailForm.length; i++) {
