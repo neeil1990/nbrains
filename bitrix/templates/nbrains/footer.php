@@ -12,16 +12,16 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 					<div class="footer-classic__custom-column">
 						<div class="unit flex-sm-row">
 							<div class="unit__left"><span class="icon icon-md icon-default fl-bigmug-line-headphones32"></span></div>
-							<div class="unit__body"><a class="link link-lg" href="tel:#">1-800-700-6200</a>
-								<p>Our Support Service is always available 24 hours a day</p>
+							<div class="unit__body"><a class="link link-lg" href="tel:<?= tplvar('phone');?>"><?= tplvar('phone');?></a>
+								<p>Наша служба поддержки</p>
 							</div>
 						</div>
 					</div>
 				</div>
 				<div class="col-md-10 col-lg-6">
 					<div class="group-md">
-						<h3>Subscribe</h3>
-						<p class="large">Get the latest updates and offers</p>
+						<h3>Подписывайся</h3>
+						<p class="large">Получите последние обновления и предложения</p>
 					</div>
 					<!-- RD Mailform-->
 					<form class="rd-mailform form_inline form_lg" data-form-output="form-output-global" data-form-type="subscribe" method="post" action="bat/rd-mailform.php">
@@ -30,16 +30,16 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 							<label class="form-label" for="subscribe-form-footer-form-email">Your E-mail</label>
 						</div>
 						<div class="form-button">
-							<button class="button button-lg button-primary button-ujarak" type="submit">Subscribe</button>
+							<button class="button button-lg button-primary button-ujarak" type="submit">присоединяться</button>
 						</div>
 					</form>
 				</div>
 			</div>
 			<div class="row row-50 justify-content-md-center justify-content-lg-start justify-content-xl-between">
 				<div class="col-md-5 col-lg-3">
-					<p class="custom-heading-1 custom-heading-bordered">About us</p>
+					<p class="custom-heading-1 custom-heading-bordered">Немного о нас</p>
 					<div class="divider"></div>
-					<p class="ls-05">Our company has been developing high-quality and reliable software for corporate needs since 2008.</p>
+					<p class="ls-05">Наша компания занимается разработкой качественного и надежного программного обеспечения для корпоративных нужд с 2012 года.</p>
 					<ul class="list-inline list-inline-xs">
 						<li><a class="icon icon-xxs icon-circle icon-filled icon-filled_brand fa fa-facebook" href="#"></a></li>
 						<li><a class="icon icon-xxs icon-circle icon-filled icon-filled_brand fa fa-twitter" href="#"></a></li>
