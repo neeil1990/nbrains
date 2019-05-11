@@ -13,7 +13,7 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
 ?>
 <h3 class="text-center">Написать нам</h3>
 <!-- RD Mailform -->
-<form class="rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="/bitrix/services/main/ajax.php?c=nbrains:main.feedback&action=main&mode=class&signedParameters=<?=$this->getComponent()->getSignedParameters()?>">
+<form class="rd-mailform form_transparent" data-form-output="form-output-global" data-form-type="contact" method="post" action="/bitrix/services/main/ajax.php?c=nbrains:main.feedback&action=main&mode=class&signedParameters=<?=$this->getComponent()->getSignedParameters()?>">
     <?=bitrix_sessid_post()?>
     <div class="row align-items-md-end row-20">
         <div class="col-md-6">

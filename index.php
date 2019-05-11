@@ -362,6 +362,28 @@ $APPLICATION->SetTitle('Главная');
             )
         );?>
 
+        <section class="section parallax-container bg-gray-darker" data-parallax-img="<?=SITE_TEMPLATE_PATH?>/images/bg-image-3-1920x730.jpg">
+            <div class="parallax-content">
+                <div class="section-md text-center">
+                    <div class="container">
+                        <div class="row justify-content-md-center">
+                            <div class="col-md-9 col-lg-8 col-xl-7">
+                                <?$APPLICATION->IncludeComponent(
+                                    "nbrains:main.feedback",
+                                    "",
+                                    Array(
+                                        "EVENT_NAME" => "FEEDBACK_FORM",
+                                        "IBLOCK_ID" => "11",
+                                        "IBLOCK_TYPE" => "forms"
+                                    )
+                                );?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
 
 
 
