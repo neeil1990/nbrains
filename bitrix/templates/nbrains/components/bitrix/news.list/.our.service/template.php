@@ -37,7 +37,7 @@ $this->setFrameMode(true);
 						<?endif;?>
 
 						<?if($arItem["CODE"]):?>
-						<a class="button button-sm button-default button-ujarak" href="<?=$arItem["CODE"]?>">View Details</a>
+						<a class="button button-sm button-default button-ujarak" data-toggle="modal" data-target="#modalCallBack" data-whatever="<?=$arItem["NAME"]?> заполните форму и мы вам все расскажем" href="#">подробнее</a>
 						<? endif; ?>
 					</div>
 				</article>

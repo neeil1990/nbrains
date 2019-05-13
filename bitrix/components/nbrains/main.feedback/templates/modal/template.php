@@ -22,7 +22,7 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
             </div>
             <div class="modal-body text-center">
                 <!-- RD Mailform -->
-                <img class="brand__logo-dark" src="<?=SITE_TEMPLATE_PATH?>/images/logo-default-95x80.png" alt="" width="95" height="80">
+
                 <form class="rd-mailform" data-form-output="form-output-global" data-form-type="contact" method="post" action="/bitrix/services/main/ajax.php?c=nbrains:main.feedback&action=main&mode=class&signedParameters=<?=$this->getComponent()->getSignedParameters()?>">
                     <?=bitrix_sessid_post()?>
                     <div class="row align-items-md-end row-20">
@@ -34,7 +34,7 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
                         </div>
                         <div class="col-md-6">
                             <div class="form-wrap">
-                                <input class="form-input" id="contact-phone-modal" type="text" name="phone" data-constraints="@PhoneNumber">
+                                <input class="form-input" id="contact-phone-modal" type="text" name="phone" data-constraints="@Required @PhoneNumber">
                                 <label class="form-label" for="contact-phone-modal"><?=GetMessage("MFT_PHONE")?></label>
                             </div>
                         </div>

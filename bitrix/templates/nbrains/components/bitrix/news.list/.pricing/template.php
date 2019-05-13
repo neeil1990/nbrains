@@ -58,7 +58,7 @@ $this->setFrameMode(true);
 					<?endforeach;?>
 				</ul>
 				<?if($arItem["CODE"]):?>
-					<div class="pricing-table__item-control"><a class="button btn-primary" href="<?=$arItem["CODE"];?>">Order now</a></div>
+					<div class="pricing-table__item-control"><a class="button btn-primary" data-toggle="modal" data-target="#modalCallBack" data-whatever="Заполните поля формы и мы вам перезвоним" href="#">Заказать</a></div>
 				<? endif; ?>
 			</article>
 			<?endforeach;?>
