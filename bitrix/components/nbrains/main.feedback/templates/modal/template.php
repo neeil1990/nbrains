@@ -41,7 +41,7 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
                         <div class="col-sm-12">
                             <div class="form-wrap">
                                 <label class="form-label" for="contact-message-modal"><?=GetMessage("MFT_MESSAGE")?></label>
-                                <textarea class="form-input" id="contact-message-modal" name="message" data-constraints="@Required"></textarea>
+                                <textarea class="form-input" id="contact-message-modal" name="message"></textarea>
                             </div>
                         </div>
                         <div class="col-md-6">
