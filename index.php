@@ -137,6 +137,7 @@ $APPLICATION->SetTitle('Главная');
                 1 => "PRICE",
                 2 => "DESCRIPTION_BOLD",
                 3 => "DESCRIPTION",
+                4 => "SMALL_TEXT",
             ),
             "SET_BROWSER_TITLE" => "N",	// Устанавливать заголовок окна браузера
             "SET_LAST_MODIFIED" => "N",	// Устанавливать в заголовках ответа время модификации страницы
