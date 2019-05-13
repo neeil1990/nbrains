@@ -21,7 +21,7 @@ $this->setFrameMode(true);
 						<div class="box-width-3 box-centered">
 							<h2><?=$arResult["NAME"]?></h2>
 							<p class="text-style-1"><?=$arResult["DESCRIPTION"]?></p>
-							<a class="button button-lg btn-primary button-ujarak" href="<?=$arResult["CODE"]?>">Read More</a>
+							<a class="button button-lg btn-primary button-ujarak" href="<?=$arResult["CODE"]?>">подробнее</a>
 						</div>
 					</div>
 					<div class="col-md-7 col-lg-6 wow fadeInLeftSmall">
