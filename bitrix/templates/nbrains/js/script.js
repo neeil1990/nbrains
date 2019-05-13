@@ -405,7 +405,7 @@
 			// Custom validator - phone number
 			regula.custom({
 				name: 'PhoneNumber',
-				defaultMessage: 'Invalid phone number format',
+				defaultMessage: 'Неверный формат номера телефона',
 				validator: function () {
 					if (this.value === '') return true;
 					else return /^(\+\d)?[0-9\-\(\) ]{5,}$/i.test(this.value);
@@ -1754,6 +1754,19 @@
 			$(this).attr("src",hoverImg);
 			$(this).data("img",staticImg);
 		});
+
+		$('#modalCallBack').on('show.bs.modal', function (event) {
+			var button = $(event.relatedTarget); // Button that triggered the modal
+			var recipient = button.data('whatever'); // Extract info from data-* attributes
+			// If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+			// Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+			var modal = $(this);
+
+			modal.find('.modal-title').text(recipient);
+		});
+
+		$('input[name="phone"]').mask("+7 (999) 999-99-99");
+
 	});
 
 }());

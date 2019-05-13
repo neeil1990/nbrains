@@ -91,7 +91,11 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 										</ul>
 									</div>
 								</div>
-								<div class="rd-navbar-panel__button"><a class="button button-xs button-icon button-icon-left button-default button-ujarak" href="login.html"><span class="icon mdi mdi-account"></span>Login</a></div>
+								<div class="rd-navbar-panel__button">
+                                    <a class="button button-xs button-icon button-icon-left button-default button-ujarak" data-toggle="modal" data-target="#modalCallBack" data-whatever="Заполните поля формы и мы вам перезвоним" href="#">
+                                        <span class="icon mdi mdi-phone-in-talk"></span>Заказать звонок
+                                    </a>
+                                </div>
 							</div>
 							<!-- RD Navbar Nav Wrap-->
 							<div class="rd-navbar-nav-wrap">

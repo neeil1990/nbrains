@@ -2,7 +2,6 @@
 if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 	die();
 ?>
-
 <!-- Page Footer-->
 <footer class="section footer-classic context-dark">
 	<div class="footer-classic__main bg-gray-3">
@@ -111,9 +110,19 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 
 </div>
 <!-- Global Mailform Output-->
+<?$APPLICATION->IncludeComponent(
+    "nbrains:main.feedback",
+    "modal",
+    Array(
+        "EVENT_NAME" => "FEEDBACK_FORM",
+        "IBLOCK_ID" => "12",
+        "IBLOCK_TYPE" => "forms"
+    )
+);?>
 <div class="snackbars" id="form-output-global"></div>
 <!-- Javascript-->
 <script src="<?=SITE_TEMPLATE_PATH?>/js/core.min.js"></script>
+<script src="<?=SITE_TEMPLATE_PATH?>/js/jquery.maskinput.js"></script>
 <script src="<?=SITE_TEMPLATE_PATH?>/js/script.js"></script>
 </body>
 </html>
