@@ -12,10 +12,11 @@
 		this.items = null;
 		this.currentIndex = null;
 		this.handlers = {};
+		this.baseContainer = options.baseContainer || document.body;
 
 		this.setItems(options.items || []);
 
-		this.zIndex = options.zIndex || 999999;
+		this.isBodyPaddingAdded = null;
 		this.cycleMode = options.hasOwnProperty('cycleMode')? options.cycleMode : true;
 		this.preload = options.hasOwnProperty('preload')? options.preload : 3;
 		this.cachedData = {};
@@ -42,7 +43,6 @@
 			darkMode: true,
 			floatMode: false,
 			autoHide: false,
-			zIndex: this.zIndex,
 			showTotalSelectedBlock: false,
 			showResetAllBlock: false,
 			alignItems: 'center',
@@ -50,6 +50,8 @@
 				return this.getPanelWrapper();
 			}.bind(this)
 		});
+
+		this.eventsAlreadyBinded = false;
 
 		this.init();
 	};
@@ -62,10 +64,20 @@
 		buildItemListByNode: function (node)
 		{
 			var promise = new BX.Promise();
-			var nodes = node.dataset.viewerGroupBy?
-				[].slice.call(node.ownerDocument.querySelectorAll("[data-viewer][data-viewer-group-by='" + node.dataset.viewerGroupBy + "']")) :
-				[node]
-			;
+			var nodes = [];
+
+			if (this.isSeparateItem(node))
+			{
+				nodes = [node];
+			}
+			else if(node.dataset.viewerGroupBy)
+			{
+				nodes = [].slice.call(node.ownerDocument.querySelectorAll("[data-viewer][data-viewer-group-by='" + node.dataset.viewerGroupBy + "']"));
+			}
+			else
+			{
+				nodes = [node];
+			}
 
 			this.loadExtensions(this.collectExtensionsForItems(nodes)).then(function (){
 				var items = nodes.map(function(node) {
@@ -76,6 +88,20 @@
 			}.bind(this));
 
 			return promise;
+		},
+
+		/**
+		 * @param {HTMLElement} node
+		 * @return {boolean}
+		 */
+		isSeparateItem: function (node)
+		{
+			return node.dataset.viewerSeparateItem;
+		},
+
+		shouldProcessSeparateMode: function (items)
+		{
+			return items.length === 1 && items[0].isSeparateItem();
 		},
 
 		shouldRunViewer: function (node)
@@ -110,7 +136,10 @@
 
 			var extensions = [];
 			extensionSet.forEach(function (ext) {
-				extensions.push(ext);
+				if (shouldLoadExtensions(ext))
+				{
+					extensions.push(ext);
+				}
 			});
 
 			return extensions;
@@ -162,6 +191,15 @@
 					return;
 				}
 
+				if (this.shouldProcessSeparateMode(items))
+				{
+					this.setItems(items).then(function(){
+						this.openSeparate(0);
+					}.bind(this));
+
+					return;
+				}
+
 				//shortcut for download
 				if ((BX.browser.IsMac() && event.metaKey) || event.ctrlKey)
 				{
@@ -178,6 +216,13 @@
 
 		bindEvents: function ()
 		{
+			if (this.eventsAlreadyBinded)
+			{
+				return;
+			}
+
+			this.eventsAlreadyBinded = true;
+
 			this.handlers.keyPress = this.handleKeyPress.bind(this);
 			this.handlers.touchStart = this.handleTouchStart.bind(this);
 			this.handlers.touchEnd = this.handleTouchEnd.bind(this);
@@ -186,8 +231,6 @@
 			this.handlers.showPrev = this.showPrev.bind(this);
 			this.handlers.close = this.close.bind(this);
 			this.handlers.handleClickOnItemContainer = this.handleClickOnItemContainer.bind(this);
-			this.handlers.handleSliderOpen = this.handleSliderOpen.bind(this);
-			this.handlers.handleSliderCloseComplete = this.handleSliderCloseComplete.bind(this);
 			this.handlers.handleSliderCloseByEsc = this.handleSliderCloseByEsc.bind(this);
 
 			BX.bind(document, 'keydown', this.handlers.keyPress);
@@ -200,8 +243,6 @@
 			BX.bind(this.getPrevButton(), 'click', this.handlers.showPrev);
 			BX.bind(this.getCloseButton(), 'click', this.handlers.close);
 
-			BX.addCustomEvent('SidePanel.Slider:onOpen', this.handlers.handleSliderOpen);
-			BX.addCustomEvent('SidePanel.Slider:onCloseComplete', this.handlers.handleSliderCloseComplete);
 			BX.addCustomEvent('SidePanel.Slider:onCloseByEsc', this.handlers.handleSliderCloseByEsc);
 		},
 
@@ -231,7 +272,7 @@
 
 		enableReadingMode: function(withTimer)
 		{
-			if (BX.browser.IsMobile())
+			if (BX.browser.IsMobile() || !this.isOnTop())
 			{
 				return;
 			}
@@ -287,39 +328,6 @@
 			}
 		},
 
-		/**
-		 * @param {BX.SidePanel.Event} event
-		 */
-		handleSliderCloseComplete: function(event)
-		{
-			var slider = BX.SidePanel.Instance.getTopSlider();
-			if (slider)
-			{
-				console.log('grab zIndex from closed slider', slider.getZindex());
-				this.setZindex(slider.getZindex() - 1);
-			}
-			else
-			{
-				console.log('reset zIndex by originalZIndex', this.originalZIndex);
-				this.setZindex(this.originalZIndex);
-				this.originalZIndex = null;
-			}
-		},
-
-		/**
-		 * @param {BX.SidePanel.Event} event
-		 */
-		handleSliderOpen: function (event)
-		{
-			if (!this.originalZIndex)
-			{
-				this.originalZIndex = this.getZindex();
-			}
-			console.log('SidePanel.Slider:onOpen', this.originalZIndex, event.getSlider().getZindex() - 1);
-
-			this.setZindex(event.getSlider().getZindex() - 1);
-		},
-
 		adjustViewport: function ()
 		{
 			var viewportNode = document.querySelector('[name="viewport"]');
@@ -342,30 +350,10 @@
 			viewportNode.setAttribute('content', this._viewportContent);
 		},
 
-		adjustZindex: function ()
-		{
-			if (!BX.getClass('BX.SidePanel.Instance'))
-			{
-				return;
-			}
-
-			if (!BX.SidePanel.Instance.isOpen())
-			{
-				this.setZindex(this.originalZIndex || this.zIndex);
-				this.originalZIndex = null;
-
-				return;
-			}
-
-			//we have to show viewer over sidepanel
-			var slider = BX.SidePanel.Instance.getTopSlider();
-			this.originalZIndex = this.zIndex;
-
-			this.setZindex(slider.getZindex() + 1);
-		},
-
 		unbindEvents: function()
 		{
+			this.eventsAlreadyBinded = false;
+
 			BX.unbind(document, 'keydown', this.handlers.keyPress);
 			BX.unbind(window, 'resize', this.handlers.resize);
 			BX.unbind(this.getItemContainer(), 'touchstart', this.handlers.touchStart);
@@ -375,9 +363,6 @@
 			BX.unbind(this.getNextButton(), 'click', this.handlers.showNext);
 			BX.unbind(this.getPrevButton(), 'click', this.handlers.showPrev);
 			BX.unbind(this.getCloseButton(), 'click', this.handlers.close);
-
-			BX.removeCustomEvent('SidePanel.Slider:onOpen', this.handlers.handleSliderOpen);
-			BX.removeCustomEvent('SidePanel.Slider:onCloseComplete', this.handlers.handleSliderCloseComplete);
 		},
 
 		init: function ()
@@ -388,6 +373,15 @@
 			this.buildItemListByNode(node).then(function (items) {
 				if (items.length === 0)
 				{
+					return;
+				}
+
+				if (this.shouldProcessSeparateMode(items))
+				{
+					this.setItems(items).then(function(){
+						this.openSeparate(0);
+					}.bind(this));
+
 					return;
 				}
 
@@ -428,16 +422,20 @@
 			actionToRun.action.call(this, item, additionalParams);
 		},
 
+		/**
+		 * @returns {number}
+		 */
 		getZindex: function ()
 		{
-			return this.zIndex;
-		},
+			var container = this.getViewerContainer();
+			if (!container.parentNode)
+			{
+				return 0;
+			}
 
-		setZindex: function (zIndex)
-		{
-			console.log('setZindex', zIndex);
-			this.zIndex = zIndex;
-			this.getViewerContainer().style.zIndex = zIndex;
+			var component = BX.ZIndexManager.getComponent(container);
+
+			return component.getZIndex();
 		},
 
 		/**
@@ -501,7 +499,10 @@
 
 			var extensions = [];
 			extensionSet.forEach(function (ext) {
-				extensions.push(ext);
+				if (shouldLoadExtensions(ext))
+				{
+					extensions.push(ext);
+				}
 			});
 
 			return extensions;
@@ -555,8 +556,9 @@
 			this.items[index] = newItem;
 		},
 
-		show: function (index)
+		show: function (index, options)
 		{
+			options = options || {};
 			if (typeof index === 'undefined')
 			{
 				index = 0;
@@ -577,16 +579,16 @@
 
 			this.currentIndex = index;
 
-			this.actionPanel.removeItems();
-			this.actionPanel.addItems(
-				this.convertItemActionsToPanelItems(this.getCurrentItem())
-			);
-
+			this.resetActionsInPanelByItem(this.getCurrentItem());
 			item.load().then(function (loadedItem) {
 				if (this.getCurrentItem() === loadedItem)
 				{
 					console.log('show item');
 					this.processShowItem(loadedItem);
+					if (options.asFirstToShow)
+					{
+						loadedItem.asFirstToShow();
+					}
 				}
 			}.bind(this))
 			.catch(function (reason) {
@@ -703,6 +705,8 @@
 
 			item.afterRender();
 			this.adjustControlsSize(item.getContentWidth());
+
+			BX.onCustomEvent('BX.UI.Viewer.Controller:onAfterShow', [this, item]);
 		},
 
 		adjustControlsSize: function(contentWidth)
@@ -907,6 +911,12 @@
 					text: BX.message('JS_UI_VIEWER_ITEM_ACTION_SHARE'),
 					buttonIconClass: 'ui-btn-icon-share'
 				},
+				print: {
+					id: 'print',
+					type: 'print',
+					text: '',
+					buttonIconClass: 'ui-btn-icon-print ui-btn-disabled'
+				},
 				info: {
 					id: 'info',
 					type: 'info',
@@ -1076,79 +1086,103 @@
 			return this._isOpen;
 		},
 
-		getScrollWidth: function()
-		{
-			var div = BX.create('div', {
-				style: {
-					overflow: 'scroll',
-					width: '50px',
-					height: '50px',
-					visibility: 'hidden'
-				}
-			});
-
-			document.body.appendChild(div);
-			var scrollWidth = div.offsetWidth - div.clientWidth;
-			document.body.removeChild(div);
-
-			return scrollWidth;
-		},
-
 		addBodyPadding: function()
 		{
-			if (BX.getClass('BXIM.messenger.popupMessenger'))
+			var padding = window.innerWidth - document.documentElement.clientWidth;
+
+			if (BX.getClass('BXIM.messenger.popupMessenger') ||
+				padding === 0)
 			{
 				return;
 			}
 
-			var padding = this.getScrollWidth() + 'px';
+			document.body.style.paddingRight = padding + 'px';
+
 			var imBar = document.getElementById('bx-im-bar');
-			var helpBlock = document.getElementById('bx-help-block');
-
-			document.body.style.paddingRight = padding;
-
 			if(imBar)
 			{
-				imBar.style.borderRight = padding + ' solid rgb(238, 242, 244)';
+				var borderColor = 'rgb(238, 242, 244)';
+
+				if(document.body.classList.contains('bitrix24-light-theme'))
+				{
+					borderColor = 'rgba(255, 255, 255, .1)';
+				}
+
+				if(document.body.classList.contains('bitrix24-dark-theme'))
+				{
+					borderColor = 'rgba(82, 92, 105, .1)';
+				}
+
+				imBar.style.borderRight = padding + 'px solid ' + borderColor;
 			}
 
-			if(helpBlock)
-			{
-				helpBlock.style.borderRight  = padding + ' solid rgb(238, 242, 244)';
-				helpBlock.style.right = '-' + padding;
-			}
+			this.isBodyPaddingAdded = true;
 		},
 
 		removeBodyPadding: function()
 		{
-			var padding = '';
+			document.body.style.removeProperty('padding-right');
+
 			var imBar = document.getElementById('bx-im-bar');
-			var helpBlock = document.getElementById('bx-help-block');
-
-			document.body.style.paddingRight = padding;
-
-			if(imBar)
+			if (imBar)
 			{
-				imBar.style.borderRight = padding;
+				imBar.style.removeProperty('border-right');
 			}
 
-			if(helpBlock)
+			this.isBodyPaddingAdded = false;
+		},
+
+		openSeparate: function(index)
+		{
+			var item = this.getItemByIndex(index);
+			if (!item)
 			{
-				helpBlock.style.borderRight  = padding;
-				helpBlock.style.right = padding;
+				return;
 			}
+
+			item.load()
+				.then(function (loadedItem) {}.bind(this))
+				.catch(function (reason) {
+					var loadedItem = reason.item;
+
+					console.log('catch viewer');
+
+					BX.onCustomEvent('BX.UI.Viewer.Controller:onItemError', [this, reason, loadedItem]);
+
+					if (this.getCurrentItem() === loadedItem)
+					{
+						this.processError(reason, loadedItem);
+					}
+
+					BX.onCustomEvent('BX.UI.Viewer.Controller:onAfterProcessItemError', [this, reason, loadedItem]);
+				}.bind(this));
 		},
 
 		open: function(index)
 		{
 			this.adjustViewport();
 			this.addBodyPadding();
-			this.adjustZindex();
 
-			document.body.appendChild(this.getViewerContainer());
+			var container = this.getViewerContainer();
+			this.baseContainer.appendChild(container);
+			BX.focus(container);
 
-			this.show(index);
 			this.showPanel();
+
+			var component = BX.ZIndexManager.getComponent(container);
+			if (!component)
+			{
+				BX.ZIndexManager.register(container, {
+					overlay: this.actionPanel.getPanelContainer(),
+					overlayGap: 1
+				});
+			}
+
+			BX.ZIndexManager.bringToFront(container);
+
+			this.show(index, {
+				asFirstToShow: true
+			});
 
 			this.bindEvents();
 
@@ -1171,11 +1205,18 @@
 
 		showPanel: function()
 		{
-			this.actionPanel.layout.container.style.zIndex = '9999999';
 			this.actionPanel.layout.container.style.background = 'none';
 
 			this.actionPanel.draw();
 			this.actionPanel.showPanel();
+		},
+
+		resetActionsInPanelByItem: function (item)
+		{
+			this.actionPanel.removeItems();
+			this.actionPanel.addItems(
+				this.convertItemActionsToPanelItems(item)
+			);
 		},
 
 		hideCurrentItem: function()
@@ -1314,14 +1355,18 @@
 
 			BX.bind(this.layout.container, 'transitionend', function()
 			{
+				BX.ZIndexManager.unregister(this.layout.container);
 				BX.remove(this.layout.container);
 				BX.removeClass(this.layout.container, 'ui-viewer-hide');
 				BX.unbindAll(this.layout.container);
 				this.actionPanel.hidePanel();
 				this.unLockScroll();
 				this.unbindEvents();
-				this.removeBodyPadding();
 				this.disableReadingMode();
+				if(this.isBodyPaddingAdded)
+				{
+					this.removeBodyPadding();
+				}
 			}.bind(this));
 
 			// this.items = null;
@@ -1333,9 +1378,11 @@
 		showLoading: function (options)
 		{
 			options = options || {};
+			options.zIndex = BX.type.isNumber(options.zIndex)? options.zIndex : -1;
 
 			this.layout.inner.appendChild(this.getLoader());
 			this.setTextOnLoading(options.text || '');
+			this.layout.loader.style.zIndex = options.zIndex;
 		},
 
 		setTextOnLoading: function (text)
@@ -1372,10 +1419,10 @@
 			{
 				this.layout.container = BX.create('div', {
 					props: {
-						className: 'ui-viewer'
+						className: 'ui-viewer',
+						tabIndex: 22081990
 					},
 					style: {
-						zIndex: this.zIndex,
 						height: window.clientHeight + 'px'
 					},
 					children: [
@@ -1549,6 +1596,73 @@
 	};
 
 	/**
+	 * @extends {BX.UI.Viewer.Controller}
+	 * @param options
+	 * @constructor
+	 */
+	BX.UI.Viewer.InlineController = function (options)
+	{
+		options = options || {};
+
+		BX.UI.Viewer.Controller.apply(this, arguments);
+	};
+
+	BX.UI.Viewer.InlineController.prototype =
+	{
+		__proto__: BX.UI.Viewer.Controller.prototype,
+		constructor: BX.UI.Viewer.Controller,
+
+		adjustViewport: function(){},
+		addBodyPadding: function(){},
+		adjustZindex: function(){},
+		showPanel: function(){},
+		adjustViewerHeight: function(){},
+		// showLoading: function(){},
+
+		/**
+		 * @param {HTMLElement} node
+		 */
+		renderItemByNode: function (node)
+		{
+			if (!node)
+			{
+				return;
+			}
+
+			this.buildItemListByNode(node).then(function(items){
+				if (items.length === 0)
+				{
+					return;
+				}
+
+				this.setItems(items).then(function(){
+					this.open(0);
+				}.bind(this));
+			}.bind(this));
+		},
+
+		getViewerContainer: function()
+		{
+			if (!this.layout.container)
+			{
+				//this.layout.inner? for showLoading
+				this.layout.container = this.layout.inner = BX.create('div', {
+					props: {
+						className: 'ui-viewer-inner'
+					},
+					children: [
+						this.getItemContainer()
+					]
+				});
+			}
+
+			return this.layout.container;
+		},
+
+		handleClickOnItemContainer: function(){},
+		handleKeyPress: function(){},
+	};
+	/**
 	 * @param type
 	 * @param {HTMLElement} node
 	 * @return {BX.UI.Viewer.Item}
@@ -1655,6 +1769,10 @@
 			var nodes = BX.findChildren(container, filter, true);
 			var indexToShow = 0;
 			var targetNode = BX.getEventTarget(event);
+			if (targetNode.tagName !== 'A' && targetNode.closest('a[target="_blank"]'))
+			{
+				return false;
+			}
 
 			var items = nodes.map(function(node, index) {
 				if (node === targetNode)
@@ -1671,6 +1789,19 @@
 			event.preventDefault();
 		});
 	};
+
+	var shouldLoadExtensions = function(extension) {
+		if (extension === 'disk.viewer.actions' && BX.getClass('BX.Disk.Viewer.Actions'))
+		{
+			return false;
+		}
+		if (extension === 'disk.viewer.document-item' && BX.getClass('BX.Disk.Viewer.DocumentItem'))
+		{
+			return false;
+		}
+
+		return true;
+	}
 
 
 	var instance = null;

@@ -6,20 +6,28 @@ use \Bitrix\Main\Config\Option;
 class Stepper
 {
 	/**
-	 * list of updaters classes, then can be show in progress bar
+	 * list of updaters classes, then can be show in progress bar.
 	 * @return array
 	 */
-	private static function getUpdaterClasses()
+	private static function getUpdaterClasses(): array
 	{
 		return array(
 			'Bitrix\Landing\Update\Block\NodeAttributes',
 			'Bitrix\Landing\Update\Block\NodeImg',
+			'Bitrix\Landing\Update\Block\FixSrcImg',
+			'Bitrix\Landing\Update\Block\SearchContent',
+			'Bitrix\Landing\Update\Block\LastUsed',
 			'Bitrix\Landing\Update\Block',
-			'Bitrix\Landing\Update\Domain\Check'
+			'Bitrix\Landing\Update\Landing\InitApp',
+			'Bitrix\Landing\Update\Landing\SearchContent',
+			'Bitrix\Landing\Update\Domain\Check',
+			'Bitrix\Landing\Update\Assets\WebpackClear',
+			'Bitrix\Landing\Update\Assets\FontFix',
+			'Bitrix\Landing\Update\Assets\FontWeightFix',
 		);
 	}
-	
-	
+
+
 	/**
 	 * Show some stepper if need.
 	 * @return void
@@ -41,8 +49,11 @@ class Stepper
 				// if not exist agent - something went wrong, need rollback
 				else
 				{
-					Option::delete('main.stepper.' . $moduleId, $className);
-					
+					Option::delete(
+						'main.stepper.' . $moduleId,
+						['name' => $className]
+					);
+
 					// journal
 					$eventLog = new \CEventLog;
 					$eventLog->Add(array(
@@ -75,10 +86,10 @@ class Stepper
 	public static function checkAgentActivity($className)
 	{
 		global $DB;
-		
+
 		$className = trim($className, '\\');
 		$name = $DB->ForSql($className . '::execAgent();');
-		
+
 		$res = $DB->Query("
 			SELECT ID
 			FROM b_agent
@@ -89,7 +100,7 @@ class Stepper
 		{
 			return false;
 		}
-		
+
 		return true;
 	}
 }

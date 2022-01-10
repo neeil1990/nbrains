@@ -5,7 +5,9 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 }
 
 use Bitrix\Main\Loader;
-use \Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\ModuleManager;
+use Bitrix\Crm;
 
 Loc::loadMessages(__FILE__);
 
@@ -43,10 +45,14 @@ class LandingUtilsCmpFilterComponent extends \CBitrixComponent
 	 * @param string $q Query string.
 	 * @return array
 	 */
-	protected static function search($q)
+	protected static function search($q): array
 	{
 		$filter = array();
 		$q = trim($q);
+		if ($q === '')
+		{
+			return $filter;
+		}
 
 		if (
 			self::ENABLED_SEARCH_MODULE &&
@@ -77,17 +83,70 @@ class LandingUtilsCmpFilterComponent extends \CBitrixComponent
 				);
 			}
 			$obSearch->navStart(500);
+			$found = false;
 			while ($row = $obSearch->fetch())
 			{
+				$found = true;
 				$filter['ID'][] = $row['ITEM_ID'];
+			}
+			if (!$found)
+			{
+				unset($filter['ID']);
+				$filter['*SEARCHABLE_CONTENT'] = $q;
 			}
 		}
 		else
 		{
-			$filter['?NAME'] = '%' . $q . '%';
+			$filter = self::getContentFilter($q);
 		}
 
 		return $filter;
+	}
+
+	/**
+	 * Generate filter for bitrix24 catalog.
+	 *
+	 * @internal
+	 *
+	 * @param string $query
+	 * @return array
+	 */
+	protected static function getContentFilter(string $query): array
+	{
+		if (
+			ModuleManager::isModuleInstalled('bitrix24')
+			&& Loader::includeModule('crm')
+			&& Loader::includeModule('catalog')
+		)
+		{
+			$catalogId = Crm\Product\Catalog::getDefaultId();
+			if (!empty($catalogId))
+			{
+				$catalog = \CCatalogSku::GetInfoByProductIBlock($catalogId);
+				if (!empty($catalog))
+				{
+					return [
+						[
+							'LOGIC' => 'OR',
+							'*SEARCHABLE_CONTENT' => $query,
+							'=SUBQUERY' => [
+								'FIELD' => 'PROPERTY_'.$catalog['SKU_PROPERTY_ID'],
+								'FILTER' => [
+									'CHECK_PERMISSIONS' => 'Y',
+									'MIN_PERMISSION' => 'R',
+									'ACTIVE' => 'Y',
+									'ACTIVE_DATE' => 'Y',
+									'IBLOCK_ID' => $catalog['IBLOCK_ID'],
+									'*SEARCHABLE_CONTENT' => $query,
+								]
+							],
+						]
+					];
+				}
+			}
+		}
+
+		return ['*SEARCHABLE_CONTENT' => $query];
 	}
 
 	/**
@@ -96,6 +155,11 @@ class LandingUtilsCmpFilterComponent extends \CBitrixComponent
 	 */
 	public function executeComponent()
 	{
+		if (!Loader::includeModule('landing'))
+		{
+			return;
+		}
+
 		if (
 			isset($this->arParams['FILTER']) &&
 			isset($this->arParams['FILTER_NAME']) &&
@@ -103,6 +167,7 @@ class LandingUtilsCmpFilterComponent extends \CBitrixComponent
 			trim($this->arParams['FILTER_NAME']) != ''
 		)
 		{
+			$this->arParams['FILTER_NAME'] = trim($this->arParams['FILTER_NAME']);
 			$filter = array();
 			$request = \Bitrix\Main\Application::getInstance()->getContext()->getRequest();
 			foreach ($this->getFilterFields() as $itemFilter)
@@ -151,7 +216,14 @@ class LandingUtilsCmpFilterComponent extends \CBitrixComponent
 
 			if (!empty($filter))
 			{
-				$GLOBALS[trim($this->arParams['FILTER_NAME'])] = $filter;
+				if (
+					isset($GLOBALS[$this->arParams['FILTER_NAME']]) &&
+					is_array($GLOBALS[$this->arParams['FILTER_NAME']])
+				)
+				{
+					$filter = array_merge($filter, $GLOBALS[$this->arParams['FILTER_NAME']]);
+				}
+				$GLOBALS[$this->arParams['FILTER_NAME']] = $filter;
 			}
 		}
 	}

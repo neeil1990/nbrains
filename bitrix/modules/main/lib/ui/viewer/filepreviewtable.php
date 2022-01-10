@@ -9,6 +9,22 @@ use Bitrix\Main\ORM\Event;
 use Bitrix\Main\Type\Date;
 use Bitrix\Main\Type\DateTime;
 
+/**
+ * Class FilePreviewTable
+ *
+ * DO NOT WRITE ANYTHING BELOW THIS
+ *
+ * <<< ORMENTITYANNOTATION
+ * @method static EO_FilePreview_Query query()
+ * @method static EO_FilePreview_Result getByPrimary($primary, array $parameters = array())
+ * @method static EO_FilePreview_Result getById($id)
+ * @method static EO_FilePreview_Result getList(array $parameters = array())
+ * @method static EO_FilePreview_Entity getEntity()
+ * @method static \Bitrix\Main\UI\Viewer\EO_FilePreview createObject($setDefaultValues = true)
+ * @method static \Bitrix\Main\UI\Viewer\EO_FilePreview_Collection createCollection()
+ * @method static \Bitrix\Main\UI\Viewer\EO_FilePreview wakeUpObject($row)
+ * @method static \Bitrix\Main\UI\Viewer\EO_FilePreview_Collection wakeUpCollection($rows)
+ */
 final class FilePreviewTable extends DataManager
 {
 	/** @var array */
@@ -83,8 +99,13 @@ final class FilePreviewTable extends DataManager
 
 		foreach ($files as $file)
 		{
-			self::deleteContent($file);
-			self::delete($file['ID']);
+			$keepImage = isset($file['PREVIEW_IMAGE_ID']);
+
+			self::deleteContent($file, $keepImage);
+			if (!$keepImage)
+			{
+				self::delete($file['ID']);
+			}
 		}
 	}
 
@@ -112,7 +133,7 @@ final class FilePreviewTable extends DataManager
 		self::deleteContent($file);
 	}
 
-	protected static function deleteContent(array $file)
+	protected static function deleteContent(array $file, $keepImage = false)
 	{
 		if (isset(self::$alreadyDeleted[$file['ID']]))
 		{
@@ -122,7 +143,10 @@ final class FilePreviewTable extends DataManager
 		self::$alreadyDeleted[$file['ID']] = true;
 
 		\CFile::delete($file['PREVIEW_ID']);
-		\CFile::delete($file['PREVIEW_IMAGE_ID']);
+		if (!$keepImage)
+		{
+			\CFile::delete($file['PREVIEW_IMAGE_ID']);
+		}
 	}
 
 	/**

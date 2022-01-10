@@ -1,22 +1,7 @@
 <?
-CModule::AddAutoloadClasses(
-	"rest",
-	array(
-		"CRestServer" => "classes/general/rest.php",
-		"CRestUtil" => "classes/general/rest_util.php",
 
-		"CRestEvent" => "classes/general/rest_event.php",
-		"CRestEventCallback" => "classes/general/rest_event.php",
-		"CRestEventSession" => "classes/general/rest_event.php",
+require_once __DIR__.'/autoload.php';
 
-		"IRestService" => "classes/general/rest.php",
-		"CRestProvider" => "classes/general/rest_provider.php",
-
-		"CBitrixRestEntity" => "classes/general/restentity.php",
-
-		"CRestServerBatchItem" => "classes/general/rest.php",
-	)
-);
 
 class CRestEventHandlers
 {
@@ -25,7 +10,7 @@ class CRestEventHandlers
 		if($_SERVER['REQUEST_METHOD'] == 'OPTIONS')
 		{
 			$p = COption::GetOptionString("rest", "server_path", "/rest")."/";
-			if(substr(strtolower($_SERVER['REQUEST_URI']), 0, strlen($p)) === $p)
+			if(mb_substr(mb_strtolower($_SERVER['REQUEST_URI']), 0, mb_strlen($p)) === $p)
 			{
 				if(!defined('BX24_REST_SKIP_SEND_HEADERS'))
 				{
@@ -40,8 +25,15 @@ class CRestEventHandlers
 
 CJSCore::registerExt('marketplace', array(
 	'js' => '/bitrix/js/rest/marketplace.js',
+	'css' => '/bitrix/js/rest/css/marketplace.css',
 	'lang' => BX_ROOT.'/modules/rest/lang/'.LANGUAGE_ID.'/jsmarketplace.php',
-	'rel' => array('ajax', 'popup', 'access', 'sidepanel'),
+	'lang_additional' => array(
+		'REST_MARKETPLACE_CATEGORY_URL' => \Bitrix\Rest\Marketplace\Url::getCategoryUrl(),
+		'REST_BUY_SUBSCRIPTION_URL' => \Bitrix\Rest\Marketplace\Url::getSubscriptionBuyUrl(),
+		'CAN_BUY_SUBSCRIPTION' => \Bitrix\Rest\Marketplace\Client::canBuySubscription() ? 'Y' : 'N',
+		'CAN_ACTIVATE_DEMO_SUBSCRIPTION' => \Bitrix\Rest\Marketplace\Client::isSubscriptionDemoAvailable() ? 'Y' : 'N',
+	),
+	'rel' => array('ajax', 'popup', 'access', 'sidepanel', 'ui.notification'),
 ));
 
 CJSCore::registerExt('applayout', array(
@@ -49,7 +41,9 @@ CJSCore::registerExt('applayout', array(
 	'css' => '/bitrix/js/rest/css/applayout.css',
 	'lang' => BX_ROOT.'/modules/rest/lang/'.LANGUAGE_ID.'/jsapplayout.php',
 	'lang_additional' => array(
-		'REST_APPLICATION_URL' => '/bitrix/components/bitrix/app.layout/lazyload.ajax.php'
+		'REST_APPLICATION_URL' => \Bitrix\Rest\Marketplace\Url::getApplicationUrl(),
+		'REST_APPLICATION_VIEW_URL' => \Bitrix\Rest\Marketplace\Url::getApplicationPlacementViewUrl(),
+		'REST_PLACEMENT_URL' => \Bitrix\Rest\Marketplace\Url::getApplicationPlacementUrl()
 	),
 	'rel' => array('ajax', 'popup', 'sidepanel'),
 ));
@@ -60,13 +54,24 @@ CJSCore::registerExt('appplacement', array(
 ));
 
 CJSCore::registerExt('restclient', array(
-	'js' => '/bitrix/js/rest/client/rest.client.js',
 	'skip_core' => true,
-	'rel' => array('promise'),
+	'rel' => array('rest.client'),
 ));
 
 CJSCore::registerExt('rest_userfield', array(
 	'js' => '/bitrix/js/rest/userfield.js',
 	'rel' => array('applayout'),
 ));
+
+CJSCore::registerExt(
+	'rest.integration',
+	[
+		'js' => '/bitrix/js/rest/integration.js',
+		'lang' => BX_ROOT.'/modules/rest/jsintegration.php',
+		'rel' => [
+			'ajax',
+			'ui.notification',
+		],
+	]
+);
 ?>

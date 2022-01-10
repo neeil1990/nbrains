@@ -1,6 +1,8 @@
 <?php
 namespace Bitrix\Landing\Node;
 
+use Bitrix\Main\Web\DOM\StyleInliner;
+
 class Embed extends \Bitrix\Landing\Node
 {
 	/**
@@ -14,12 +16,12 @@ class Embed extends \Bitrix\Landing\Node
 
 	/**
 	 * Save data for this node.
-	 * @param \Bitrix\Landing\Block &$block Block instance.
+	 * @param \Bitrix\Landing\Block $block Block instance.
 	 * @param string $selector Selector.
 	 * @param array $data Data array.
 	 * @return void
 	 */
-	public static function saveNode(\Bitrix\Landing\Block &$block, $selector, array $data)
+	public static function saveNode(\Bitrix\Landing\Block $block, $selector, array $data)
 	{
 		$doc = $block->getDom();
 		$resultList = $doc->querySelectorAll($selector);
@@ -30,23 +32,51 @@ class Embed extends \Bitrix\Landing\Node
 			{
 				if (isset($value['src']) && $value['src'])
 				{
-					$resultList[$pos]->setAttribute('src', $value['src']);
+					if($resultList[$pos]->getTagName() === 'IFRAME')
+					{
+						$resultList[$pos]->setAttribute('src', $value['src']);
+					}
+					else
+					{
+						$resultList[$pos]->setAttribute('data-src', $value['src']);
+					}
 				}
 				if (isset($value['source']) && $value['source'])
 				{
 					$resultList[$pos]->setAttribute('data-source', $value['source']);
 				}
+
+//				set preview image
+                $styles = [];
+                foreach (StyleInliner::getStyle($resultList[$pos]) as $key => $stylesValue)
+                {
+                    if ($key !== 'background' && $key !== 'background-image')
+                    {
+                        $styles[] = "{$key}: {$stylesValue};";
+                    }
+                }
+				if (isset($value['preview']) && $value['preview'])
+				{
+					$styles[] = "background-image: url('{$value['preview']}');";
+					$resultList[$pos]->setAttribute('data-preview', $value['preview']);
+				}
+				else
+                {
+                    $resultList[$pos]->removeAttribute('data-preview');
+                }
+                $styles = implode(' ', $styles);
+                $resultList[$pos]->setAttribute('style', $styles);
 			}
 		}
 	}
 
 	/**
 	 * Get data for this node.
-	 * @param \Bitrix\Landing\Block &$block Block instance.
+	 * @param \Bitrix\Landing\Block $block Block instance.
 	 * @param string $selector Selector.
 	 * @return array
 	 */
-	public static function getNode(\Bitrix\Landing\Block &$block, $selector)
+	public static function getNode(\Bitrix\Landing\Block $block, $selector)
 	{
 		$data = array();
 		$doc = $block->getDom();
@@ -55,8 +85,9 @@ class Embed extends \Bitrix\Landing\Node
 		foreach ($resultList as $pos => $res)
 		{
 			$data[$pos] = array(
-				'src' => $res->getAttribute('src'),
-				'data-source' => $res->getAttribute('data-source')
+				'src' => $res->getAttribute('data-src') ?: $res->getAttribute('src'),
+				'source' => $res->getAttribute('data-source'),
+				'preview' => $res->getAttribute('data-preview')
 			);
 		}
 

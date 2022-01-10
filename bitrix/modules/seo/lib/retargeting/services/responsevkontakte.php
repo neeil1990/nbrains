@@ -14,7 +14,7 @@ class ResponseVkontakte extends Response
 
 	public function parse($data)
 	{
-		$parsed = Json::decode($data);
+		$parsed = is_array($data) ? $data : Json::decode($data);
 		if ($parsed['error'])
 		{
 			$errorMessage = $parsed['error']['error_msg'];
@@ -30,6 +30,10 @@ class ResponseVkontakte extends Response
 					);
 					break;
 			}
+
+			$errorMessage = Loc::getMessage('SEO_RETARGETING_SERVICE_RESPONSE_VKONTAKTE_ERROR')
+				. ': '
+				. $errorMessage;
 			$this->addError(new Error($errorMessage, $parsed['error']['error_code']));
 		}
 

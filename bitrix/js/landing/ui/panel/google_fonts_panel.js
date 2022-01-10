@@ -43,7 +43,7 @@
 		BX.Landing.UI.Panel.Content.apply(this, [
 			"google-fonts-panel",
 			{
-				title: BX.message("LANDING_GOOGLE_FONT_PANEL_TITLE")
+				title: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_TITLE")
 			}
 		]);
 
@@ -52,8 +52,8 @@
 		addClass(this.layout, "landing-ui-panel-google-fonts");
 		addClass(this.overlay, "landing-ui-panel-google-fonts-overlay");
 		this.client = new BX.Landing.Client.GoogleFonts();
-
-		var container = top.document.body.querySelector(".landing-ui-view-container");
+		var rootWindow = BX.Landing.PageObject.getRootWindow();
+		var container = rootWindow.document.body.querySelector(".landing-ui-view-container");
 		append(this.layout, container);
 		append(this.overlay, container);
 
@@ -86,7 +86,7 @@
 		 * Shows panel
 		 * @return {Promise}
 		 */
-		show: function()
+		show: function(params)
 		{
 			var showPromise = this.superclass.show.call(this);
 
@@ -94,6 +94,18 @@
 			{
 				return showPromise
 					.then(proxy(this.saveResolver, this));
+			}
+
+			if (params)
+			{
+				if (params['hideOverlay'])
+				{
+					this.overlay.style.display = "none";
+				}
+				if (params['context'])
+				{
+					this.context = params['context'];
+				}
 			}
 
 			return showPromise
@@ -162,7 +174,14 @@
 		 */
 		showLoader: function()
 		{
-			return Promise.resolve((this.loader = this.loader || new BX.Loader({target: this.content})).show());
+			if (!this.loader)
+			{
+				this.loader = new BX.Loader({target: this.content});
+			}
+
+			this.loader.show();
+
+			return Promise.resolve();
 		},
 
 
@@ -187,6 +206,16 @@
 		 */
 		loadFonts: function(response)
 		{
+			var context;
+			if (this.context)
+			{
+				context = this.context;
+			}
+			else
+			{
+				context = top;
+			}
+
 			return new Promise(function(resolve) {
 				WebFont.load({
 					google: {
@@ -194,13 +223,14 @@
 							return font.family.replace(/ /g, "+")
 						})
 					},
-					context: top,
+					context: context,
 					classes: false,
 					active: function()
 					{
-						if (top.document.fonts)
+						var rootWindow = BX.Landing.PageObject.getRootWindow();
+						if (rootWindow.document.fonts)
 						{
-							top.document.fonts.ready
+							rootWindow.document.fonts.ready
 								.then(function() {
 									resolve(response);
 								});
@@ -282,9 +312,9 @@
 				"<div class=\"landing-ui-font-preview\">" +
 					"<div class=\"landing-ui-font-preview-font-name\">"+options.family+"</div>" +
 					"<div class=\"landing-ui-font-preview-font-button\">" +
-						"<span class=\"ui-btn ui-btn-xs ui-btn-light-border ui-btn-round\">"+BX.message("LANDING_GOOGLE_FONT_SELECT_BUTTON")+"</span>" +
+						"<span class=\"ui-btn ui-btn-xs ui-btn-light-border ui-btn-round\">"+BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_SELECT_BUTTON")+"</span>" +
 					"</div>" +
-					"<div style=\"font-family: "+options.family+"; direction: "+direction+";\" class=\"landing-ui-font-preview-pangram\" contenteditable=\"true\">" +
+					"<div style=\"font-family: "+options.family+"; direction: "+direction+";\" class=\"landing-ui-font-preview-pangram\" contenteditable=\"true\" onpaste=\"return false;\">" +
 						pangram +
 					"</div>" +
 				"</div>"
@@ -355,7 +385,7 @@
 		createLanguageForm: function()
 		{
 			var form = new BX.Landing.UI.Form.StyleForm({
-				title: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_FORM_TITLE")
+				title: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_FORM_TITLE")
 			});
 
 			var fieldFactory = new BX.Landing.UI.Factory.FieldFactory({
@@ -367,11 +397,11 @@
 			form.addField(fieldFactory.create({
 				type: "radio",
 				items: [
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_CYRILLIC"), value: "cyrillic", checked: RU},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_LATIN"), value: "latin", checked: !RU},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_ARABIC"), value: "arabic"},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_HEBREW"), value: "hebrew"},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_KOREAN"), value: "korean"}
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_CYRILLIC"), value: "cyrillic", checked: RU},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_LATIN"), value: "latin", checked: !RU},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_ARABIC"), value: "arabic"},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_HEBREW"), value: "hebrew"},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_LANGUAGE_KOREAN"), value: "korean"}
 				]
 			}));
 
@@ -386,7 +416,7 @@
 		createCategoryForm: function()
 		{
 			var form = new BX.Landing.UI.Form.StyleForm({
-				title: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_FORM_TITLE")
+				title: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_FORM_TITLE")
 			});
 			var fieldFactory = new BX.Landing.UI.Factory.FieldFactory({
 				onValueChange: proxy(this.onFilterChange, this)
@@ -395,11 +425,11 @@
 			form.addField(fieldFactory.create({
 				type: "checkbox",
 				items: [
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_SANS_SERIF"), value: "sans-serif", checked: true},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_SERIF"), value: "serif", checked: true},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_DISPLAY"), value: "display", checked: true},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_HANDWRITING"), value: "handwriting", checked: true},
-					{name: BX.message("LANDING_GOOGLE_FONT_PANEL_CATEGORY_MONOSPACE"), value: "monospace", checked: true}
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_SANS_SERIF"), value: "sans-serif", checked: true},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_SERIF"), value: "serif", checked: true},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_DISPLAY"), value: "display", checked: true},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_HANDWRITING"), value: "handwriting", checked: true},
+					{name: BX.Landing.Loc.getMessage("LANDING_GOOGLE_FONT_PANEL_CATEGORY_MONOSPACE"), value: "monospace", checked: true}
 				]
 			}));
 

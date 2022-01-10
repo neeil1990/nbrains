@@ -26,6 +26,11 @@ class CRestProvider
 		"nfr" => "nfr",
 		"tf" => "tf",
 		"crm" => "crm",
+		"tasks" => "tasks",
+		"basic" => "basic",
+		"std" => "std",
+		"pro" => "pro",
+		"ent" => "ent",
 	);
 
 	protected static $arApp = null;
@@ -108,12 +113,18 @@ class CRestProvider
 							)
 						),
 					),
+					\CRestUtil::PLACEMENTS => array(
+						\CRestUtil::PLACEMENT_APP_URI => array(
+							'max_count' => 1
+						)
+					)
 				),
 			);
 
 			if(!\Bitrix\Main\ModuleManager::isModuleInstalled('oauth'))
 			{
 				$ownMethods[\CRestUtil::GLOBAL_SCOPE]['app.info'] = array(__CLASS__, 'appInfo');
+				$ownMethods[\CRestUtil::GLOBAL_SCOPE]['feature.get'] = array(__CLASS__, 'getFeature');
 			}
 
 			$arDescription = array();
@@ -312,7 +323,7 @@ class CRestProvider
 
 		if($arQuery['FULL'] == true)
 		{
-			$arScope = \CRestUtil::getScopeList($server->getServiceDescription());
+			$arScope = \Bitrix\Rest\Engine\ScopeManager::getInstance()->listScope();
 		}
 		else
 		{
@@ -372,23 +383,17 @@ class CRestProvider
 
 	public static function appInfo($params, $n, \CRestServer $server)
 	{
+		$licensePrevious = '';
 		if(\Bitrix\Main\ModuleManager::isModuleInstalled('bitrix24'))
 		{
-			$licenseInfo = COption::GetOptionString("main", "~controller_group_name");
+			$result = self::getBitrix24LicenseName();
+			$license = $result['LICENSE'];
 
-			list($lang, $licenseName, $additional) = explode("_", $licenseInfo, 3);
-
-			if(!array_key_exists($licenseName, static::$licenseList))
+			if ($result['TYPE'] == 'demo')
 			{
-				$licenseName = static::LICENSE_DEFAULT;
+				$result = self::getBitrix24LicenseName(\CBitrix24::LICENSE_TYPE_PREVIOUS);
+				$licensePrevious = $result['LICENSE'];
 			}
-
-			if(!$lang)
-			{
-				$lang = LANGUAGE_ID;
-			}
-
-			$license = $lang."_".static::$licenseList[$licenseName];
 		}
 		else
 		{
@@ -409,9 +414,18 @@ class CRestProvider
 				'INSTALLED' => $arApp['INSTALLED'] == \Bitrix\Rest\AppTable::INSTALLED,
 				'PAYMENT_EXPIRED' => $info['PAYMENT_EXPIRED'],
 				'DAYS' => $info['DAYS_LEFT'],
-				'LICENSE' => $license,
 				'LANGUAGE_ID' => \CRestUtil::getLanguage(),
+				'LICENSE' => $license,
 			);
+			if ($licensePrevious)
+			{
+				$res['LICENSE_PREVIOUS'] = $licensePrevious;
+			}
+			if (CModule::IncludeModule('bitrix24'))
+			{
+				$res['LICENSE_TYPE'] = CBitrix24::getLicenseType();
+				$res['LICENSE_FAMILY'] = CBitrix24::getLicenseFamily();
+			}
 
 			$server->setSecurityState($res);
 		}
@@ -445,6 +459,69 @@ class CRestProvider
 	}
 
 	/**
+	 * Return feature information.
+	 *
+	 * @param $params
+	 * @param $n
+	 * @param CRestServer $server
+	 *
+	 * @return array
+	 *
+	 * @throws RestException
+	 * @throws \Bitrix\Main\LoaderException
+	 */
+	public static function getFeature($params, $n, \CRestServer $server)
+	{
+		$params = array_change_key_case($params, CASE_UPPER);
+		$result = [
+			'value' => '',
+		];
+		if (empty($params['CODE']))
+		{
+			throw new RestException(
+				'CODE can\'t be empty',
+				'CODE_EMPTY',
+				\CRestServer::STATUS_WRONG_REQUEST
+			);
+		}
+
+		if(\Bitrix\Main\ModuleManager::isModuleInstalled('bitrix24') && Loader::includeModule('bitrix24'))
+		{
+			$result['value'] = \Bitrix\Bitrix24\Feature::isFeatureEnabled($params['CODE']) ? 'Y' : 'N';
+		}
+		else
+		{
+			foreach (GetModuleEvents('rest', 'onRestGetFeature', true) as $event)
+			{
+				$eventData = ExecuteModuleEventEx(
+					$event,
+					[
+						$params['CODE'],
+					]
+				);
+				if (is_array($eventData))
+				{
+					if ($eventData['value'] === true || $eventData['value'] === 'Y')
+					{
+						$result['value'] = 'Y';
+					}
+					else
+					{
+						$result['value'] = 'N';
+					}
+				}
+			}
+
+			if (empty($result['value']))
+			{
+				$result['value'] = LANGUAGE_ID . '_selfhosted';
+			}
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Gets application option values
 	 *
 	 * @param array $params array([option => option_name])
@@ -473,9 +550,9 @@ class CRestProvider
 
 		$appOptions = Option::get("rest", "options_".$server->getClientId(), "");
 
-		if(strlen($appOptions) > 0)
+		if($appOptions <> '')
 		{
-			$appOptions = unserialize($appOptions);
+			$appOptions = unserialize($appOptions, ['allowed_classes' => false]);
 		}
 		else
 		{
@@ -525,9 +602,9 @@ class CRestProvider
 		if(\CRestUtil::isAdmin())
 		{
 			$appOptions = Option::get("rest", "options_".$server->getClientId(), "");
-			if(strlen($appOptions) > 0)
+			if($appOptions <> '')
 			{
-				$appOptions = unserialize($appOptions);
+				$appOptions = unserialize($appOptions, ['allowed_classes' => false]);
 			}
 			else
 			{
@@ -675,6 +752,36 @@ class CRestProvider
 		}
 
 		throw new Exception('Wrong app!');
+	}
+
+	private static function getBitrix24LicenseName($licenseType = \CBitrix24::LICENSE_TYPE_CURRENT)
+	{
+		if (!\Bitrix\Main\ModuleManager::isModuleInstalled('bitrix24'))
+		{
+			return null;
+		}
+
+		$licenseOption = ($licenseType == \CBitrix24::LICENSE_TYPE_CURRENT? "~controller_group_name": "~prev_controller_group_name");
+
+		$licenseInfo = COption::GetOptionString("main", $licenseOption);
+
+		[$lang, $licenseName, $additional] = explode("_", $licenseInfo, 3);
+
+		if(!array_key_exists($licenseName, static::$licenseList))
+		{
+			$licenseName = static::LICENSE_DEFAULT;
+		}
+
+		if(!$lang)
+		{
+			$lang = LANGUAGE_ID;
+		}
+
+		return [
+			'LANG' => $lang,
+			'TYPE' => static::$licenseList[$licenseName],
+			'LICENSE' => $lang."_".static::$licenseList[$licenseName]
+		];
 	}
 
 	protected static function getApp(\CRestServer $server)

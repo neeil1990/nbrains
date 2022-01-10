@@ -10,6 +10,19 @@ use Bitrix\Main\Application;
 /**
  * Class NumeratorSequenceTable
  * @package Bitrix\Main\Numerator\Model
+ *
+ * DO NOT WRITE ANYTHING BELOW THIS
+ *
+ * <<< ORMENTITYANNOTATION
+ * @method static EO_NumeratorSequence_Query query()
+ * @method static EO_NumeratorSequence_Result getByPrimary($primary, array $parameters = array())
+ * @method static EO_NumeratorSequence_Result getById($id)
+ * @method static EO_NumeratorSequence_Result getList(array $parameters = array())
+ * @method static EO_NumeratorSequence_Entity getEntity()
+ * @method static \Bitrix\Main\Numerator\Model\EO_NumeratorSequence createObject($setDefaultValues = true)
+ * @method static \Bitrix\Main\Numerator\Model\EO_NumeratorSequence_Collection createCollection()
+ * @method static \Bitrix\Main\Numerator\Model\EO_NumeratorSequence wakeUpObject($row)
+ * @method static \Bitrix\Main\Numerator\Model\EO_NumeratorSequence_Collection wakeUpCollection($rows)
  */
 class NumeratorSequenceTable extends DataManager
 {
@@ -124,7 +137,7 @@ class NumeratorSequenceTable extends DataManager
 			$result = static::add([
 				'NUMERATOR_ID'         => $numeratorId,
 				'KEY'                  => md5($numberHash),
-				'TEXT_KEY'             => substr($numberHash, 0, 50),
+				'TEXT_KEY'             => mb_substr($numberHash, 0, 50),
 				'LAST_INVOCATION_TIME' => $lastInvocationTime,
 				'NEXT_NUMBER'          => $defaultNumber,
 			]);
@@ -136,7 +149,7 @@ class NumeratorSequenceTable extends DataManager
 		}
 		catch (SqlQueryException $exc)
 		{
-			if (stripos($exc->getMessage(), "Duplicate entry") !== false)
+			if (mb_stripos($exc->getMessage(), "Duplicate entry") !== false)
 			{
 				return [];
 			}

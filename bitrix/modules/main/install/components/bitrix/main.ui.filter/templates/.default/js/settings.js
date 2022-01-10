@@ -71,6 +71,7 @@
 		this.classDisabled = 'main-ui-disable';
 		this.classAnimationShow = 'main-ui-popup-show-animation';
 		this.classAnimationClose = 'main-ui-popup-close-animation';
+		this.classLimitsAnimation = 'main-ui-filter-field-limits-animate';
 		this.classSidebarControlsContainer = 'main-ui-filter-add-container';
 		this.searchContainerPostfix = '_search_container';
 		this.classPresetButtonsContainer = 'main-ui-filter-field-preset-button-container';

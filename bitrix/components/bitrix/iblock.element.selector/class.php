@@ -41,6 +41,7 @@ class IblockElementSelector extends CBitrixComponent
 		$params['ON_CHANGE'] = !empty($params['ON_CHANGE']) ? $params['ON_CHANGE'] : '';
 		$params['ON_SELECT'] = !empty($params['ON_SELECT']) ? $params['ON_SELECT'] : '';
 		$params['ON_UNSELECT'] = !empty($params['ON_UNSELECT']) ? $params['ON_UNSELECT'] : '';
+		$params['TEMPLATE_URL'] = $params['TEMPLATE_URL'] ?: '';
 
 		return $params;
 	}
@@ -108,25 +109,30 @@ class IblockElementSelector extends CBitrixComponent
 		$this->arResult['LAST_ELEMENTS'] = [];
 		if($this->arResult['ACCESS_DENIED'] == 'Y')
 			return;
+		if ($this->arParams['IBLOCK_ID'] <= 0)
+		{
+			return;
+		}
 
-		$filter = [];
-		if ($this->arParams['IBLOCK_ID'] > 0)
-			$filter['IBLOCK_ID'] = $this->arParams['IBLOCK_ID'];
-		$filter['CHECK_PERMISSIONS'] = 'Y';
-		$filter['MIN_PERMISSION'] = $this->arResult['MIN_PERMISSION'];
+		$filter = [
+			'IBLOCK_ID' => $this->arParams['IBLOCK_ID'],
+			'CHECK_PERMISSIONS' => 'Y',
+			'MIN_PERMISSION' => $this->arResult['MIN_PERMISSION'],
+		];
 
 		$queryObject = CIBlockElement::GetList(
 			['ID' => 'DESC'],
 			$filter,
 			false,
 			['nTopCount' => 20],
-			['ID', 'IBLOCK_ID', 'NAME']
+			['ID', 'IBLOCK_ID', 'NAME', 'IBLOCK_SECTION_ID']
 		);
 		while($element = $queryObject->fetch())
 		{
 			$this->arResult['LAST_ELEMENTS'][] = [
 				'ID' => $element['ID'],
-				'NAME' => '['.$element['ID'].'] '.$element['NAME']
+				'NAME' => '['.$element['ID'].'] '.$element['NAME'],
+				'URL' => $this->getUrlToElement($element['ID'], $element['IBLOCK_ID'], $element['IBLOCK_SECTION_ID']),
 			];
 		}
 		unset($element, $queryObject);
@@ -149,16 +155,41 @@ class IblockElementSelector extends CBitrixComponent
 			$filter,
 			false,
 			false,
-			['ID', 'IBLOCK_ID', 'NAME']
+			['ID', 'IBLOCK_ID', 'NAME', 'IBLOCK_SECTION_ID']
 		);
 		while($element = $queryObject->fetch())
 		{
 			$this->arResult['CURRENT_ELEMENTS'][] = [
 				'ID' => $element['ID'],
-				'NAME' => '['.$element['ID'].'] '.$element['NAME']
+				'NAME' => '['.$element['ID'].'] '.$element['NAME'],
+				'URL' => $this->getUrlToElement($element['ID'], $element['IBLOCK_ID'], $element['IBLOCK_SECTION_ID']),
 			];
 		}
 		unset($element, $queryObject);
+	}
+
+	private function getUrlToElement($elementId, $iblockId, $sectionId)
+	{
+		if (!$this->arParams['TEMPLATE_URL'])
+		{
+			return '';
+		}
+
+		$socnetGroupId = null;
+		$queryObject = \CIBlock::getList([], ['ID' => $iblockId, 'CHECK_PERMISSIONS' => 'N']);
+		while ($iblock = $queryObject->fetch())
+		{
+			$socnetGroupId = $iblock['SOCNET_GROUP_ID'];
+		}
+
+		$sectionId = $sectionId ?: 0;
+		$socnetGroupId = $socnetGroupId ?: 0;
+
+		return str_replace(
+			['#list_id#', '#section_id#', '#element_id#', '#group_id#'],
+			[$iblockId, $sectionId, $elementId, $socnetGroupId],
+			$this->arParams['TEMPLATE_URL']
+		);
 	}
 
 	protected function fillResult()
@@ -175,6 +206,8 @@ class IblockElementSelector extends CBitrixComponent
 		$this->arResult['ON_CHANGE'] = $this->arParams['ON_CHANGE'];
 		$this->arResult['ON_SELECT'] = $this->arParams['ON_SELECT'];
 		$this->arResult['ON_UNSELECT'] = $this->arParams['ON_UNSELECT'];
+
+		$this->arResult['TEMPLATE_URL'] = $this->arParams['TEMPLATE_URL'];
 
 		$this->arResult['CURRENT_ELEMENTS_ID'] = $this->arParams['CURRENT_ELEMENTS_ID'];
 	}

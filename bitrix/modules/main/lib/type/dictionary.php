@@ -2,7 +2,7 @@
 namespace Bitrix\Main\Type;
 
 class Dictionary
-	implements \ArrayAccess, \Iterator, \Countable
+	implements \ArrayAccess, \Iterator, \Countable, \JsonSerializable
 {
 	/**
 	 * @var array
@@ -40,7 +40,30 @@ class Dictionary
 		return null;
 	}
 
-	public function set(array $values)
+	public function set($name, $value = null)
+	{
+		if (is_array($name))
+		{
+			$this->values = $name;
+		}
+		else
+		{
+			$this->values[$name] = $value;
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getValues()
+	{
+		return $this->values;
+	}
+
+	/**
+	 * @param $values
+	 */
+	public function setValues($values)
 	{
 		$this->values = $values;
 	}
@@ -160,4 +183,13 @@ class Dictionary
 	{
 		return empty($this->values);
 	}
+
+	/**
+	 * JsonSerializable::jsonSerialize — Specify data which should be serialized to JSON
+	 * @return array
+	 */
+	public function jsonSerialize()
+	{
+		return $this->values;
+    }
 }

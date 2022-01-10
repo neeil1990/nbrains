@@ -52,7 +52,17 @@ class LandingBlock
 	}
 
 	/**
-	 * Main executable method.
+	 *  Method, which executes just before creating the block (first add on page).
+	 * @param Block $block Block instance.
+	 * @return void
+	 */
+	public function beforeAdd(Block $block)
+	{
+
+	}
+
+	/**
+	 *  Method, which executes just before block.
 	 * @param Block $block Block instance.
 	 * @return void
 	 */

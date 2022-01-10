@@ -21,7 +21,7 @@ return array(
 		'.landing-block-node-card-img' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_44.4.SLIDER_5_COLS_WITH_PRICES_NODES_LANDINGBLOCKNODECARDIMG'),
 			'type' => 'img',
-			'dimensions' => array('width' => 600, 'height' => 600),
+			'dimensions' => array('width' => 360),
 		),
 		'.landing-block-node-card-title' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_44.4.SLIDER_5_COLS_WITH_PRICES_NODES_LANDINGBLOCKNODECARDTITLE'),
@@ -43,7 +43,7 @@ return array(
 		),
 		'.landing-block-node-card-title' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_44.4.SLIDER_5_COLS_WITH_PRICES_NODES_LANDINGBLOCKNODECARDTITLE'),
-			'type' => array('typo', 'animation'),
+			'type' => ['typo', 'animation', 'heading'],
 		),
 		'.landing-block-node-card-text' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_44.4.SLIDER_5_COLS_WITH_PRICES_NODES_LANDINGBLOCKNODECARDTEXT'),
@@ -51,7 +51,7 @@ return array(
 		),
 		'.landing-block-node-card-price' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_44.4.SLIDER_5_COLS_WITH_PRICES_NODES_LANDINGBLOCKNODECARDPRICE'),
-			'type' => array('typo', 'box', 'animation'),
+			'type' => array('typo', 'box', 'animation', 'color-hover', 'background-color-hover'),
 		),
 	),
 	'assets' => array(

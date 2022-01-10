@@ -880,3 +880,166 @@
 2022-01-10 15:03:34 -  - exec CUpdateClientPartner::GetHTTPPage
 2022-01-10 15:03:34 -  - TIME GetUpdatesList(request) 0.205 sec
 2022-01-10 15:03:34 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 15:44:01 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 15:44:01 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 15:44:02 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 15:44:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 15:44:02 -  - TIME GetUpdatesList(request) 0.358 sec
+2022-01-10 15:44:02 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:34 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:48:34 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:34 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:34 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:34 -  - TIME GetUpdatesList(request) 0.255 sec
+2022-01-10 16:48:34 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:41 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:48:41 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:41 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock%2Cthebrainstech.copyiblock&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:41 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:41 -  - TIME GetUpdatesList(request) 0.268 sec
+2022-01-10 16:48:41 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:43 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:43 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:43 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=thebrainstech.copyiblock&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:43 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:43 -  - TIME LoadModulesUpdates(request) 0.255 sec
+2022-01-10 16:48:43 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:43 - S - STEP
+2022-01-10 16:48:43 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:44 -  - loadFile
+2022-01-10 16:48:44 - U - RETURN
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:44 -  - TIME UnGzipArchive 0.037 sec
+2022-01-10 16:48:44 -  - TIME UpdateStepModules 0.022 sec
+2022-01-10 16:48:44 - UPD_SUCCESS - Updated: thebrainstech.copyiblock (1.1.3)<br> - Исправление багов и недочетов.
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:44 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.3%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=thebrainstech.copyiblock&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:44 -  - TIME LoadModulesUpdates(request) 0.246 sec
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:44 - S - STEP
+2022-01-10 16:48:44 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:44 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:44 -  - loadFile
+2022-01-10 16:48:45 - U - RETURN
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:45 -  - TIME UnGzipArchive 0.031 sec
+2022-01-10 16:48:45 -  - TIME UpdateStepModules 0.021 sec
+2022-01-10 16:48:45 - UPD_SUCCESS - Updated: thebrainstech.copyiblock (1.1.4)<br> - Мелкие доработки кода.
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:45 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.4%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=thebrainstech.copyiblock&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:45 -  - TIME LoadModulesUpdates(request) 0.265 sec
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:45 - S - STEP
+2022-01-10 16:48:45 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:45 -  - loadFile
+2022-01-10 16:48:45 - U - RETURN
+2022-01-10 16:48:45 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:45 -  - TIME UnGzipArchive 0.03 sec
+2022-01-10 16:48:45 -  - TIME UpdateStepModules 0.02 sec
+2022-01-10 16:48:46 - UPD_SUCCESS - Updated: thebrainstech.copyiblock (1.1.5)<br>Благодарность
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:46 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.5%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=thebrainstech.copyiblock&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:46 -  - TIME LoadModulesUpdates(request) 0.229 sec
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:46 - S - STEP
+2022-01-10 16:48:46 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:46 -  - loadFile
+2022-01-10 16:48:46 - U - RETURN
+2022-01-10 16:48:46 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:46 -  - TIME UnGzipArchive 0.067 sec
+2022-01-10 16:48:46 - CSURUS1 - Run updater '/bitrix/updates/update_m1641822526/thebrainstech.copyiblock/updater1.1.6.php'
+2022-01-10 16:48:46 -  - TIME UpdateStepModules 0.031 sec
+2022-01-10 16:48:46 - UPD_SUCCESS - Updated: thebrainstech.copyiblock (1.1.6)<br> - Благодарность
+2022-01-10 16:48:47 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:47 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:47 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=thebrainstech.copyiblock&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:47 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:47 -  - TIME LoadModulesUpdates(request) 0.267 sec
+2022-01-10 16:48:47 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:47 - STEP - Finish - NOUPDATES
+2022-01-10 16:48:47 - STEP - Finish - NOUPDATES
+2022-01-10 16:48:53 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:48:53 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:53 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:53 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:53 -  - TIME GetUpdatesList(request) 0.237 sec
+2022-01-10 16:48:53 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:55 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:48:55 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:55 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock%2Casd.tplvars&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:55 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:56 -  - TIME GetUpdatesList(request) 0.242 sec
+2022-01-10 16:48:56 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:58 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:58 -  - TIME LoadModulesUpdates(request) 0.24 sec
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:58 - S - STEP
+2022-01-10 16:48:58 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:58 -  - loadFile
+2022-01-10 16:48:58 - U - RETURN
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:58 -  - TIME UnGzipArchive 0.063 sec
+2022-01-10 16:48:58 - CSURUS1 - Run updater '/bitrix/updates/update_m1641822538/asd.tplvars/updater1.6.0.php'
+2022-01-10 16:48:58 -  - TIME UpdateStepModules 0.01 sec
+2022-01-10 16:48:58 - UPD_SUCCESS - Updated: asd.tplvars (1.6.0)<br><li>Промежуточный фикс после обновлений главного модуля.
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:58 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:59 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.6.0%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:48:59 -  - TIME LoadModulesUpdates(request) 0.25 sec
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:59 - S - STEP
+2022-01-10 16:48:59 - LMU01 - LoadModulesUpdates-Step
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:48:59 -  - loadFile
+2022-01-10 16:48:59 - U - RETURN
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::UnGzipArchive
+2022-01-10 16:48:59 -  - TIME UnGzipArchive 0.045 sec
+2022-01-10 16:48:59 - CSURUS1 - Run updater '/bitrix/updates/update_m1641822539/asd.tplvars/updater1.6.2.php'
+2022-01-10 16:48:59 -  - TIME UpdateStepModules 0.009 sec
+2022-01-10 16:48:59 - UPD_SUCCESS - Updated: asd.tplvars (1.6.2)<br><li>Изменения под главную версию.
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::LoadModulesUpdates
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:48:59 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.6.2%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars&lim=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:48:59 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:49:00 -  - TIME LoadModulesUpdates(request) 0.26 sec
+2022-01-10 16:49:00 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:49:00 - STEP - Finish - NOUPDATES
+2022-01-10 16:49:00 - STEP - Finish - NOUPDATES
+2022-01-10 16:49:02 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:49:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:49:02 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.6.2%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:49:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:49:02 -  - TIME GetUpdatesList(request) 0.215 sec
+2022-01-10 16:49:02 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:49:38 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:49:38 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:49:38 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.6.2%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:49:38 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:49:38 -  - TIME GetUpdatesList(request) 0.254 sec
+2022-01-10 16:49:38 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 16:50:56 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 16:50:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 16:50:56 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C21.900.0%2CN%3Basd.tplvars%2C1.6.2%2CN%3Bb24connector%2C21.100.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C21.0.0%2CN%3Bclouds%2C21.100.0%2CN%3Bfileman%2C21.500.0%2CN%3Bhighloadblock%2C21.200.0%2CN%3Biblock%2C21.600.300%2CN%3Blanding%2C21.700.0%2CN%3Bmessageservice%2C21.400.0%2CN%3Bperfmon%2C21.0.0%2CN%3Brest%2C21.500.100%2CN%3Bsearch%2C21.0.100%2CN%3Bseo%2C21.600.0%2CN%3Bsocialservices%2C21.400.0%2CN%3Bthebrainstech.copyiblock%2C1.1.6%2CN%3Btranslate%2C21.100.0%2CN%3Bui%2C21.1100.0%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 16:50:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 16:50:57 -  - TIME GetUpdatesList(request) 0.253 sec
+2022-01-10 16:50:57 -  - exec CUpdateClientPartner::ParseServerData

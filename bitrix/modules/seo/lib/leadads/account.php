@@ -3,16 +3,16 @@
 namespace Bitrix\Seo\LeadAds;
 
 use Bitrix\Seo\Retargeting;
-
+use Bitrix\Seo\Retargeting\IRequestDirectly;
 /**
  * Class Account
  *
  * @package Bitrix\Seo\LeadAds
  */
-abstract class Account extends Retargeting\BaseApiObject
+abstract class Account extends Retargeting\Account
 {
-	const URL_ACCOUNT_LIST = '';
-	const URL_INFO = '';
+	public const URL_ACCOUNT_LIST = '';
+	public const URL_INFO = '';
 
 	protected static $listRowMap = array(
 		'ID' => 'ID',
@@ -36,13 +36,11 @@ abstract class Account extends Retargeting\BaseApiObject
 	/**
 	 * Get profile cached.
 	 *
-	 * @return Retargeting\Response
+	 * @return Retargeting\Response|array
 	 */
 	public function getProfileCached()
 	{
-		$profile = $this->getProfile();
-
-		return $profile;
+		return $this->getProfile();
 	}
 
 	/**
@@ -65,40 +63,4 @@ abstract class Account extends Retargeting\BaseApiObject
 		return static::URL_INFO;
 	}
 
-	/**
-	 * Get group auth adapter.
-	 *
-	 * @param string $type Type.
-	 * @return Retargeting\AuthAdapter
-	 */
-	public static function getGroupAuthAdapter($type)
-	{
-		$adapter = Retargeting\AuthAdapter::create($type . '.groups');
-
-		$row = Internals\CallbackSubscriptionTable::getRow([
-			'filter' => [
-				'=TYPE' => $type,
-			]
-		]);
-		if ($row && $row['HAS_AUTH'] !== 'Y' && $adapter->hasAuth())
-		{
-			Internals\CallbackSubscriptionTable::update($row['ID'], ['HAS_AUTH' => 'Y']);
-		}
-
-		return $adapter;
-	}
-
-	/**
-	 * Get list.
-	 *
-	 * @return Retargeting\Response
-	 */
-	abstract public function getList();
-
-	/**
-	 * Get profile.
-	 *
-	 * @return Retargeting\Response
-	 */
-	abstract public function getProfile();
 }

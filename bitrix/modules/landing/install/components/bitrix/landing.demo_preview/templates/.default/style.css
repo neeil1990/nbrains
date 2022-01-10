@@ -79,13 +79,13 @@ body {
 	padding-right: 6px;
 }
 
-.landing-template-preview-sitecolor {
+.landing-template-preview-setting-container {
 	margin-top: 21px;
-	padding-left: 6px;
+	padding-left: 0px;
 	display: flex;
 }
 
-.landing-template-preview-palette-sitecolor {
+.landing-template-preview-site-color {
 	display: block;
 	padding: 0;
 }
@@ -98,19 +98,26 @@ body {
 	max-width: 42px;
 }
 
-.landing-template-preview-palette-item-sitecolor {
-	width: 21px;
-	height: 21px;
+.landing-template-preview-palette-item span {
+	display: block;
+	padding-bottom: 100%;
+}
+
+.landing-template-site-color-item {
+	width: 35px;
+	height: 35px;
 	margin-right: 10px;
+	max-width: 35px;
+}
+
+.landing-template-preview-site-group-item
+{
+	max-width: 35px;
+	max-height: 35px;
 }
 
 .landing-template-preview-palette-item + .landing-template-preview-palette-item {
 	margin-left: 10px;
-}
-
-.landing-template-preview-palette-item span {
-	display: block;
-	padding-bottom: 100%;
 }
 
 .landing-template-preview-palette-item::before {
@@ -120,27 +127,27 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	border: 2px rgba(82, 92, 105, .45) solid;
+	border: 1px solid rgba(0, 0 ,0 , .13);
 	border-radius: 100%;
-	opacity: 0;
 	transition: all 200ms ease;
 }
 
 .landing-template-preview-palette-item.active::before {
-	opacity: 1;
 	top: -4px;
 	left: -4px;
 	right: -4px;
 	bottom: -4px;
+	border: 2px rgba(82, 92, 105, .45) solid;
 }
 
 .landing-template-preview-header {
 	padding-top: 20px;
 	padding-bottom: 12px;
 	color: #828B95;
+	align-self: center;
 }
 
-.landing-template-preview-header-sitecolor {
+.landing-template-preview-header-site-color {
 	padding: 0;
 	line-height: 21px;
 }
@@ -288,6 +295,9 @@ body {
 .landing-template-preview-title {
 	display: flex;
 	align-items: center;
+	font: 26px/26px "OpenSans-Light", Helvetica, Arial, sans-serif;
+	margin: 0;
+	word-wrap: break-word;
 }
 
 .landing-template-preview-edit-textarea {
@@ -321,4 +331,19 @@ body {
 	position: absolute;
 	left: 0;
 	top: -2px;
+}
+
+.main-color-picker-preview {
+	background: #f25a8f;
+}
+
+.template-landing24  {
+	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	-moz-osx-font-smoothing: grayscale
+}
+
+.cursor-pointer {
+	cursor: pointer;
 }

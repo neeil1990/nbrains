@@ -8,6 +8,8 @@
 
 namespace Bitrix\Main\ORM\Fields;
 
+use Bitrix\Main\ArgumentException;
+use Bitrix\Main\ArgumentTypeException;
 use Bitrix\Main\Type\DateTime;
 
 /**
@@ -17,6 +19,9 @@ use Bitrix\Main\Type\DateTime;
  */
 class DatetimeField extends DateField
 {
+	/** @var bool */
+	protected $useTimezone = true;
+
 	/**
 	 * DatetimeField constructor.
 	 *
@@ -31,6 +36,32 @@ class DatetimeField extends DateField
 	}
 
 	/**
+	 * @param bool $use
+	 * @return $this
+	 */
+	public function configureUseTimezone($use = true)
+	{
+		$this->useTimezone = (bool) $use;
+
+		return $this;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function getFetchDataModifiers()
+	{
+		$modifiers = parent::getFetchDataModifiers();
+
+		if (!$this->useTimezone)
+		{
+			$modifiers[] = [__CLASS__, 'disableTimezoneFetchModifier'];
+		}
+
+		return $modifiers;
+	}
+
+	/**
 	 * @param mixed $value
 	 *
 	 * @return \Bitrix\Main\Type\Date|DateTime
@@ -40,7 +71,14 @@ class DatetimeField extends DateField
 	{
 		if (!empty($value) && !($value instanceof DateTime))
 		{
-			return new DateTime($value);
+			$value = new DateTime($value);
+		}
+
+		if ($value instanceof DateTime)
+		{
+			$this->useTimezone
+				? $value->enableUserTime()
+				: $value->disableUserTime();
 		}
 
 		return $value;
@@ -67,6 +105,47 @@ class DatetimeField extends DateField
 	 */
 	public function convertValueToDb($value)
 	{
-		return $this->getConnection()->getSqlHelper()->convertToDbDateTime($value);
+		try
+		{
+			return $this->getConnection()->getSqlHelper()->convertToDbDateTime($value);
+		}
+		catch (ArgumentTypeException $e)
+		{
+			throw new ArgumentException(
+				"Type error in `{$this->name}` of `{$this->entity->getFullName()}`: ".$e->getMessage()
+			);
+		}
+	}
+
+	/**
+	 * @see getFetchDataModifiers()
+	 *
+	 * @param DateTime $time
+	 * @return DateTime
+	 */
+	public static function disableTimezoneFetchModifier($time)
+	{
+		if ($time !== null)
+		{
+			$time->disableUserTime();
+		}
+
+		return $time;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGetterTypeHint()
+	{
+		return '\\'.DateTime::class;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSetterTypeHint()
+	{
+		return '\\'.DateTime::class;
 	}
 }

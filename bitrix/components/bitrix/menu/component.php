@@ -20,13 +20,13 @@ else
 	$arParams["MAX_LEVEL"] = 1;
 
 //Root menu type
-if (isset($arParams["ROOT_MENU_TYPE"]) && strlen($arParams["ROOT_MENU_TYPE"]) > 0)
+if (isset($arParams["ROOT_MENU_TYPE"]) && $arParams["ROOT_MENU_TYPE"] <> '')
 	$arParams["ROOT_MENU_TYPE"] = htmlspecialcharsbx(trim($arParams["ROOT_MENU_TYPE"]));
 else
 	$arParams["ROOT_MENU_TYPE"] = "left";
 
 //Child menu type
-if (isset($arParams["CHILD_MENU_TYPE"]) && strlen($arParams["CHILD_MENU_TYPE"]) > 0)
+if (isset($arParams["CHILD_MENU_TYPE"]) && $arParams["CHILD_MENU_TYPE"] <> '')
 	$arParams["CHILD_MENU_TYPE"] = htmlspecialcharsbx(trim($arParams["CHILD_MENU_TYPE"]));
 else
 	$arParams["CHILD_MENU_TYPE"] = "left";
@@ -37,14 +37,14 @@ $arParams["USE_EXT"] = (isset($arParams["USE_EXT"]) && $arParams["USE_EXT"] == "
 $arParams["DELAY"] = (isset($arParams["DELAY"]) && $arParams["DELAY"] == "Y" ? "Y" : "N");
 
 //Allow multiple highlightning of current item in menu
-$arParams["ALLOW_MULTI_SELECT"] = ($arParams["ALLOW_MULTI_SELECT"] == "Y");
+$arParams["ALLOW_MULTI_SELECT"] = (($arParams["ALLOW_MULTI_SELECT"] ?? '') == "Y");
 
 //Find current menu item in RecalcMenu(). Cach ID depends on this parameter too
 $arParams["CACHE_SELECTED_ITEMS"] = ($arParams["CACHE_SELECTED_ITEMS"] <> "N" && $arParams["CACHE_SELECTED_ITEMS"] !== false);
 
 $curDir = $APPLICATION->GetCurDir();
 
-if($this->startResultCache(false, false, ($arParams["MENU_CACHE_USE_USERS"] === "Y"? $this->getGenerationCachePath($USER->GetID()): false)))
+if($this->startResultCache(false, false, (($arParams["MENU_CACHE_USE_USERS"] ?? '') === "Y"? $this->getGenerationCachePath($USER->GetID()): false)))
 {
 	if(defined("BX_COMP_MANAGED_CACHE"))
 		$CACHE_MANAGER->registerTag("bitrix:menu");
@@ -160,8 +160,8 @@ if($USER->IsAuthorized())
 			$position = bxstrrpos($currentAddDir, "/");
 			if ($position === false)
 				break;
-	
-			$currentAddDir = substr($currentAddDir, 0, $position+1);
+
+			$currentAddDir = mb_substr($currentAddDir, 0, $position + 1);
 		}
 	}
 	

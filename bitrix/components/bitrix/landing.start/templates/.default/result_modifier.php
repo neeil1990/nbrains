@@ -4,23 +4,62 @@ if (!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED!==true)
 	die();
 }
 
-$context = \Bitrix\Main\Application::getInstance()->getContext();
+/** @var array $arParams */
+/** @var array $arResult */
+/** @var \CMain $APPLICATION */
+
+use Bitrix\Main\Application;
+use Bitrix\Main\Localization\Loc;
+
+$context = Application::getInstance()->getContext();
+$session = Application::getInstance()->getSession();
 $request = $context->getRequest();
 
-use \Bitrix\Main\Localization\Loc;
+// some pages we should open only in slider
+if ($request->get('IFRAME') !== 'Y' && $context->getServer()->getRequestMethod() === 'GET')
+{
+	if (!in_array($this->getPageName(), ['template', 'sites', 'site_show', 'landing_view', 'roles', 'role_edit', 'notes']))
+	{
+		$session->set('LANDING_OPEN_SIDE_PANEL', Application::getInstance()->getContext()->getRequest()->getRequestUri());
+		localRedirect($arParams['PAGE_URL_SITES']);
+	}
+}
+if ($session->has('LANDING_OPEN_SIDE_PANEL'))
+{
+	?>
+	<script>
+		BX.ready(function()
+		{
+			BX.SidePanel.Instance.open('<?= \CUtil::JSEscape($session['LANDING_OPEN_SIDE_PANEL'])?>', {allowChangeHistory: false});
+		});
+	</script>
+	<?
+	$session->remove('LANDING_OPEN_SIDE_PANEL');
+}
+
+// special design for next sliders
+if (in_array($this->getPageName(), ['site_domain', 'site_domain_switch', 'site_cookies', 'notes']))
+{
+	\Bitrix\Landing\Manager::getApplication()->restartBuffer();
+	return;
+}
+
 Loc::loadMessages(dirname(__FILE__) . '/template.php');
+
+\Bitrix\Main\UI\Extension::load(['ajax', 'landing_master']);
+$disableFrame = $this->getPageName() == 'landing_view';
 
 ob_start();
 ?>
 <script type="text/javascript">
 	BX.message({
+		LANDING_TPL_JS_PAY_TARIFF_TITLE: '<?= \CUtil::jsEscape(Loc::getMessage('LANDING_TPL_JS_PAY_TARIFF_TITLE'));?>',
 		LANDING_TPL_JS_PAY_TARIFF: '<?= \CUtil::jsEscape(Loc::getMessage('LANDING_TPL_JS_PAY_TARIFF'));?>'
 	});
 </script>
 <?
 \Bitrix\Main\Page\Asset::getInstance()->addString(ob_get_contents());
 ob_end_clean();
-
 
 // prepare links
 if ($arParams['SEF_MODE'] != 'Y')
@@ -42,7 +81,7 @@ if ($arParams['SEF_MODE'] != 'Y')
 }
 
 // iframe header
-if ($request->get('IFRAME') == 'Y')
+if ($request->get('IFRAME') == 'Y' && !$disableFrame)
 {
 	\Bitrix\Landing\Manager::getApplication()->restartBuffer();
 	include 'slider_header.php';
@@ -76,24 +115,27 @@ elseif (in_array($this->getPageName(), array('template', 'site_show')))
 
 	if ($this->getPageName() == 'site_show')
 	{
-		$title = Loc::getMessage('LANDING_TPL_ADD_PAGE');
-		$link = $arParams['PAGE_URL_LANDING_EDIT'];
-		$link = str_replace(
-			array('#site_show#', '#landing_edit#'),
-			array($arResult['VARS']['site_show'], 0),
-			$link);
-
-		$folderId = $request->get($arParams['ACTION_FOLDER']);
-		if ($folderId)
+		if ($arResult['ACCESS_PAGE_NEW'] == 'Y')
 		{
-			$link = new \Bitrix\Main\Web\Uri($link);
-			$link->addParams(array(
-				$arParams['ACTION_FOLDER'] => $folderId
-			));
-			$link = $link->getUri();
+			$title = Loc::getMessage('LANDING_TPL_ADD_PAGE');
+			$link = $arParams['PAGE_URL_LANDING_EDIT'];
+			$link = str_replace(
+				array('#site_show#', '#landing_edit#'),
+				array($arResult['VARS']['site_show'], 0),
+				$link);
+
+			$folderId = $request->get($arParams['ACTION_FOLDER']);
+			if ($folderId)
+			{
+				$link = new \Bitrix\Main\Web\Uri($link);
+				$link->addParams(array(
+					$arParams['ACTION_FOLDER'] => $folderId
+				));
+				$link = $link->getUri();
+			}
 		}
 	}
-	else
+	else if ($arResult['ACCESS_SITE_NEW'] == 'Y')
 	{
 		$title = Loc::getMessage('LANDING_TPL_ADD_SITE_' . $arParams['TYPE']);
 		$link = $arParams['PAGE_URL_SITE_EDIT'];
@@ -106,6 +148,61 @@ elseif (in_array($this->getPageName(), array('template', 'site_show')))
 
 	$folderId = $request->get($arParams['ACTION_FOLDER']);
 
+	// settings menu
+	$settingsLink = [];
+	if (
+		$arResult['VARS']['site_show'] > 0 &&
+		$arResult['ACCESS_SITE_SETTINGS'] == 'Y'
+	)
+	{
+		$settingsLink[] = [
+			'TITLE' => Loc::getMessage('LANDING_TPL_SETTING_SITE'),
+			'LINK' => $linkSett = str_replace(
+				'#site_edit#',
+				$arResult['VARS']['site_show'],
+				$arParams['PAGE_URL_SITE_EDIT']
+			)
+		];
+		if ($arParams['TYPE'] == 'STORE')
+		{
+			$uriSettCatalog = new \Bitrix\Main\Web\Uri($linkSett);
+			$uriSettCatalog->addParams(['tpl' => 'catalog']);
+			$settingsLink[] = [
+				'TITLE' => Loc::getMessage('LANDING_TPL_SETTING_CATALOG'),
+				'LINK' => $uriSettCatalog->getUri()
+			];
+			unset($linkSett, $uriSettCatalog);
+		}
+	}
+	// add site import button
+	else if ($arResult['ACCESS_SITE_NEW'] == 'Y')
+	{
+		$importUrl = \Bitrix\Landing\Transfer\Import\Site::getUrl(
+			$arParams['TYPE']
+		);
+		if ($importUrl)
+		{
+			$settingsLink[] = ['TITLE' => '', 'LINK' => ''];
+			$settingsLink[] = [
+				'TITLE' => Loc::getMessage('LANDING_TPL_IMPORT_SITE_' . $arParams['TYPE']),
+				'LINK' => $importUrl
+			];
+		}
+	}
+
+	if (
+		$arResult['VARS']['site_show'] <= 0 &&
+		($arParams['TYPE'] == 'PAGE' || $arParams['TYPE'] == 'STORE') &&
+		!\Bitrix\Main\ModuleManager::isModuleInstalled('bitrix24') &&
+		\Bitrix\Main\ModuleManager::isModuleInstalled('sale')
+	)
+	{
+		$settingsLink[] = [
+			'TITLE' => Loc::getMessage('LANDING_TPL_DEV_SITE'),
+			'LINK' => '/bitrix/components/bitrix/sale.bsm.site.master/slider.php'
+		];
+	}
+
 	$APPLICATION->IncludeComponent(
 		'bitrix:landing.filter',
 		'.default',
@@ -113,25 +210,26 @@ elseif (in_array($this->getPageName(), array('template', 'site_show')))
 			'FILTER_TYPE' => $this->getPageName() == 'site_show'
 							? 'LANDING'
 							: 'SITE',
-			'SETTING_LINK' => ($arResult['VARS']['site_show'] > 0)
-								? str_replace(
-									'#site_edit#',
-									$arResult['VARS']['site_show'],
-									$arParams['PAGE_URL_SITE_EDIT']
+			'SETTING_LINK' => $settingsLink,
+			'BUTTONS' => ($link && $title)
+							? array(
+								array(
+									'LINK' => $link,
+									'TITLE' => $title
 								)
-								: '',
-			'BUTTONS' => array(
-				array(
-					'LINK' => $link,
-					'TITLE' => $title
-				)
-			),
+							)
+							: array(),
 			'TYPE' => $arParams['TYPE'],
+			'DRAFT_MODE' => $arParams['DRAFT_MODE'],
 			'FOLDER_SITE_ID' => !$folderId ? $arResult['VARS']['site_show'] : 0
 		),
 		$this->__component
 	);
+
+	unset($settingsLink);
 }
+
+include __DIR__ . '/popups/agreement.php';
 
 if (
 	$request->get('agreement') == 'Y' &&
@@ -139,5 +237,21 @@ if (
 	\Bitrix\Landing\Manager::isB24()
 )
 {
-	include __DIR__ . '/popups/agreement.php';
+	?>
+	<script type="text/javascript">
+		BX.ready(function()
+		{
+			if (typeof landingAgreementPopup !== 'undefined')
+			{
+				landingAgreementPopup();
+			}
+		});
+	</script>
+	<?
+}
+
+// backward compatibility
+if ($arResult['AGREEMENT_ACCEPTED'])
+{
+	$arResult['AGREEMENT'] = [];
 }

@@ -6,6 +6,21 @@ BX.namespace("BX.Kanban");
 
 BX.Kanban.Utils = {
 
+	/**
+	 *
+	 * @param {number} code
+	 */
+	getKeyDownName: function(code)
+	{
+		switch(code)
+		{
+			case 27:
+				return 'Escape';
+			default:
+				return false;
+		}
+	},
+
 	isValidId: function(id)
 	{
 		return BX.type.isNumber(id) || BX.type.isNotEmptyString(id);
@@ -99,6 +114,11 @@ BX.Kanban.Utils = {
 
 	showErrorDialog: function(error, fatal)
 	{
+		if (!BX.type.isNotEmptyString(error))
+		{
+			return;
+		}
+
 		var dialog = BX.PopupWindowManager.create(
 			"main-kanban-error-dialog",
 			null,

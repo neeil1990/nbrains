@@ -2,11 +2,9 @@
 
 namespace Bitrix\Main\UI\Filter;
 
-use Bitrix\Main\ModuleManager;
-use Bitrix\Main\Text\HtmlFilter;
 use Bitrix\Main\Localization\Loc;
+use Bitrix\Main\Text\HtmlFilter;
 use Bitrix\Main\Type\Date;
-
 
 Loc::loadMessages(__FILE__);
 
@@ -29,6 +27,27 @@ class Field
 		$field = array(
 			"ID" => "field_".$name,
 			"TYPE" => Type::STRING,
+			"NAME" => $name,
+			"VALUE" => $defaultValue,
+			"LABEL" => $label,
+			"PLACEHOLDER" => $placeholder
+		);
+
+		return $field;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $defaultValue
+	 * @param string $label
+	 * @param string $placeholder
+	 * @return array
+	 */
+	public static function textarea($name, $defaultValue = "", $label = "", $placeholder = "")
+	{
+		$field = array(
+			"ID" => "field_".$name,
+			"TYPE" => Type::TEXTAREA,
 			"NAME" => $name,
 			"VALUE" => $defaultValue,
 			"LABEL" => $label,
@@ -133,6 +152,7 @@ class Field
 		if (empty($values))
 		{
 			$values = array(
+				"_allow_year" => "",
 				"_from" => "",
 				"_to" => "",
 				"_days" => "",
@@ -150,6 +170,7 @@ class Field
 
 		foreach($sourceMonths as $key => $month)
 		{
+			$month = (string)$month;
 			$months[] = array(
 				"VALUE" => $month,
 				"NAME" => static::getMessage($messages, "MAIN_UI_FILTER_FIELD_MONTH_".$month)
@@ -172,6 +193,8 @@ class Field
 
 		foreach($sourceQuarters as $key => $quarter)
 		{
+			$quarter = (string)$quarter;
+
 			$quarters[] = array(
 				"VALUE" => $quarter,
 				"NAME" => static::getMessage($messages, "MAIN_UI_FILTER_FIELD_QUARTER_".$quarter)
@@ -242,6 +265,8 @@ class Field
 
 		foreach ($sourceYears as $key => $year)
 		{
+			$year = (string)$year;
+
 			$years[] = array(
 				"NAME" => $year,
 				"VALUE" => $year
@@ -261,11 +286,11 @@ class Field
 			array(
 				array(
 					"NAME" => Loc::getMessage("MAIN_UI_FILTER_FIELD_SUBTYPE_CUSTOM_DATE_YEARS_SWITCHER_YES"),
-					"VALUE" => 1
+					"VALUE" => '1'
 				),
 				array(
 					"NAME" => Loc::getMessage("MAIN_UI_FILTER_FIELD_SUBTYPE_CUSTOM_DATE_YEARS_SWITCHER_NO"),
-					"VALUE" => 0
+					"VALUE" => '0'
 				)
 			),
 			array()
@@ -551,19 +576,21 @@ class Field
 	/**
 	 * Prepares data of user field
 	 * @param string $name
-	 * @param string $value
 	 * @param string $label
 	 * @param string $placeholder
+	 * @param bool $multiple
+	 * @param array $params
+	 * @param bool $lightweight
 	 * @return array
 	 */
-	public static function destSelector($name, $label = "", $placeholder = "", $multiple = false, $params = array(), $lightweight = false)
+	public static function destSelector($name, $label = "", $placeholder = "", $multiple = false, $params = array(), $lightweight = false, $filterName = '')
 	{
 		\CJSCore::init(array('socnetlogdest'));
 
 		global $APPLICATION;
 
 		$field = array(
-			"ID" => "field_".$name,
+			"ID" => "field_".$name.($filterName <> '' ? '_'.$filterName : ''),
 			"TYPE" => Type::DEST_SELECTOR,
 			"NAME" => $name,
 			"LABEL" => $label,
@@ -583,34 +610,44 @@ class Field
 				'eventInit' => 'BX.Filter.DestinationSelector:openInit',
 				'eventOpen' => 'BX.Filter.DestinationSelector:open',
 				'context' => (isset($params['context']) ? $params['context'] : 'FILTER_'.$name),
+				'popupAutoHide' => 'N',
 				'useSearch' => 'N',
 				'userNameTemplate' => \CUtil::jSEscape(\CSite::getNameFormat()),
-				'useClientDatabase' => 'Y',
-				'allowEmailInvitation' => (isset($params['allowEmailInvitation']) && $params['allowEmailInvitation'] == 'Y' ? 'Y' : 'N'),
+				'useClientDatabase' => (isset($params['useClientDatabase']) && $params['useClientDatabase'] == 'N' ? 'N' : 'Y'),
 				'enableLast' => 'Y',
 				'enableUsers' => (!isset($params['enableUsers']) || $params['enableUsers'] != 'N' ? 'Y' : 'N'),
 				'enableDepartments' => (!isset($params['enableDepartments']) || $params['enableDepartments'] != 'N' ? 'Y' : 'N'),
-				'enableSonetgroups' => (isset($params['enableSonetgroups']) && $params['enableSonetgroups'] == 'Y' ? 'Y' : 'N'),
-				'departmentSelectDisable' => (isset($params['departmentSelectDisable']) && $params['departmentSelectDisable'] == 'Y' ? 'Y' : 'N'),
 				'allowAddUser' => 'N',
 				'allowAddCrmContact' => 'N',
 				'allowAddSocNetGroup' => 'N',
-				'allowSearchEmailUsers' => (isset($params['allowSearchEmailUsers']) && $params['allowSearchEmailUsers'] == 'Y' ? 'Y' : 'N'),
 				'allowSearchCrmEmailUsers' => 'N',
 				'allowSearchNetworkUsers' => 'N',
-				'allowSonetGroupsAjaxSearchFeatures' => 'N',
 				'useNewCallback' => 'Y',
-				'enableAll' => (isset($params['enableAll']) && $params['enableAll'] == 'Y' ? 'Y' : 'N'),
-				'enableEmpty' => (isset($params['enableEmpty']) && $params['enableEmpty'] == 'Y' ? 'Y' : 'N'),
-				'enableProjects' => (isset($params['enableProjects']) && $params['enableProjects'] == 'Y' ? 'Y' : 'N'),
 				'focusInputOnSelectItem' => 'N',
-				'focusInputOnSwitchTab' => 'N'
+				'focusInputOnSwitchTab' => 'N',
+				'landing' => (isset($params['landing']) && $params['landing'] == 'Y' ? 'Y' : 'N'),
 			);
 
 			if (!empty($params['contextCode']))
 			{
 				$optionsList['contextCode'] = $params['contextCode'];
+				unset($params['contextCode']);
 			}
+
+			if (isset($params['context']))
+			{
+				unset($params['context']);
+			}
+			if (isset($params['enableUsers']))
+			{
+				unset($params['enableUsers']);
+			}
+			if (isset($params['enableDepartments']))
+			{
+				unset($params['enableDepartments']);
+			}
+
+			$optionsList = array_merge($optionsList, $params);
 
 			$APPLICATION->includeComponent(
 				"bitrix:main.ui.selector",
@@ -624,9 +661,11 @@ class Field
 						'unSelect' => '',
 						'openDialog' => 'BX.Filter.DestinationSelectorManager.onDialogOpen',
 						'closeDialog' => 'BX.Filter.DestinationSelectorManager.onDialogClose',
-						'openSearch' => ''
+						'openSearch' => '',
+						'closeSearch' => 'BX.Filter.DestinationSelectorManager.onDialogClose',
 					),
-					'OPTIONS' => $optionsList
+					'OPTIONS' => $optionsList,
+					'LOAD_JS' => true
 				),
 				false,
 				array("HIDE_ICONS" => "Y")
@@ -634,6 +673,35 @@ class Field
 
 			$field["HTML"] = ob_get_clean();
 		}
+
+		return $field;
+	}
+
+	public static function entitySelector(
+		string $name,
+		string $label = '',
+		string $placeholder = '',
+		array $params = [],
+		string $filterName = ''
+	)
+	{
+		$multiple = $params['multiple'] ?? false;
+		$addEntityIdToResult = $params['addEntityIdToResult'] ?? false;
+		$dialogOptions = $params['dialogOptions'] ?? [];
+		$field = [
+			'ID' => 'field_' . $name . ($filterName != '' ? '_' . $filterName : ''),
+			'TYPE' => Type::ENTITY_SELECTOR,
+			'NAME' => $name,
+			'LABEL' => $label,
+			'VALUES' => [
+				'_label' => '',
+				'_value' => '',
+			],
+			'MULTIPLE' => $multiple,
+			'PLACEHOLDER' => $placeholder,
+			'DIALOG_OPTIONS' => $dialogOptions,
+			'ADD_ENTITY_ID_TO_RESULT' => $addEntityIdToResult,
+		];
 
 		return $field;
 	}

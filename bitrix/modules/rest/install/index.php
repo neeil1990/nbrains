@@ -14,13 +14,11 @@ class rest extends CModule
 
 	private $errors = false;
 
-	function rest()
+	public function __construct()
 	{
 		$arModuleVersion = array();
 
-		$path = str_replace("\\", "/", __FILE__);
-		$path = substr($path, 0, strlen($path) - strlen("/index.php"));
-		include($path."/version.php");
+		include(__DIR__.'/version.php');
 
 		$this->MODULE_VERSION = $arModuleVersion["VERSION"];
 		$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
@@ -35,16 +33,9 @@ class rest extends CModule
 
 		$this->errors = false;
 
-		// Database tables creation
-		if(strtolower($DB->type) !== 'mysql')
+		if(!$DB->Query("SELECT 'x' FROM b_rest_app WHERE 1=0", true))
 		{
-			$this->errors = array(
-				GetMessage('REST_DB_NOT_SUPPORTED'),
-			);
-		}
-		elseif(!$DB->Query("SELECT 'x' FROM b_rest_app WHERE 1=0", true))
-		{
-			$this->errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/db/".strtolower($DB->type)."/install.sql");
+			$this->errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/db/mysql/install.sql");
 		}
 
 		if($this->errors !== false)
@@ -66,15 +57,16 @@ class rest extends CModule
 		$eventManager->registerEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Placement', 'onRestServiceBuildDescription');
 		$eventManager->registerEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Event', 'onRestServiceBuildDescription');
 		$eventManager->registerEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\UserFieldType', 'onRestServiceBuildDescription');
-
 		$eventManager->registerEventHandler("rest","onFindMethodDescription", "rest","\\Bitrix\\Rest\\Engine\\RestManager","onFindMethodDescription");
-
 		$eventManager->registerEventHandler("main", "OnApplicationsBuildList", "main", '\Bitrix\Rest\APAuth\Application', "onApplicationsBuildList", 100, "modules/rest/lib/apauth/application.php");
-
 		$eventManager->registerEventHandler("im", "OnAfterConfirmNotify", "rest", "\\Bitrix\\Rest\\NotifyIm", "receive");
-
 		$eventManager->registerEventHandler("rest", "\\Bitrix\\Rest\\APAuth\\Password::OnDelete", "rest", "\\Bitrix\\Rest\\APAuth\\PermissionTable", "onPasswordDelete");
-
+		$eventManager->registerEventHandler("perfmon", "OnGetTableSchema", "rest", "rest", "OnGetTableSchema");
+		$eventManager->registerEventHandler('rest', 'OnRestApplicationConfigurationImport', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventImportController');
+		$eventManager->registerEventHandler('rest', 'OnRestApplicationConfigurationExport', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventExportController');
+		$eventManager->registerEventHandler('rest', 'OnRestApplicationConfigurationClear', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventClearController');
+		$eventManager->registerEventHandler('rest', 'OnRestApplicationConfigurationEntity', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'getEntityList');
+		$eventManager->registerEventHandler('rest', 'OnRestApplicationConfigurationGetManifest', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'getManifestList');
 		if(CModule::IncludeModule('iblock'))
 		{
 			COption::SetOptionString("rest", "entity_iblock_type", "rest_entity");
@@ -86,7 +78,7 @@ class rest extends CModule
 				'SORT' => 1000,
 				'LANG' => array(
 					LANGUAGE_ID => array(
-						'NAME' => GetMessage('REST_IBLOCK_NAME'),
+						'NAME' => GetMessage('REST_IBLOCK_NAME_2'),
 						'SECTION_NAME' => GetMessage('REST_IBLOCK_SECTION_NAME'),
 						'ELEMENT_NAME' => GetMessage('REST_IBLOCK_ELEMENT_NAME'),
 					)
@@ -108,11 +100,29 @@ class rest extends CModule
 
 		$eventManager->registerEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\APAuth\\Auth", "onRestCheckAuth");
 		$eventManager->registerEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\SessionAuth\\Auth", "onRestCheckAuth");
+		$eventManager->registerEventHandler(
+			'main',
+			'OnAfterRegisterModule',
+			'rest',
+			'\Bitrix\Rest\Engine\ScopeManager',
+			'onChangeRegisterModule'
+		);
+		$eventManager->registerEventHandler(
+			'main',
+			'OnAfterUnRegisterModule',
+			'rest',
+			'\Bitrix\Rest\Engine\ScopeManager',
+			'onChangeRegisterModule'
+		);
 
 		\CAgent::AddAgent("Bitrix\\Rest\\Marketplace\\Client::getNumUpdates();", "rest", "N", 86400);
 		\CAgent::AddAgent("Bitrix\\Rest\\EventOfflineTable::cleanProcessAgent();", "rest", "N", 86400);
-		\CAgent::AddAgent("\\Bitrix\\Rest\\StatTable::cleanUpAgent();", "rest", "N", 86400);
-
+		\CAgent::AddAgent("Bitrix\\Rest\\LogTable::cleanUpAgent();", "rest", "N", 86400);
+		\CAgent::AddAgent('\Bitrix\Rest\Configuration\Helper::sendStatisticAgent();', "rest", "N",86400);
+		\CAgent::AddAgent('\\Bitrix\\Rest\\UsageStatTable::sendAgent();', "rest", "N", 3600);
+		\CAgent::AddAgent('\\Bitrix\\Rest\\UsageStatTable::cleanUpAgent();', "rest", "N", 3600);
+		\CAgent::AddAgent('\Bitrix\Rest\Marketplace\Notification::checkAgent();', "rest", "N", 86400);
+		\CAgent::AddAgent('\Bitrix\Rest\Marketplace\Immune::load();', "rest", "N", 86400);
 
 		return true;
 	}
@@ -125,7 +135,7 @@ class rest extends CModule
 
 		if(!array_key_exists("savedata", $arParams) || $arParams["savedata"] != "Y")
 		{
-			$this->errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/db/".strtolower($DB->type)."/uninstall.sql");
+			$this->errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/db/mysql/uninstall.sql");
 		}
 
 		if($this->errors !== false)
@@ -143,22 +153,34 @@ class rest extends CModule
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Placement', 'onRestServiceBuildDescription');
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\Event', 'onRestServiceBuildDescription');
 		$eventManager->unRegisterEventHandler('rest', 'OnRestServiceBuildDescription', 'rest', '\Bitrix\Rest\Api\UserFieldType', 'onRestServiceBuildDescription');
-
 		$eventManager->unRegisterEventHandler("rest","onFindMethodDescription", "rest","\\Bitrix\\Rest\\Engine\\RestManager","onFindMethodDescription");
-
 		$eventManager->unRegisterEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\OAuth\\Auth", "onRestCheckAuth");
-
 		$eventManager->unRegisterEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\APAuth\\Auth", "onRestCheckAuth");
-
 		$eventManager->unRegisterEventHandler("rest", "onRestCheckAuth", "rest", "\\Bitrix\\Rest\\SessionAuth\\Auth", "onRestCheckAuth");
-
 		$eventManager->unRegisterEventHandler("main", "OnApplicationsBuildList", "main", '\Bitrix\Rest\APAuth\Application', "onApplicationsBuildList", "modules/rest/lib/apauth/application.php");
-
 		$eventManager->unRegisterEventHandler("im", "OnAfterConfirmNotify", "rest", "\\Bitrix\\Rest\\NotifyIm", "receive");
-
 		$eventManager->unRegisterEventHandler("rest", "\\Bitrix\\Rest\\APAuth\\Password::OnDelete", "rest", "\\Bitrix\\Rest\\APAuth\\PermissionTable", "onPasswordDelete");
-
 		$eventManager->unRegisterEventHandler("rest", "OnRestServiceBuildDescription", "rest", "\\Bitrix\\Rest\\Engine\\RestManager", "OnRestServiceBuildDescription");
+		$eventManager->unRegisterEventHandler("perfmon", "OnGetTableSchema", "rest", "rest", "OnGetTableSchema");
+		$eventManager->unRegisterEventHandler('rest', 'OnRestApplicationConfigurationImport', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventImportController');
+		$eventManager->unRegisterEventHandler('rest', 'OnRestApplicationConfigurationExport', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventExportController');
+		$eventManager->unRegisterEventHandler('rest', 'OnRestApplicationConfigurationClear', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'onEventClearController');
+		$eventManager->unRegisterEventHandler('rest', 'OnRestApplicationConfigurationEntity', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'getEntityList');
+		$eventManager->unRegisterEventHandler('rest', 'OnRestApplicationConfigurationGetManifest', 'rest', '\Bitrix\Rest\Configuration\AppConfiguration', 'getManifestList');
+		$eventManager->unRegisterEventHandler(
+			'main',
+			'OnAfterRegisterModule',
+			'rest',
+			'\Bitrix\Rest\Engine\ScopeManager',
+			'onChangeRegisterModule'
+		);
+		$eventManager->unRegisterEventHandler(
+			'main',
+			'OnAfterUnRegisterModule',
+			'rest',
+			'\Bitrix\Rest\Engine\ScopeManager',
+			'onChangeRegisterModule'
+		);
 
 		CAgent::RemoveModuleAgents("rest");
 
@@ -179,10 +201,12 @@ class rest extends CModule
 
 	function InstallFiles($arParams = array())
 	{
+		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/admin", $_SERVER["DOCUMENT_ROOT"]."/bitrix/admin", true, true);
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/components", $_SERVER["DOCUMENT_ROOT"]."/bitrix/components", true, true);
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/js", $_SERVER["DOCUMENT_ROOT"]."/bitrix/js", true, true);
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/tools", $_SERVER["DOCUMENT_ROOT"]."/bitrix/tools", true, true);
 		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/services", $_SERVER["DOCUMENT_ROOT"]."/bitrix/services", true, true);
+		CopyDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/images",  $_SERVER["DOCUMENT_ROOT"]."/bitrix/images/rest", true, true);
 
 		// delete old urlrewrite rule
 		CUrlRewriter::Delete(array(
@@ -229,6 +253,13 @@ class rest extends CModule
 				"ID" => "bitrix:rest.hook",
 				"PATH" => "/marketplace/hook/index.php",
 			));
+
+			\Bitrix\Main\UrlRewriter::add($siteId, array(
+				"CONDITION" => "#^/marketplace/configuration/#",
+				"RULE" => "",
+				"ID" => "bitrix:rest.configuration",
+				"PATH" => "/marketplace/configuration/index.php",
+			));
 		}
 
 		return true;
@@ -242,37 +273,28 @@ class rest extends CModule
 	function DoInstall()
 	{
 		global $APPLICATION, $USER, $step, $DB;
-		$step = IntVal($step);
+		$step = intval($step);
 
 		if(!$USER->IsAdmin())
 			return;
 
-		if(strtolower($DB->type) !== 'mysql')
+		if(!check_bitrix_sessid())
 		{
-			$APPLICATION->ThrowException(GetMessage('REST_DB_NOT_SUPPORTED'));
-			$APPLICATION->IncludeAdminFile(GetMessage("REST_INSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/step1.php");
+			$step = 1;
 		}
 
-		else
+		if($step < 2)
 		{
-			if(!check_bitrix_sessid())
-			{
-				$step = 1;
-			}
+			$APPLICATION->IncludeAdminFile(GetMessage("REST_INSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/step1.php");
+		}
+		elseif($step == 2)
+		{
+			$this->InstallDB(array());
+			$this->InstallFiles(array());
 
-			if($step < 2)
-			{
-				$APPLICATION->IncludeAdminFile(GetMessage("REST_INSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/step1.php");
-			}
-			elseif($step == 2)
-			{
-				$this->InstallDB(array());
-				$this->InstallFiles(array());
+			$GLOBALS["errors"] = $this->errors;
 
-				$GLOBALS["errors"] = $this->errors;
-
-				$APPLICATION->IncludeAdminFile(GetMessage("REST_INSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/step2.php");
-			}
+			$APPLICATION->IncludeAdminFile(GetMessage("REST_INSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/step2.php");
 		}
 	}
 
@@ -281,7 +303,7 @@ class rest extends CModule
 		global $APPLICATION, $USER, $step;
 		if($USER->IsAdmin())
 		{
-			$step = IntVal($step);
+			$step = intval($step);
 			if($step < 2)
 			{
 				$APPLICATION->IncludeAdminFile(GetMessage("REST_UNINSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/unstep1.php");
@@ -298,6 +320,48 @@ class rest extends CModule
 				$APPLICATION->IncludeAdminFile(GetMessage("REST_UNINSTALL_TITLE"), $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/rest/install/unstep2.php");
 			}
 		}
+	}
+
+	public static function OnGetTableSchema()
+	{
+		return array(
+			"rest" => array(
+				"b_rest_app" => array(
+					"ID" => array(
+						"b_rest_event" => "APP_ID",
+						"b_rest_app_lang" => "APP_ID",
+						"b_rest_placement" => "APP_ID",
+						"b_rest_event_offline" => "APP_ID",
+						"b_rest_stat" => "APP_ID",
+						"b_rest_stat_app" => "APP_ID",
+						"b_rest_app_log" => "APP_ID",
+					),
+					"CODE" => array(
+						"b_rest_stat_app" => "APP_CODE",
+					)
+				),
+				"b_rest_ap" => array(
+					"ID" => array(
+						"b_rest_ap_permission" => "PASSWORD_ID",
+						"b_rest_log" => "PASSWORD_ID",
+					)
+				),
+				"b_rest_stat_method" => array(
+					"ID" => array(
+						"b_rest_stat" => "METHOD_ID",
+					)
+				),
+			),
+			"main" => array(
+				"b_user" => array(
+					"ID" => array(
+						"b_rest_event" => "USER_ID",
+						"b_rest_ap" => "USER_ID",
+						"b_rest_app_log" => "USER_ID",
+					)
+				),
+			),
+		);
 	}
 }
 ?>

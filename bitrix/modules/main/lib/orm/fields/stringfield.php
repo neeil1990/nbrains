@@ -110,11 +110,16 @@ class StringField extends ScalarField
 	 */
 	public function cast($value)
 	{
+		if ($this->is_nullable && $value === null)
+		{
+			return $value;
+		}
+
 		$value = (string) $value;
 
 		if ($this->size !== null)
 		{
-			$value = substr($value, 0, $this->size);
+			$value = mb_substr($value, 0, $this->size);
 		}
 
 		return $value;

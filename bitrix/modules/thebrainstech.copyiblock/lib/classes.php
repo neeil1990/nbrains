@@ -48,7 +48,8 @@ class TheBrains {
                         "ACTION" => "javascript:(new BX.CDialog({
 					content_url: '" . $APPLICATION->GetCurPageParam("", array("mode", "table_id")) . "',
 					width: 500,
-					height: 180,
+					head: '<div style=\"text-align: center;\"><a href=\"https://www.donationalerts.com/r/nbrains\" target=\"_blank\">".GetMessage('THEBRAINSE_DONAT')."</a> | <a href=\" ".self::dialogDonation()." \"> ".GetMessage('THEBRAINSE_DONAT_THANKS')."</a></div>',
+					height: 260,
 					resizable: false,
 					draggable: true,
 					content: '<h3 style=\"text-align: center\">". GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY') ." ID : ". $_REQUEST['ID'] ." ". $name ."</h3>"
@@ -89,13 +90,16 @@ class TheBrains {
                 $ib = new CIBlock;
                 $arFields = CIBlock::GetArrayByID($IBLOCK_ID);
                 $arFields["GROUP_ID"] = CIBlock::GetGroupPermissions($IBLOCK_ID);
-                $arFields["NAME"] = $arFields["NAME"]."_new";
+                $arFields["NAME"] = $arFields["NAME"]."NEW";
+                $arFields["CODE"] = $arFields["CODE"]."NEW";
+                $arFields["API_CODE"] = $arFields["API_CODE"]."NEW";
                 unset($arFields["ID"]);
                 if($_REQUEST["TYPE"]!="empty")
                     $arFields["IBLOCK_TYPE_ID"]=$_REQUEST["TYPE"];
                 $ID = $ib->Add($arFields);
-                if(intval($ID)<=0)
-                    $bError = true;
+                if(intval($ID) <= 0)
+                    $bError[] = $ib->LAST_ERROR;
+
                 if($_REQUEST["ID"]!="empty")
                     $iblock_prop=intval($_REQUEST["ID"]);
                 else
@@ -122,9 +126,10 @@ class TheBrains {
                         if(!is_array($v))$prop_fields[$k]=trim($v);
                         if($k{0}=='~') unset($prop_fields[$k]);
                     }
+
                     $PropID = $ibp->Add($prop_fields);
-                    if(intval($PropID)<=0)
-                        $bError = true;
+                    if(intval($PropID) <= 0)
+                        $bError[] = $ibp->LAST_ERROR;
                 }
 
                 if($_REQUEST["W_COPY"] == 'SE' OR $_REQUEST["W_COPY"] == 'EL') {
@@ -168,10 +173,10 @@ class TheBrains {
                     }
                 }
 
-                if(!$bError && $IBLOCK_ID>0)
+                if(!$bError && $IBLOCK_ID > 0)
                     echo '<div style="text-align:center;"><p style="font-size: 16px">'. GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY_END') .'</p><a style="font-size: 20px" href="iblock_edit.php?type='.$arFields['IBLOCK_TYPE_ID'].'&lang='.LANG.'&ID='.$ID.'&admin=Y">'. GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_GO_TO_IB') .'</a></div>';
                 else
-                    echo $bError;
+                    echo implode('<br/>', $bError);
             }
             die();
         }
@@ -204,4 +209,17 @@ class TheBrains {
 
         }
     }
+
+    static public function dialogDonation() {
+
+        $arDialogParams = array(
+            "title" => GetMessage('THEBRAINSE_DONAT_TITLE'),
+            "content_url" => '/bitrix/admin/thebrainstech.copyiblock/donation.php',
+        );
+
+        $strParams = CUtil::PhpToJsObject($arDialogParams);
+
+        return addcslashes('javascript:(new BX.CDialog('.$strParams.')).Show()', '\'');
+    }
+
 }

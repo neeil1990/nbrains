@@ -9,7 +9,11 @@ BX.UI.ActionPanel.Item = function(options)
 	this.id = options.id;
 	this.type = options.type;
 	this.text = options.text;
+	this.html = options.text;
 	this.icon = options.icon;
+	this.title = options.title;
+	this.iconOnly = options.iconOnly;
+	this.additionalClassForPanel = options.additionalClassForPanel;
 	this.submenuOptions = {};
 	if (options.submenuOptions && BX.type.isString(options.submenuOptions))
 	{
@@ -28,6 +32,7 @@ BX.UI.ActionPanel.Item = function(options)
 	this.actionPanel = options.actionPanel;
 	this.options = options;
 	this.attributes = BX.prop.getObject(options, 'attributes');
+	this.dataset = options.dataset;
 	this.disabled = options.disabled;
 	this.layout = {
 		container: null,
@@ -38,37 +43,89 @@ BX.UI.ActionPanel.Item = function(options)
 
 BX.UI.ActionPanel.Item.prototype =
 {
+	changeIconClass: function(iconClass)
+	{
+		BX.removeClass(this.layout.container, this.buttonIconClass);
+		BX.addClass(this.layout.container, iconClass);
+
+		this.buttonIconClass = iconClass;
+	},
+
 	render: function()
 	{
 		var selectorType;
 
 		this.href ? selectorType = "a" : selectorType = "div";
 
-		var className = "ui-action-panel-item " + (this.disabled ? 'ui-action-panel-item-is-disabled' : '');
+		var className = "ui-action-panel-item " + (this.additionalClassForPanel ? this.additionalClassForPanel+' ':'') + (this.disabled ? 'ui-action-panel-item-is-disabled' : '');
 		if (this.buttonIconClass)
 		{
 			className = 'ui-btn ui-btn-lg ui-btn-link ' + this.buttonIconClass;
 		}
 
-		this.layout.container = BX.create(selectorType, {
-			props: {
-				className: className
-			},
-			children: [
-				this.icon ? '<span class="ui-action-panel-item-icon"><img src="' + this.icon + '" title=" "></span>' : null,
-				(this.text && !this.buttonIconClass) ? '<span class="ui-action-panel-item-title">' + this.text + '</span>' : this.text
-			],
-			attrs: this.attributes,
-			dataset: {
-				role: 'action-panel-item'
-			},
-			events: {
-				click: this.handleClick.bind(this)
-			}
-		});
+		if (this.onclick && BX.type.isArray(this.items) && this.items.length > 0)
+		{
+			this.layout.container = BX.create('div', {
+				props: {
+					className: 'ui-btn-split ui-btn-link' + (this.buttonIconClass || '')
+				},
+				children: [
+					BX.create('button', {
+						props: {
+							className: 'ui-btn-main',
+						},
+						events: {
+							click: this.handleMainClick.bind(this)
+						},
+						text: this.text
+					}),
+					BX.create('button', {
+						props: {
+							className: 'ui-btn-menu',
+						},
+						events: {
+							click: this.handleMenuClick.bind(this)
+						}
+					})
+				],
+				attrs: this.attributes,
+				dataset: {
+					role: 'action-panel-item'
+				}
+			});
+		}
+		else
+		{
+			this.layout.container = BX.create(selectorType, {
+				props: {
+					className: className
+				},
+				children: [
+					this.icon ? '<span class="ui-action-panel-item-icon"><img src="' + this.icon + '"></span>' : null,
+					(this.text && !this.buttonIconClass && this.iconOnly !== true ) ? '<span class="ui-action-panel-item-title">' + this.text + '</span>' : (this.iconOnly !== true ? this.text : null)
+				],
+				attrs: this.attributes,
+				dataset: {
+					role: 'action-panel-item'
+				},
+				events: {
+					click: this.handleClick.bind(this)
+				}
+			});
+		}
 
 		this.href ? this.layout.container.setAttribute('href', this.href) : null;
-		this.href ? this.layout.container.setAttribute('title', this.text) : null;
+		(this.href || this.title) ? this.layout.container.setAttribute('title', (this.title ? this.title :this.text)) : null;
+
+		if (BX.type.isString(this.onclick))
+		{
+			this.layout.container.setAttribute('onclick', this.onclick);
+		}
+
+		if (this.dataset)
+		{
+			BX.adjust(this.layout.container, {'dataset': this.dataset});
+		}
 
 		if (this.options.hide)
 		{
@@ -81,6 +138,11 @@ BX.UI.ActionPanel.Item.prototype =
 	show: function ()
 	{
 		BX.show(this.layout.container, 'block');
+	},
+
+	showAsInlineBlock: function ()
+	{
+		BX.style(this.layout.container,'display','inline-block');
 	},
 
 	hide: function ()
@@ -108,6 +170,33 @@ BX.UI.ActionPanel.Item.prototype =
 		return this.layout.container.offsetHeight > 0 && !this.isVisible();
 	},
 
+	handleMenuClick: function (event)
+	{
+		if (this.isDisabled())
+		{
+			event.preventDefault();
+
+			return;
+		}
+
+		return this.openSubMenu();
+	},
+
+	handleMainClick: function (event)
+	{
+		if (this.isDisabled())
+		{
+			event.preventDefault();
+
+			return;
+		}
+
+		if (BX.type.isFunction(this.onclick))
+		{
+			this.onclick.call(this, event, this);
+		}
+	},
+
 	handleClick: function (event)
 	{
 		if (this.isDisabled())
@@ -116,17 +205,13 @@ BX.UI.ActionPanel.Item.prototype =
 
 			return;
 		}
-		if (this.items)
+		if (BX.type.isArray(this.items) && this.items.length > 0)
 		{
 			this.openSubMenu();
 		}
 		else
 		{
-			if(BX.type.isString(this.onclick))
-			{
-				eval(this.onclick);
-			}
-			else if (BX.type.isFunction(this.onclick))
+			if (BX.type.isFunction(this.onclick))
 			{
 				this.onclick.call(this, event, this);
 			}
@@ -160,7 +245,7 @@ BX.UI.ActionPanel.Item.prototype =
 
 	openSubMenu: function()
 	{
-		if(!this.items)
+		if (!BX.type.isArray(this.items) || this.items.length === 0)
 		{
 			return;
 		}

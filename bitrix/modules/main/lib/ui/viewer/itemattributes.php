@@ -34,7 +34,7 @@ class ItemAttributes
 	/**
 	 * @var array
 	 */
-	protected static $viewerTypeByContentType = [];
+	protected static $renderClassByContentType = [];
 
 	/**
 	 * ItemAttributes constructor.
@@ -56,7 +56,7 @@ class ItemAttributes
 	{
 		$this
 			->setAttribute('data-viewer')
-			->setAttribute('data-viewer-type', static::getViewerTypeByFile($this->fileData))
+			->setViewerType(static::getViewerTypeByFile($this->fileData))
 			->setAttribute('data-src', $this->sourceUri)
 		;
 	}
@@ -155,6 +155,21 @@ class ItemAttributes
 		return $this->setAttribute('data-title', htmlspecialcharsbx($title));
 	}
 
+	public function setTypeClass(string $class)
+	{
+		return $this->setAttribute('data-viewer-type-class', htmlspecialcharsbx($class));
+	}
+
+	public function setViewerType(string $type): self
+	{
+		return $this->setAttribute('data-viewer-type', $type);
+	}
+
+	public function getTypeClass()
+	{
+		return $this->getAttribute('data-viewer-type-class');
+	}
+
 	/**
 	 * @param $id
 	 *
@@ -193,6 +208,13 @@ class ItemAttributes
 		return $this;
 	}
 
+	public function clearActions(): self
+	{
+		$this->actions = [];
+
+		return $this;
+	}
+
 	/**
 	 * @return array
 	 */
@@ -225,7 +247,7 @@ class ItemAttributes
 	{
 		if (!$this->issetAttribute('data-viewer-type'))
 		{
-			$this->setAttribute('data-viewer-type', static::getViewerTypeByFile($this->fileData));
+			$this->setViewerType(static::getViewerTypeByFile($this->fileData));
 		}
 
 		return $this->getAttribute('data-viewer-type');
@@ -297,19 +319,25 @@ class ItemAttributes
 	 */
 	protected static function getViewerTypeByFile(array $fileArray)
 	{
-		if (isset(static::$viewerTypeByContentType[$fileArray['CONTENT_TYPE']]))
-		{
-			return static::$viewerTypeByContentType[$fileArray['CONTENT_TYPE']];
-		}
-
 		$contentType = $fileArray['CONTENT_TYPE'];
 		$originalName = $fileArray['ORIGINAL_NAME'];
+
+		if (isset(static::$renderClassByContentType[$contentType]))
+		{
+			$renderClass = static::$renderClassByContentType[$contentType];
+			if ($renderClass::getSizeRestriction() === null)
+			{
+				return $renderClass::getJsType();
+			}
+		}
 
 		$previewManager = new PreviewManager();
 		$renderClass = $previewManager->getRenderClassByFile([
 			'contentType' => $contentType,
 			'originalName' => $originalName,
+			'size' => isset($fileArray['FILE_SIZE'])? $fileArray['FILE_SIZE'] : null,
 		]);
+
 		if ($renderClass === Renderer\Stub::class)
 		{
 			$transformerManager = new TransformerManager();
@@ -328,7 +356,10 @@ class ItemAttributes
 			}
 		}
 
-		static::$viewerTypeByContentType[$fileArray['CONTENT_TYPE']] = $renderClass::getJsType();
+		if ($renderClass !== Renderer\RestrictedBySize::class)
+		{
+			static::$renderClassByContentType[$fileArray['CONTENT_TYPE']] = $renderClass;
+		}
 
 		return $renderClass::getJsType();
 	}
@@ -398,7 +429,7 @@ class ItemAttributes
 	protected function convertKeyToDataSet($key)
 	{
 		$key = str_replace('data-', '', $key);
-		$key = str_replace('-', ' ', strtolower($key));
+		$key = str_replace('-', ' ', mb_strtolower($key));
 
 		return lcfirst(str_replace(' ', '', ucwords($key)));
 	}

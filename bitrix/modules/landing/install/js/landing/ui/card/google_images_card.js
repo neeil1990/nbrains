@@ -18,8 +18,12 @@
 	function itemAdapter(item, google)
 	{
 		return {
-			image: item.image.thumbnailLink,
+			image: item.link,
 			credit: {},
+			dimensions: {
+				width: item.image.width,
+				height: item.image.height
+			},
 			onClick: google.onPictureChange.bind(google, item.link)
 		}
 	}
@@ -50,6 +54,7 @@
 		BX.Landing.UI.Card.Library.apply(this, arguments);
 		this.page = 1;
 		this.query = "";
+		this.loader = new BX.Loader({target: this.body, offset: {top: '12%'}});
 		this.client = BX.Landing.Client.Google.getInstance();
 		this.onSearchWithDebounce = BX.debounce(this.onSearchWithDebounce, 1000, this);
 		this.showPopular();
@@ -109,7 +114,7 @@
 			{
 				this.settingsButton = BX.create("a", {
 					props: {className: "ui-btn ui-btn-xs ui-btn-light-border ui-btn-icon-setting landing-google-settings-button"},
-					html: BX.message("LANDING_GOOGLE_IMAGES_CHANGE_KEY_BUTTON"),
+					html: BX.Landing.Loc.getMessage("LANDING_GOOGLE_IMAGES_CHANGE_KEY_BUTTON"),
 					events: {
 						click: this.onSettingsClick.bind(this)
 					}
@@ -217,7 +222,7 @@
 				children: [
 					create("span", {
 						props: {className: "ui-alert-message"},
-						html: BX.message("LANDING_IMAGES_PANEL_KEY_ERROR")
+						html: BX.Landing.Loc.getMessage("LANDING_IMAGES_PANEL_KEY_ERROR")
 					})
 				]
 			});
@@ -230,7 +235,7 @@
 				children: [
 					create("span", {
 						props: {className: "ui-alert-message"},
-						html: BX.message("LANDING_IMAGES_PANEL_GOOGLE_ERROR")
+						html: BX.Landing.Loc.getMessage("LANDING_IMAGES_PANEL_GOOGLE_ERROR")
 					})
 				]
 			});

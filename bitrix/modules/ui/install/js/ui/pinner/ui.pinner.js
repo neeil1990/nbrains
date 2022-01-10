@@ -38,6 +38,7 @@
 		{
 			var node = this.node;
 			var options = this.options;
+			var anchorBottom;
 
 			if (!options.anchorTop)
 			{
@@ -45,9 +46,15 @@
 				node.parentNode.insertBefore(anchorTop, node);
 				options.anchorTop = anchorTop;
 			}
-			if (!options.anchorBottom)
+
+			if (document.querySelector(options.anchorBottom))
 			{
-				var anchorBottom = document.createElement('div');
+				anchorBottom = document.querySelector(options.anchorBottom)
+				options.anchorBottom = anchorBottom;
+			}
+			else
+			{
+				anchorBottom = document.createElement('div');
 				node.parentNode.insertBefore(anchorBottom, node.nextSibling);
 				options.anchorBottom = anchorBottom;
 			}
@@ -55,7 +62,7 @@
 			BX.bind(
 				window,
 				'scroll',
-				BX.throttle(this.onChange.bind(this), this.timeout)
+				BX.throttle(this.onChange.bind(this), 200)
 			);
 			BX.bind(
 				window,

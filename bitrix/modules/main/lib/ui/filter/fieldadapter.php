@@ -7,8 +7,13 @@ use Bitrix\Main\Localization\Loc;
 
 class FieldAdapter
 {
-	public static function adapt($sourceField)
+	/**
+	 * @param array $sourceField
+	 * @return array
+	 */
+	public static function adapt(array $sourceField, $filterId = '')
 	{
+		$sourceField = static::normalize($sourceField);
 		switch ($sourceField["type"])
 		{
 			case "list" :
@@ -20,23 +25,24 @@ class FieldAdapter
 					{
 						if (is_array($selectItem))
 						{
-							$selectItem["VALUE"] = $selectItemValue;
+							$selectItem["VALUE"] = (string)$selectItemValue;
 							$listItem = $selectItem;
 						}
 						else
 						{
-							$listItem = array("NAME" => $selectItem, "VALUE" => $selectItemValue);
+							$listItem = ["NAME" => $selectItem, "VALUE" => (string)$selectItemValue];
 						}
 
 						$items[] = $listItem;
 					}
 				}
 
-				if ($sourceField["params"]["multiple"] === "Y")
+				if ($sourceField["params"]["multiple"])
 				{
 					$field = Field::multiSelect(
 						$sourceField["id"],
-						$items, array(),
+						$items,
+						array(),
 						$sourceField["name"],
 						$sourceField["placeholder"]
 					);
@@ -67,14 +73,15 @@ class FieldAdapter
 			case "date" :
 				$field = Field::date(
 					$sourceField["id"],
-					DateType::NONE, array(),
+					DateType::NONE,
+					array(),
 					$sourceField["name"],
 					$sourceField["placeholder"],
-					$sourceField["time"],
-					$sourceField["exclude"],
-					$sourceField["include"],
-					$sourceField["allow_years_switcher"],
-					$sourceField["messages"]
+					(isset($sourceField["time"]) ? $sourceField["time"] : false),
+					(isset($sourceField["exclude"]) ? $sourceField["exclude"] : array()),
+					(isset($sourceField["include"]) ? $sourceField["include"] : array()),
+					(isset($sourceField["allow_years_switcher"]) ? $sourceField["allow_years_switcher"] : false),
+					(isset($sourceField["messages"]) ? $sourceField["messages"] : array())
 				);
 				break;
 
@@ -119,17 +126,16 @@ class FieldAdapter
 					$sourceField["value"],
 					$sourceField["name"],
 					$sourceField["placeholder"],
-					$sourceField["style"]
+					(isset($sourceField["style"]) ? $sourceField["style"] : false)
 				);
 				break;
 
 			case "custom_entity" :
-				$multiple = $sourceField["params"]["multiple"] === "Y" || $sourceField["params"]["multiple"] === true;
 				$field = Field::customEntity(
 					$sourceField["id"],
 					$sourceField["name"],
 					$sourceField["placeholder"],
-					$multiple
+					$sourceField["params"]["multiple"]
 				);
 				break;
 
@@ -163,9 +169,29 @@ class FieldAdapter
 					$sourceField["id"],
 					$sourceField["name"],
 					$sourceField["placeholder"],
-					(!empty($sourceField["params"]) && !empty($sourceField["params"]["multiple"]) && $sourceField["params"]["multiple"] == "Y"),
-					(!empty($sourceField["params"]) && is_array($sourceField["params"]) ? $sourceField["params"] : array()),
-					(isset($sourceField["lightweight"]) ? $sourceField["lightweight"] : false)
+					$sourceField["params"]["multiple"],
+					$sourceField["params"],
+					(isset($sourceField["lightweight"]) ? $sourceField["lightweight"] : false),
+					$filterId
+				);
+				break;
+
+			case 'entity_selector' :
+				$field = Field::entitySelector(
+					isset($sourceField['id']) ? (string)$sourceField['id'] : '',
+					isset($sourceField['name']) ? (string)$sourceField['name'] : '',
+					isset($sourceField['placeholder']) ? (string)$sourceField['placeholder'] : '',
+					(isset($sourceField['params']) && is_array($sourceField['params'])) ? $sourceField['params'] : [],
+					(string)$filterId
+				);
+				break;
+
+			case "textarea" :
+				$field = Field::textarea(
+					$sourceField["id"],
+					"",
+					$sourceField["name"],
+					$sourceField["placeholder"]
 				);
 				break;
 
@@ -183,7 +209,53 @@ class FieldAdapter
 		{
 			$field["HTML"] = $sourceField["html"];
 		}
+		if (!empty($sourceField["additionalFilter"]))
+		{
+			$field["ADDITIONAL_FILTER_ALLOWED"] = $sourceField["additionalFilter"];
+		}
+
+		if (isset($sourceField["sectionId"]) && $sourceField["sectionId"] !== '')
+		{
+			$field["SECTION_ID"] = $sourceField["sectionId"];
+		}
+		if (!empty($sourceField["icon"]))
+		{
+			$field["ICON"] = $sourceField["icon"];
+		}
 
 		return $field;
+	}
+
+	/**
+	 * @param array $sourceField
+	 * @return array
+	 */
+	public static function normalize(array $sourceField)
+	{
+		if (!isset($sourceField["type"]))
+		{
+			$sourceField["type"] = "string";
+		}
+		if (!isset($sourceField["placeholder"]))
+		{
+			$sourceField["placeholder"] = "";
+		}
+		if (!isset($sourceField["params"]) || !is_array($sourceField["params"]))
+		{
+			$sourceField["params"] = array();
+		}
+		if (!isset($sourceField["params"]["multiple"]))
+		{
+			$sourceField["params"]["multiple"] = false;
+		}
+		else
+		{
+			$sourceField["params"]["multiple"] = (
+				$sourceField["params"]["multiple"] === 'Y'
+				|| $sourceField["params"]["multiple"] === true
+			);
+		}
+
+		return $sourceField;
 	}
 }

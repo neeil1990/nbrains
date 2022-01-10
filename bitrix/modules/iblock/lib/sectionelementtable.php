@@ -1,11 +1,30 @@
 <?php
 namespace Bitrix\Iblock;
 
+use Bitrix\Iblock\ORM\CommonElementTable;
 use Bitrix\Main,
 	Bitrix\Main\Localization\Loc;
+use Bitrix\Main\ORM\Fields\Relations\Reference;
+use Bitrix\Main\ORM\Query\Join;
 
 Loc::loadMessages(__FILE__);
 
+/**
+ * Class SectionElementTable
+ *
+ * DO NOT WRITE ANYTHING BELOW THIS
+ *
+ * <<< ORMENTITYANNOTATION
+ * @method static EO_SectionElement_Query query()
+ * @method static EO_SectionElement_Result getByPrimary($primary, array $parameters = array())
+ * @method static EO_SectionElement_Result getById($id)
+ * @method static EO_SectionElement_Result getList(array $parameters = array())
+ * @method static EO_SectionElement_Entity getEntity()
+ * @method static \Bitrix\Iblock\EO_SectionElement createObject($setDefaultValues = true)
+ * @method static \Bitrix\Iblock\EO_SectionElement_Collection createCollection()
+ * @method static \Bitrix\Iblock\EO_SectionElement wakeUpObject($row)
+ * @method static \Bitrix\Iblock\EO_SectionElement_Collection wakeUpCollection($rows)
+ */
 class SectionElementTable extends Main\Entity\DataManager
 {
 	/**
@@ -40,7 +59,7 @@ class SectionElementTable extends Main\Entity\DataManager
 			'IBLOCK_SECTION' => new Main\Entity\ReferenceField(
 				'IBLOCK_SECTION',
 				'Bitrix\Iblock\Section',
-				array('=this.IBLOCK_SECTION_ID' => 'ref.ID')
+				Join::on('this.IBLOCK_SECTION_ID', 'ref.ID')
 			),
 			'IBLOCK_ELEMENT' => new Main\Entity\ReferenceField(
 				'IBLOCK_ELEMENT',
@@ -49,6 +68,13 @@ class SectionElementTable extends Main\Entity\DataManager
 				array(
 					'title' => Loc::getMessage('IBLOCK_SECTION_ELEMENT_ENTITY_IBLOCK_ELEMENT_FIELD'),
 				)
+			),
+
+			new Reference(
+				'REGULAR_ELEMENT',
+				CommonElementTable::class,
+				Join::on('this.IBLOCK_ELEMENT_ID', 'ref.ID')
+					->whereNull('this.ADDITIONAL_PROPERTY_ID')
 			)
 		);
 	}

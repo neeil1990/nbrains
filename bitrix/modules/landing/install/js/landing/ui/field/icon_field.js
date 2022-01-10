@@ -17,14 +17,23 @@
 	BX.Landing.UI.Field.Icon = function(data)
 	{
 		BX.Landing.UI.Field.Image.apply(this, arguments);
-		this.uploadButton.layout.innerText = BX.message("LANDING_ICONS_FIELD_BUTTON_REPLACE");
+		this.uploadButton.layout.innerText = BX.Landing.Loc.getMessage("LANDING_ICONS_FIELD_BUTTON_REPLACE");
 		this.editButton.layout.hidden = true;
 		this.clearButton.layout.hidden = true;
 
-		if (BX.Landing.UI.Panel.Icon.getInstance().libraries.length === 0)
-		{
-			this.uploadButton.disable();
-		}
+		this.dropzone.removeEventListener("dragover", this.onDragOver);
+		this.dropzone.removeEventListener("dragleave", this.onDragLeave);
+		this.dropzone.removeEventListener("drop", this.onDrop);
+		this.preview.removeEventListener("dragenter", this.onImageDragEnter);
+
+		BX.Landing.UI.Panel.IconPanel
+			.getLibraries()
+			.then(function(libraries) {
+				if (libraries.length === 0)
+				{
+					this.uploadButton.disable();
+				}
+			}.bind(this));
 	};
 
 	BX.Landing.UI.Field.Icon.prototype = {
@@ -35,9 +44,12 @@
 		{
 			event.preventDefault();
 
-			BX.Landing.UI.Panel.Icon.getInstance().show().then(function(iconClassName) {
-				this.setValue({type: "icon", classList: iconClassName.split(" ")});
-			}.bind(this));
+			BX.Landing.UI.Panel.IconPanel
+				.getInstance()
+				.show()
+				.then(function(iconClassName) {
+					this.setValue({type: "icon", classList: iconClassName.split(" ")});
+				}.bind(this));
 		},
 
 		/**
@@ -59,6 +71,7 @@
 			{
 				var selectorClassname = this.selector.split("@")[0].replace(".", "");
 				classList = clone(this.classList).concat([selectorClassname]);
+				classList = BX.Landing.Utils.arrayUnique(classList);
 			}
 
 			return {

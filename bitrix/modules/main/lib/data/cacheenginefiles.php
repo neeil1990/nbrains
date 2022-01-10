@@ -13,19 +13,24 @@ class CacheEngineFiles
 	private $read = false;
 	private $path = '';
 
-	protected $useLock = true;
+	protected $useLock = false;
 	protected static $lockHandles = array();
 
 	/**
 	 * Engine constructor.
-	 *
+	 * @param array $options Cache options.
 	 */
-	public function __construct()
+	public function __construct($options = [])
 	{
-		$cacheConfig = Main\Config\Configuration::getValue("cache");
-		if ($cacheConfig && is_array($cacheConfig) && isset($cacheConfig["use_lock"]))
+		$config = Main\Config\Configuration::getValue("cache");
+		if ($config && is_array($config) && isset($config["use_lock"]))
 		{
-			$this->useLock = (bool)$cacheConfig["use_lock"];
+			$this->useLock = (bool)$config["use_lock"];
+		}
+
+		if (!empty($options) && isset($options['actual_data']))
+		{
+			$this->useLock = !((bool) $options['actual_data']);
 		}
 	}
 
@@ -78,7 +83,7 @@ class CacheEngineFiles
 	 */
 	private static function unlink($fileName)
 	{
-		if (self::$lockHandles[$fileName])
+		if (isset(self::$lockHandles[$fileName]) && self::$lockHandles[$fileName])
 		{
 			fclose(self::$lockHandles[$fileName]);
 			unset(self::$lockHandles[$fileName]);
@@ -403,7 +408,7 @@ class CacheEngineFiles
 
 			$this->written = fwrite($handle, $contents);
 			$this->path = $fn;
-			$len = Main\Text\BinaryString::getLength($contents);
+			$len = strlen($contents);
 
 			fclose($handle);
 
@@ -452,7 +457,7 @@ class CacheEngineFiles
 			|| preg_match("/^(\\d{12})/", $header, $match)
 		)
 		{
-			if (strlen($match[1]) <= 0 || doubleval($match[1]) < time())
+			if ($match[1] == '' || doubleval($match[1]) < time())
 				return true;
 		}
 
@@ -512,12 +517,7 @@ class CacheEngineFiles
 		if ($deleteFromQueue)
 		{
 			$con = Main\Application::getConnection();
-			$con->queryExecute("
-				DELETE FROM b_cache_tag
-				WHERE SITE_ID = '".$con->getSqlHelper()->forSql($ar["SITE_ID"])."'
-				AND CACHE_SALT = '".$con->getSqlHelper()->forSql($ar["CACHE_SALT"])."'
-				AND RELATIVE_PATH = '".$con->getSqlHelper()->forSql($ar["RELATIVE_PATH"])."'
-			");
+			$con->queryExecute("DELETE FROM b_cache_tag WHERE ID = ".intval($ar["ID"]));
 		}
 	}
 
@@ -535,7 +535,7 @@ class CacheEngineFiles
 		$etime = time() + 2;
 		if ($count > 0)
 		{
-			$rs = $con->query("SELECT SITE_ID, CACHE_SALT, RELATIVE_PATH, TAG from b_cache_tag WHERE TAG='*'", 0, $count);
+			$rs = $con->query("SELECT * from b_cache_tag WHERE TAG='*'", 0, $count);
 			while ($ar = $rs->fetch())
 			{
 				static::deleteOneDir($etime, $ar);

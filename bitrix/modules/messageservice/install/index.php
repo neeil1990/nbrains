@@ -13,13 +13,11 @@ Class messageservice extends CModule
 	var $MODULE_CSS;
 	var $MODULE_GROUP_RIGHTS = "Y";
 
-	function messageservice()
+	public function __construct()
 	{
 		$arModuleVersion = array();
 
-		$path = str_replace("\\", "/", __FILE__);
-		$path = substr($path, 0, strlen($path) - strlen("/index.php"));
-		include($path."/version.php");
+		include(__DIR__.'/version.php');
 
 		$this->MODULE_VERSION = $arModuleVersion["VERSION"];
 		$this->MODULE_VERSION_DATE = $arModuleVersion["VERSION_DATE"];
@@ -31,11 +29,11 @@ Class messageservice extends CModule
 
 	function InstallDB($install_wizard = true)
 	{
-		global $DB, $DBType, $APPLICATION;
+		global $DB, $APPLICATION;
 
 		$errors = null;
 		if (!$DB->Query("SELECT 'x' FROM b_messageservice_message", true))
-			$errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/db/".$DBType."/install.sql");
+			$errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/db/mysql/install.sql");
 
 		if (!empty($errors))
 		{
@@ -64,18 +62,19 @@ Class messageservice extends CModule
 
 	function UnInstallDB($arParams = Array())
 	{
-		global $DB, $DBType, $APPLICATION;
+		global $DB, $APPLICATION;
 
 		$errors = null;
 		if(array_key_exists("savedata", $arParams) && $arParams["savedata"] != "Y")
 		{
-			$errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/db/".$DBType."/uninstall.sql");
+			$errors = $DB->RunSQLBatch($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/db/mysql/uninstall.sql");
 
 			if (!empty($errors))
 			{
 				$APPLICATION->ThrowException(implode("", $errors));
 				return false;
 			}
+			\Bitrix\Main\Config\Option::delete($this->MODULE_ID);
 		}
 
 		UnRegisterModuleDependences('main', 'OnAfterEpilog', 'messageservice', '\Bitrix\MessageService\Queue', 'run');
@@ -114,8 +113,18 @@ Class messageservice extends CModule
 		if($_ENV["COMPUTERNAME"]!='BX')
 		{
 			DeleteDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/admin", $_SERVER["DOCUMENT_ROOT"]."/bitrix/admin");
-			DeleteDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/components/bitrix", $_SERVER["DOCUMENT_ROOT"]."/bitrix/components/bitrix");
-			DeleteDirFiles($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/tools", $_SERVER["DOCUMENT_ROOT"]."/bitrix/tools");
+
+			if (is_dir($p = $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/messageservice/install/components/bitrix"))
+			{
+				foreach (scandir($p) as $item)
+				{
+					if ($item == '..' || $item == '.')
+						continue;
+
+					DeleteDirFilesEx('/bitrix/components/bitrix/'.$item);
+				}
+			}
+			DeleteDirFilesEx("/bitrix/tools/messageservice");
 		}
 
 		return true;

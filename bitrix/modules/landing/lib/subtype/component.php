@@ -31,7 +31,8 @@ class Component
 				'SALELEADER',
 				'SPECIALOFFER'
 			),
-			'CONVERT_CURRENCY' => 'Y'
+			'CONVERT_CURRENCY' => 'Y',
+			'LANDING_MODE' => 'Y'
 		));
 
 		if (
@@ -53,8 +54,22 @@ class Component
 					'className' => 'landing-required-link'
 				);
 			}
+			else if (
+				!\Bitrix\Main\ModuleManager::isModuleInstalled('bitrix24') &&
+				\Bitrix\Main\Loader::includeModule('iblock') &&
+				!\Bitrix\Iblock\Model\PropertyFeature::isEnabledFeatures()
+			)
+			{
+				$manifest['requiredUserAction'] = array(
+					'header' => Loc::getMessage('LANDING_BLOCK_EMPTY_CATLOG_TITLE'),
+					'description' => Loc::getMessage('LANDING_BLOCK_CATALOG_CONFIG_FEATURE'),
+					'text' => Loc::getMessage('LANDING_BLOCK_EMPTY_CATLOG_LINK'),
+					'href' => '/bitrix/admin/settings.php?lang=' . LANGUAGE_ID . '&amp;mid=iblock',
+					'className' => 'landing-required-link'
+				);
+			}
 			// add settings link
-			if ($settings['IBLOCK_ID'])
+			if ($settings['IBLOCK_ID'] && !isset($manifest['requiredUserAction']))
 			{
 				if (
 					!isset($manifest['block']) ||
@@ -84,7 +99,7 @@ class Component
 				}
 			}
 		}
-		
+
 		return $manifest;
 	}
 }

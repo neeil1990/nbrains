@@ -26,7 +26,7 @@ return array(
 			'VIEW_USE' => 'N',
 			'VIEW_TYPE' => 'no',
 			'THEME_CODE' => '1construction',
-			'THEME_CODE_TYPO' => '3corporate',
+
 		),
 	),
 	'layout' => array(),
@@ -37,7 +37,7 @@ return array(
 			'nodes' => array(
 				'.landing-block-node-text' => array(
 					0 => '
-				<p>&copy 2018 All rights reserved.</p>
+				<p>&copy 2021 All rights reserved.</p>
 			',
 				),
 			),

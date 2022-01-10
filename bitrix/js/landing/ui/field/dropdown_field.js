@@ -9,10 +9,6 @@
 	var data = BX.Landing.Utils.data;
 	var offsetTop = BX.Landing.Utils.offsetTop;
 	var offsetLeft = BX.Landing.Utils.offsetLeft;
-	var bind = BX.Landing.Utils.bind;
-	var unbind = BX.Landing.Utils.unbind;
-
-	var Menu = BX.Landing.UI.Tool.Menu;
 
 	/**
 	 * Implements interface for works with dropdown
@@ -25,12 +21,15 @@
 	{
 		this.items = "items" in options && options.items ? options.items : {};
 		BX.Landing.UI.Field.BaseField.apply(this, arguments);
+		this.setEventNamespace('BX.Landing.UI.Field.Dropdown');
+		this.subscribeFromOptions(BX.Landing.UI.Component.fetchEventsFromOptions(options));
 		this.onChangeHandler = typeof options.onChange === "function" ? options.onChange : (function() {});
 		this.layout.classList.add("landing-ui-field-dropdown");
 		this.popup = null;
 		this.input.addEventListener("click", this.onInputClick.bind(this));
 		document.addEventListener("click", this.onDocumentClick.bind(this));
-		top.document.addEventListener("click", this.onDocumentClick.bind(this));
+		var rootWindow = BX.Landing.PageObject.getRootWindow();
+		rootWindow.document.addEventListener("click", this.onDocumentClick.bind(this));
 
 		if (BX.type.isPlainObject(this.items))
 		{
@@ -43,7 +42,10 @@
 		setTextContent(this.input, this.items[0].name);
 		data(this.input, "value", this.items[0].value);
 
-		this.setValue(this.content);
+		if (this.content !== "")
+		{
+			this.setValue(this.content);
+		}
 	};
 
 	BX.Landing.UI.Field.Dropdown.prototype = {
@@ -53,14 +55,23 @@
 		onInputClick: function(event)
 		{
 			event.stopPropagation();
-			if (!this.popup || (this.popupRoot && !this.popupRoot.contains(this.popup.popupWindow.popupContainer)))
+			if (
+				!this.popup
+				|| (!this.contentRoot && this.popupRoot && !this.popupRoot.contains(this.popup.popupWindow.popupContainer))
+			)
 			{
-				this.popup = new Menu({
+				this.popup = new BX.PopupMenuWindow({
 					id: "dropdown_" + (+new Date()),
 					bindElement: this.input,
+					bindOptions: {
+						forceBindPosition: true
+					},
+					targetContainer: this.contentRoot,
+					maxHeight: 196,
 					items: this.items.map(function(item) {
 						return {
-							text: escapeText(item.name),
+							html: item.html,
+							text: !item.html ? escapeText(item.name) : undefined,
 							onclick: function() {
 								this.onItemClick(item)
 							}.bind(this)
@@ -74,9 +85,12 @@
 					}
 				});
 
-				this.popupRoot = this.layout.parentElement.parentElement.parentElement;
-				this.popupRoot.appendChild(this.popup.popupWindow.popupContainer);
-				this.popupRoot.style.position = "relative";
+				if (!this.contentRoot)
+				{
+					this.popupRoot = this.layout.parentElement.parentElement.parentElement;
+					this.popupRoot.appendChild(this.popup.popupWindow.popupContainer);
+					this.popupRoot.style.position = "relative";
+				}
 			}
 
 			this.layout.classList.add("landing-ui-active");
@@ -91,17 +105,14 @@
 				this.popup.show();
 			}
 
-			this.popup.layout.menuContainer.style.maxHeight = "calc((36px * 5) + 16px)";
-			this.popup.popupWindow.contentContainer.style.overflowX = "hidden";
-
-			bind(this.popup.popupWindow.popupContainer, "mouseover", this.onMouseOver.bind(this));
-			bind(this.popup.popupWindow.popupContainer, "mouseleave", this.onMouseLeave.bind(this));
-
 			var rect = this.input.getBoundingClientRect();
-			var left = offsetLeft(this.input, this.popupRoot);
-			var top = offsetTop(this.input, this.popupRoot);
-			this.popup.popupWindow.popupContainer.style.top = top + rect.height + "px";
-			this.popup.popupWindow.popupContainer.style.left = left + "px";
+			if (!this.contentRoot)
+			{
+				var left = offsetLeft(this.input, this.popupRoot);
+				var top = offsetTop(this.input, this.popupRoot);
+				this.popup.popupWindow.popupContainer.style.top = top + rect.height + "px";
+				this.popup.popupWindow.popupContainer.style.left = left + "px";
+			}
 			this.popup.popupWindow.popupContainer.style.width = rect.width + "px";
 		},
 
@@ -114,6 +125,7 @@
 			this.onChangeHandler(item.value, this.items, this.postfix, this.property);
 			this.onValueChangeHandler(this);
 			BX.fireEvent(this.input, "input");
+			this.emit('onChange');
 		},
 
 		/**
@@ -121,12 +133,18 @@
 		 */
 		getValue: function()
 		{
-			return typeof this.input.dataset.value !== "undefined" ? this.input.dataset.value : this.items[0].value;
+			var value = this.input.dataset.value;
+
+			if (value !== "undefined" && typeof value !== "undefined")
+			{
+				return value;
+			}
+
+			return this.items[0].value;
 		},
 
 		setValue: function(value)
 		{
-			this.input.dataset.value = value;
 			this.items.forEach(function(item) {
 				// noinspection EqualityComparisonWithCoercionJS
 				if (value == item.value)
@@ -154,43 +172,6 @@
 			{
 				this.popup.close();
 			}
-		},
-
-		/**
-		 * Handles mouse over event
-		 */
-		onMouseOver: function()
-		{
-			bind(this.popup.popupWindow.popupContainer, !!window.onwheel ? "wheel" : "mousewheel", this.onMouseWheel.bind(this));
-			bind(this.popup.popupWindow.popupContainer, "touchmove", this.onMouseWheel.bind(this));
-		},
-
-
-		/**
-		 * Handles mouse leave event
-		 */
-		onMouseLeave: function()
-		{
-			unbind(this.popup.popupWindow.popupContainer, !!window.onwheel ? "wheel" : "mousewheel", this.onMouseWheel.bind(this));
-			unbind(this.popup.popupWindow.popupContainer, "touchmove", this.onMouseWheel.bind(this));
-		},
-
-
-		/**
-		 * Handle mouse wheel event
-		 * @param event
-		 */
-		onMouseWheel: function(event)
-		{
-			event.stopPropagation();
-			event.preventDefault();
-
-			var delta = BX.Landing.UI.Panel.Content.getDeltaFromEvent(event);
-			var scrollTop = this.popup.popupWindow.contentContainer.scrollTop;
-
-			requestAnimationFrame(function() {
-				this.popup.popupWindow.contentContainer.scrollTop = scrollTop - delta.y;
-			}.bind(this));
 		}
 	};
 })();

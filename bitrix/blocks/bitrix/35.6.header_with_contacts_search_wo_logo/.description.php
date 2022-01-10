@@ -10,6 +10,7 @@ return array(
 	'block' => array(
 		'name' => Loc::getMessage('LANDING_BLOCK_35_6_HEADER--NAME_NEW'),
 		'section' => array('menu'),
+		'dynamic' => false,
 		'type' => 'store',
 	),
 	'cards' => array(
@@ -43,7 +44,7 @@ return array(
 	'style' => array(
 		'.landing-block-node-card' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_35_6_HEADER--NODES_CARD'),
-			'type' => 'border-color',
+			'type' => 'border-colors',
 		),
 		'.landing-block-node-card-title' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_35_6_HEADER--NODES_CARD_TITLE'),
@@ -60,14 +61,6 @@ return array(
 		'.landing-block-node-card-icon-container' => array(
 			'name' => Loc::getMessage('LANDING_BLOCK_35_6_HEADER--NODES_ICON'),
 			'type' => 'color',
-		),
-	),
-	'assets' => array(
-		'js' => array(
-			'/bitrix/components/bitrix/search.title/script.js',
-		),
-		'css' => array(
-			'/bitrix/components/bitrix/search.title/templates/bootstrap_v4/style.css',
 		),
 	),
 );

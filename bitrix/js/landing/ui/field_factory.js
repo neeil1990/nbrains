@@ -32,7 +32,8 @@
 					onInput: options.onInput,
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
-					attribute: options.attribute
+					attribute: options.attribute,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -50,7 +51,8 @@
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
 					time: options.time,
-					format: options.format
+					format: options.format,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -63,7 +65,8 @@
 					placeholder: options.placeholder,
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
-					attribute: options.attribute
+					attribute: options.attribute,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -76,7 +79,8 @@
 					content: options.value,
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
-					attribute: options.attribute
+					attribute: options.attribute,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -89,7 +93,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					uploadParams: this.uploadParams
+					uploadParams: this.uploadParams,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -107,7 +112,8 @@
 					},
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
-					attribute: options.attribute
+					attribute: options.attribute,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -120,7 +126,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					options: this.linkOptions
+					options: this.linkOptions,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -133,7 +140,33 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					options: this.linkOptions,
-					textOnly: true
+					textOnly: true,
+					disabled: BX.Text.toBoolean(options.disabled)
+				});
+
+				return new BX.Landing.UI.Field.LinkURL(options);
+			}
+
+			if (options.type === "dynamic_source")
+			{
+
+				options = assign({}, options, {
+					title: options.name,
+					content: options.value,
+					selector: this.selector,
+					onChange: this.onChangeHandler,
+					onValueChange: this.onValueChangeHandler,
+					options: this.linkOptions,
+					textOnly: true,
+					currentPageOnly: options.currentPageOnly,
+					allowedTypes: [
+						'block'
+					],
+					disableCustomURL: true,
+					disallowType: true,
+					customPlaceholder: BX.Landing.Loc.getMessage('LANDING_BLOCK__BLOCK_SOURCE_PLACEHOLDER'),
+					panelTitle: BX.Landing.Loc.getMessage('LANDING_BLOCK__BLOCK_SOURCE_PLACEHOLDER'),
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 
 				return new BX.Landing.UI.Field.LinkURL(options);
@@ -149,13 +182,14 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					type: options.type === "range-slider" ? "multiple" : null
+					type: options.type === "range-slider" ? "multiple" : null,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
 			if (options.type === "palette")
 			{
-				return new BX.Landing.UI.Field.Color({
+				return new BX.Landing.UI.Field.ColorPalette({
 					title: options.name,
 					selector: this.selector,
 					items: options.items,
@@ -163,7 +197,25 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					property: options.property
+					property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
+				});
+			}
+
+			// todo: need save Backward compatibility for "pallette"?
+			if (options.type === "color")
+			{
+				return new BX.Landing.UI.Field.ColorField({
+					title: options.name,
+					selector: this.selector,
+					subtype: options.subtype,
+					// items: options.items,
+					content: options.value,
+					onChange: this.onChangeHandler,
+					onValueChange: this.onValueChangeHandler,
+					attribute: options.attribute,
+					// property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -177,7 +229,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					property: options.property
+					property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -191,7 +244,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					property: options.property
+					property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -206,7 +260,8 @@
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
 					property: options.property,
-					mode: options.mode
+					mode: options.mode,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -221,7 +276,8 @@
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
 					property: options.property,
-					compact: options.compact
+					compact: options.compact,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -236,7 +292,8 @@
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
 					property: options.property,
-					compact: options.compact
+					compact: options.compact,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -250,7 +307,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					property: options.property
+					property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 
@@ -266,7 +324,8 @@
 					onChange: this.onChangeHandler,
 					onValueChange: this.onValueChangeHandler,
 					attribute: options.attribute,
-					property: options.property
+					property: options.property,
+					disabled: BX.Text.toBoolean(options.disabled)
 				});
 			}
 		}

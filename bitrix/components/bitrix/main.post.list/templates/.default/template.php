@@ -1,19 +1,39 @@
-<?if(!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED!==true)die();
+<?php
+
+if (!defined("B_PROLOG_INCLUDED") || B_PROLOG_INCLUDED !== true)
+{
+	die();
+}
+
 /**
  * @var CMain $APPLICATION
  * @var CUser $USER
- */
+ * @global CDatabase $DB
+ * @var array $arParams
+ * @var array $arResult
+*/
+
+use Bitrix\Main\Page\Asset;
 use \Bitrix\Main\UI;
 
-UI\Extension::load("ui.animations");
-UI\Extension::load("main.rating");
-UI\Extension::load("ui.tooltip");
+UI\Extension::load([
+	'ui.animations',
+	'main.rating',
+	'ui.tooltip',
+	'ui.icons.b24',
+	'ui.urlpreview',
+	'socialnetwork.livefeed',
+]);
 
 $APPLICATION->SetAdditionalCSS("/bitrix/components/bitrix/socialnetwork.log.ex/templates/.default/style.css");
 $APPLICATION->SetAdditionalCSS("/bitrix/components/bitrix/socialnetwork.blog.blog/templates/.default/style.css");
-\Bitrix\Main\Page\Asset::getInstance()->addJs("/bitrix/components/bitrix/main.post.list/templates/.default/scripts_for_form.js");
+Asset::getInstance()->addJs("/bitrix/components/bitrix/main.post.list/templates/.default/scripts_for_form.js");
+Asset::getInstance()->addJs("/bitrix/components/bitrix/main.post.list/templates/.default/scripts_for_form2.js");
 if (CModule::IncludeModule("im"))
-	\Bitrix\Main\Page\Asset::getInstance()->addJs("/bitrix/components/bitrix/main.post.list/templates/.default/scripts_for_im.js");
+{
+	Asset::getInstance()->addJs("/bitrix/components/bitrix/main.post.list/templates/.default/scripts_for_im.js");
+}
+
 if (!empty($arParams["RATING_TYPE_ID"]))
 {
 	$likeTemplate = (
@@ -24,7 +44,7 @@ if (!empty($arParams["RATING_TYPE_ID"]))
 	//http://hg.office.bitrix.ru/repos/modules/rev/6377a7cfcd73
 	$APPLICATION->SetAdditionalCSS("/bitrix/components/bitrix/rating.vote/templates/".$likeTemplate."/popup.css");
 	$APPLICATION->SetAdditionalCSS("/bitrix/components/bitrix/rating.vote/templates/".$likeTemplate."/style.css");
-	\Bitrix\Main\Page\Asset::getInstance()->addJs("/bitrix/js/main/rating_like.js");
+	Asset::getInstance()->addJs("/bitrix/js/main/rating_like.js");
 }
 
 CUtil::InitJSCore(array("date", "fx", "popup", "viewer", "clipboard", "tooltip"));
@@ -32,7 +52,13 @@ if (CModule::IncludeModule('socialnetwork'))
 {
 	CUtil::InitJSCore(array("comment_aux"));
 }
-
+if (CModule::IncludeModule('landing'))
+{
+	CUtil::InitJSCore(array("landing_note"));
+}
+$prefixNode = $arParams["ENTITY_XML_ID"].'-'.$arParams["EXEMPLAR_ID"];
+$eventNodeId = $prefixNode."_main";
+$eventNodeIdTemplate = "#ENTITY_XML_ID#-#EXEMPLAR_ID#_main";
 ob_start();
 ?>
 	<!--RCRD_#FULL_ID#-->
@@ -41,7 +67,7 @@ ob_start();
 		#BEFORE_RECORD#
 		<div class="feed-com-block blog-comment-user-#AUTHOR_ID# sonet-log-comment-createdby-#AUTHOR_ID# feed-com-block-#APPROVED##CLASSNAME#">
 			#BEFORE_HEADER#
-			<div class="feed-com-avatar feed-com-avatar-#AUTHOR_AVATAR_IS#"><img src="#AUTHOR_AVATAR#" width="<?=$arParams["AVATAR_SIZE"]?>" height="<?=$arParams["AVATAR_SIZE"]?>" /></div>
+			<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-#AUTHOR_AVATAR_IS#"><i></i><img src="#AUTHOR_AVATAR#" width="<?=$arParams["AVATAR_SIZE"]?>" height="<?=$arParams["AVATAR_SIZE"]?>" /></div>
 			<!--/noindex-->
 			<div class="feed-com-main-content feed-com-block-#NEW#">
 				<span class="feed-com-name #AUTHOR_EXTRANET_STYLE# feed-author-name feed-author-name-#AUTHOR_ID#">#AUTHOR_NAME#</span>
@@ -53,28 +79,23 @@ ob_start();
 					 bx-tooltip-user-id="#AUTHOR_ID#"
 					 bx-tooltip-params="#AUTHOR_TOOLTIP_PARAMS#"
 					 href="<?=($arParams["AUTHOR_URL"] != "" ? "#AUTHOR_URL#" : "javascript:void(0);")?>">#AUTHOR_NAME#</a>
-					<a class="feed-time feed-com-time" href="#VIEW_URL##com#ID#" rel="nofollow">#DATE#</a>
+					<a class="feed-time feed-com-time" href="#VIEW_URL##com#ID#" rel="nofollow" target="_top">#DATE#</a>
 				</div>
 				#AFTER_HEADER#
 				#BEFORE#
 				<div class="feed-com-text">
-					<div class="feed-com-text-inner" bx-content-view-xml-id="#CONTENT_ID#" id="feed-com-text-inner-#CONTENT_ID#" bx-content-view-save="N">
-						<div class="feed-com-text-inner-inner" id="record-#FULL_ID#-text">
+					<div class="feed-com-text-inner" bx-content-view-xml-id="#CONTENT_ID#" id="feed-com-text-inner-#CONTENT_ID#" bx-content-view-save="N" bx-mpl-block="body">
+						<div class="feed-com-text-inner-inner" id="record-#FULL_ID#-text" bx-mpl-block="text">
 							<div>#TEXT#</div>
 						</div>
 					</div>
-					<div class="feed-post-text-more" onclick="fcCommentExpand(this);" id="record-#FULL_ID#-more">
+					<div class="feed-post-text-more" bx-mpl-block="more-button" <?php
+						?>onclick="BX.onCustomEvent(BX('<?=$eventNodeIdTemplate?>'), 'onExpandComment', [this]); return BX.PreventDefault(this);"
+						 <?php
+						?>id="record-#FULL_ID#-more">
 						<div class="feed-post-text-more-but"><div class="feed-post-text-more-left"></div><div class="feed-post-text-more-right"></div></div>
-					</div><?
-					?><script>
-						BX.ready(function() {
-							BX.onCustomEvent(window, 'OnUCMoreButtonAdd', [{
-								bodyBlockID : 'record-#FULL_ID#-text',
-								moreButtonBlockID : 'record-#FULL_ID#-more'
-							}]);
-						});
-					</script><?
-					?></div>
+					</div>
+				</div>
 				#AFTER#
 			</div>
 			#LIKE_REACT#
@@ -82,48 +103,61 @@ ob_start();
 		</div>
 		<div class="feed-com-informers-bottom">
 			#BEFORE_ACTIONS#
-			<?if ( $arParams["SHOW_POST_FORM"] == "Y" )
+			<?php
+			if ( $arParams["SHOW_POST_FORM"] == "Y" )
 			{
-				?><a href="javascript:void(0);" class="feed-com-reply feed-com-reply-#SHOW_POST_FORM#" <?
-				?>id="record-#FULL_ID#-actions-reply" <?
-				?>onclick="window['UC']['#ENTITY_XML_ID#'].reply(this)" <?
-				?>bx-mpl-author-id="#AUTHOR_ID#" <?
-				?>bx-mpl-author-gender="#AUTHOR_PERSONAL_GENDER#" <?
-				?>bx-mpl-author-name="#AUTHOR_NAME#"><?=GetMessage("BLOG_C_REPLY")?></a><?
-			} ?>
-			<a href="#" <?
-			?>id="record-#FULL_ID#-actions" <?
-			   ?>bx-mpl-view-url="#VIEW_URL#" bx-mpl-view-show="#VIEW_SHOW#" <?
-			   ?>bx-mpl-edit-url="#EDIT_URL#" bx-mpl-edit-show="#EDIT_SHOW#" <?
-			   ?>bx-mpl-moderate-url="#MODERATE_URL#" bx-mpl-moderate-show="#MODERATE_SHOW#" bx-mpl-moderate-approved="#APPROVED#" <?
-			   ?>bx-mpl-delete-url="#DELETE_URL###ID#" bx-mpl-delete-show="#DELETE_SHOW#" <?
-			   ?>bx-mpl-createtask-show="#CREATETASK_SHOW#" <?
-			   ?>bx-mpl-post-entity-type="#POST_ENTITY_TYPE#" <?
-			   ?>bx-mpl-comment-entity-type="#COMMENT_ENTITY_TYPE#" <?
-			   if (!!$arParams["bPublicPage"])
-			   {
-			   ?>onclick="javascript:void(0); return BX.PreventDefault(this);" <?
-			   }
-			   else
-			   {
-			   ?>onclick="fcShowActions('#ENTITY_XML_ID#', '#ID#', this); return BX.PreventDefault(this);" <?
-			   }
-			   ?>class="feed-post-more-link feed-post-more-link-#VIEW_SHOW#-#EDIT_SHOW#-#MODERATE_SHOW#-#DELETE_SHOW#"><?
-				?><span class="feed-post-more-text"><?=GetMessage("BLOG_C_BUTTON_MORE")?></span><?
-			?></a>
+				?><a href="javascript:void(0);" class="feed-com-reply feed-com-reply-#SHOW_POST_FORM#" <?php
+				?>id="record-#FULL_ID#-actions-reply" <?php
+				?>onclick="BX.onCustomEvent(BX('<?=$eventNodeIdTemplate?>'), 'onReply', [this]);" <?php
+				?>bx-mpl-author-id="#AUTHOR_ID#" <?php
+				?>bx-mpl-author-gender="#AUTHOR_PERSONAL_GENDER#" <?php
+				?>bx-mpl-author-name="#AUTHOR_NAME#" <?php
+				?>data-slider-ignore-autobinding="true"><?=GetMessage("BLOG_C_REPLY")?></a><?php
+			}
+
+
+			if (!$arParams["bPublicPage"])
+			{
+				?><a href="#" <?php
+				?> id="record-#FULL_ID#-actions" <?php
+				?> bx-mpl-view-url="#VIEW_URL#" bx-mpl-view-show="#VIEW_SHOW#" <?php
+				?> bx-mpl-edit-url="#EDIT_URL#" bx-mpl-edit-show="#EDIT_SHOW#" <?php
+				?> bx-mpl-moderate-url="#MODERATE_URL#" bx-mpl-moderate-show="#MODERATE_SHOW#" bx-mpl-moderate-approved="#APPROVED#" <?php
+				?> bx-mpl-delete-url="#DELETE_URL###ID#" bx-mpl-delete-show="#DELETE_SHOW#" <?php
+				?> bx-mpl-createtask-show="#CREATETASK_SHOW#" <?php
+				?> bx-mpl-createsubtask-show="#CREATESUBTASK_SHOW#" <?php
+				?> bx-mpl-post-entity-type="#POST_ENTITY_TYPE#" <?php
+				?> bx-mpl-post-entity-xml-id="#ENTITY_XML_ID#" <?php
+				?> bx-mpl-comment-entity-type="#COMMENT_ENTITY_TYPE#" <?php
+				?> onclick="BX.onCustomEvent(BX('<?=$eventNodeIdTemplate?>'), 'onShowActions', [this, '#ID#']); return BX.PreventDefault(this);" <?php
+				?> class="feed-post-more-link feed-post-more-link-#VIEW_SHOW#-#EDIT_SHOW#-#MODERATE_SHOW#-#DELETE_SHOW#"><?php
+					?><span class="feed-post-more-text"><?=GetMessage("BLOG_C_BUTTON_MORE")?></span><?php
+				?></a><?php
+			}
+			?>
 			#AFTER_ACTIONS#
 		</div>
-		#AFTER_RECORD#
-	</div>
-	<div id="record-#FULL_ID#-placeholder" class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box" style="display:none;"></div>
+		#AFTER_RECORD#<?php
+		?><script>BX.ready(function() { BX.onCustomEvent(BX('<?=$eventNodeIdTemplate?>'), 'OnUCCommentIsInDOM', ['#ID#', BX('<?=$eventNodeIdTemplate?>')]);});</script><?php
+	?></div>
+	<div id="record-#FULL_ID#-placeholder" bx-mpl-block="edit-placeholder" class="blog-comment-edit feed-com-add-block blog-post-edit feed-com-add-box" style="display:none;"></div>
 	<!--RCRD_END_#FULL_ID#-->
-<?
+<?php
 $template = preg_replace("/[\t\n]/", "", ob_get_clean());
-
-
+ob_start();
+?>
+	<script>
+		BX.ready(function() {
+			BX.onCustomEvent(BX('<?=$eventNodeIdTemplate?>'), 'OnUCBlankCommentIsInDOM', ['#ID#', BX('<?=$eventNodeIdTemplate?>')]);
+		});
+	</script>
+	<div style="position: absolute;width:1px;height:1px;opasity:0;"></div>
+<?php
+$blankTemplate =  preg_replace("/[\t\n]/", "", ob_get_clean());
+?><div id="<?=$eventNodeId?>"><?php
 if (empty($arParams["RECORDS"]))
 {
-	?><div id="record-<?=$arParams["ENTITY_XML_ID"]?>-corner" class="feed-com-corner"></div><?
+	?><div id="record-<?=$arParams["ENTITY_XML_ID"]?>-corner" class="feed-com-corner"></div><?php
 }
 else
 {
@@ -135,16 +169,20 @@ else
 
 			if ($arParams["PREORDER"] == "Y")
 			{
-				?><div id="<?=$arParams["ENTITY_XML_ID"]?>_hidden_records" class="feed-hidden-post" style="display:none; overflow:hidden;"></div> <?
+				?><div id="record-<?=$prefixNode?>-hidden" class="feed-hidden-post" style="display:none; overflow:hidden;"></div> <?php
 			}
-			?><div class="feed-com-header"><?
-				?><a class="feed-com-all" href="<?=$arParams["NAV_STRING"]?>" id="<?=$arParams["ENTITY_XML_ID"]?>_page_nav"><?
-					?><?=($arParams["PREORDER"] == "Y" ? GetMessage("BLOG_C_VIEW1") : GetMessage("BLOG_C_VIEW2"))?> <span class="feed-com-all-count"><?=$arResult["NAV_STRING_COUNT_MORE"]?></span><i></i><?
-				?></a><?
-			?></div><?
+			?><div class="feed-com-header"><?php
+				?><a class="feed-com-all" href="<?=$arParams["NAV_STRING"]?>"<?php
+					?> id="<?=$prefixNode?>_page_nav" <?php
+					?> bx-mpl-comments-count="<?=$arResult["NAV_STRING_COUNT_MORE"]?>"<?php
+					?> data-slider-ignore-autobinding="true"><?php
+					?><?=($arParams["PREORDER"] == "Y" ? GetMessage("BLOG_C_VIEW1") : GetMessage("BLOG_C_VIEW2"))?> <span class="feed-com-all-count"><?=$arResult["NAV_STRING_COUNT_MORE"]?></span><i></i><?php
+				?></a><?php
+				?><span class="feed-com-loader-informer" id="<?=$prefixNode?>_page_nav_loader" style="display:none;"><?=GetMessage("BLOG_C_LOADING")?></span><?php
+			?></div><?php
 			if ($arParams["PREORDER"] != "Y")
 			{
-				?><div id="<?=$arParams["ENTITY_XML_ID"]?>_hidden_records" class="feed-hidden-post" style="display:none; overflow:hidden;"></div> <?
+				?><div id="record-<?=$prefixNode?>-hidden" class="feed-hidden-post" style="display:none; overflow:hidden;"></div> <?php
 			}
 			$arParams["NAV_STRING"] = ob_get_clean();
 		}
@@ -154,43 +192,159 @@ else
 		}
 	}
 	$tmp = reset($arParams["RECORDS"]);
-	?><div class="feed-com-corner<?=($arParams["NAV_STRING"] === "" && $tmp["NEW"] == "Y" ? " feed-post-block-yellow-corner" : "")?>"></div><?
-	if ($arParams["PREORDER"] != "Y"): ?><?=$arParams["NAV_STRING"]?><? endif;
-	$iCount = 0;
-	?><!--RCRDLIST_<?=$arParams["ENTITY_XML_ID"]?>--><?
+	?><div class="feed-com-corner<?=($arParams["NAV_STRING"] === "" && $tmp["NEW"] == "Y" ? " feed-post-block-yellow-corner" : "")?>"></div><?php
+	if ($arParams["PREORDER"] != "Y")
+	{
+		?><?= $arParams["NAV_STRING"] ?><?php
+	}
+	?><!--RCRDLIST_<?=$arParams["ENTITY_XML_ID"]?>--><?php
+	$collapsedMessages = 0;
+	$collapsedMessagesBlockIsCollapsed = true;
+	$collapsedMessagesBlock = null;
+
 	foreach ($arParams["RECORDS"] as $res)
 	{
-		if (intval($res["ID"]) <= 0)
+		if ((int)$res["ID"] <= 0)
 		{
 			continue;
 		}
 
+		if ($res["COLLAPSED"] === "Y")
+		{
+			$collapsedMessages++;
+			if ($collapsedMessagesBlock === null)
+			{
+				ob_start();
+	?>
+		<div class="feed-com-collapsed" data-bx-role="collapsed-block">
+			<input type="checkbox" id="collapsed_switcher_<?=$arParams["ENTITY_XML_ID"]?>_<?=$res["ID"]?>" #COLLAPSED_MESSAGES_BLOCK_IS_COLLAPSED#>
+			<label for="collapsed_switcher_<?=$arParams["ENTITY_XML_ID"]?>_<?=$res["ID"]?>"
+				data-bx-collapse-role="show">
+				<a class="feed-com-collapsed-btn">
+					<?=GetMessage("MPL_SHOW_COLLAPSED_COMMENTS")?> (#COLLAPSED_MESSAGES_COUNT#)
+				</a>
+			</label>
+			<label for="collapsed_switcher_<?=$arParams["ENTITY_XML_ID"]?>_<?=$res["ID"]?>"
+				data-bx-collapse-role="hide">
+				<a class="feed-com-collapsed-btn">
+					<?=GetMessage("MPL_HIDE_COLLAPSED_COMMENTS")?> (#COLLAPSED_MESSAGES_COUNT#)
+				</a>
+			</label>
+			<div class="feed-com-collapsed-block">
+				<div class="feed-com-collapsed-block-inner">
+					#COLLAPSED_MESSAGES_BLOCK#
+				</div>
+			</div>
+<script>
+	BX.ready(function() {
+		BX("collapsed_switcher_<?=$arParams["ENTITY_XML_ID"]?>_<?=$res["ID"]?>").addEventListener("click", function() {
+			var serviceBlock = this.parentNode.querySelector("div.feed-com-collapsed-block");
+			serviceBlock.style.height = this.checked ? (serviceBlock.children[0].offsetHeight + "px") : 0;
+			serviceBlock.style.opacity = this.checked ? 1 : 0;
+			this.classList.remove("feed-com-collapsed-once");
+		});
+	});
+</script>
+		</div><?php
+				$collapsedMessagesBlock = ob_get_clean();
+				ob_start();
+			}
+		}
+		else if ($collapsedMessagesBlock !== null)
+		{
+			?><?= str_replace([
+					"#COLLAPSED_MESSAGES_BLOCK_IS_COLLAPSED#",
+					"#COLLAPSED_MESSAGES_COUNT#",
+					"#COLLAPSED_MESSAGES_BLOCK#"
+				], [
+					$collapsedMessagesBlockIsCollapsed ? "" : "checked class=\"feed-com-collapsed-once\" ",
+					$collapsedMessages,
+					ob_get_clean()
+				],
+				$collapsedMessagesBlock
+			) ?><?php
+			$collapsedMessagesBlock = null;
+			$collapsedMessages = 0;
+			$collapsedMessagesBlockIsCollapsed = true;
+		}
+
 		$res["AUTHOR"] = (is_array($res["AUTHOR"]) ? $res["AUTHOR"] : array());
-		$iCount++;
-		?><div id="record-<?=$arParams["ENTITY_XML_ID"]?>-<?=$res["ID"]?>-cover" class="feed-com-block-cover"><?
-		?><?=$this->__component->parseTemplate($res, $arParams, $template)?>
-		</div>
-	<?
+		$isMessageBlank = !(array_key_exists("POST_MESSAGE_TEXT", $res) && $res["POST_MESSAGE_TEXT"] !== null);
+		$collapsedMessagesBlockIsCollapsed = ($res["NEW"] == "Y" || $res["ID"] == $arParams["RESULT"] ? false : $collapsedMessagesBlockIsCollapsed);
+		?><div id="record-<?=$arParams["ENTITY_XML_ID"]?>-<?=$res["ID"]?>-cover" <?php
+			?>bx-mpl-xml-id="<?=$arParams["ENTITY_XML_ID"]?>" <?php
+			?>bx-mpl-entity-id="<?=$res["ID"]?>" <?php
+			?>bx-mpl-read-status="<?=(($res["NEW"] == "Y" ? "new" : "old"))?>" <?php
+			?>bx-mpl-blank-status="<?=($isMessageBlank ? "blank" : "full")?>" <?php
+			?>bx-mpl-block="main" <?php
+			?>class="feed-com-block-cover"><?php
+				?><?= $this->__component->parseTemplate($res, $arParams, ($isMessageBlank ? $blankTemplate : $template)) ?>
+			</div>
+		<?php
 	}
-	?><!--RCRDLIST_END_<?=$arParams["ENTITY_XML_ID"]?>--><?
-	if ($arParams["PREORDER"] == "Y"): ?><?=$arParams["NAV_STRING"]?><? endif;
+	if ($collapsedMessagesBlock !== null)
+	{
+		?><?= str_replace([
+				"#COLLAPSED_MESSAGES_BLOCK_IS_COLLAPSED#",
+				"#COLLAPSED_MESSAGES_COUNT#",
+				"#COLLAPSED_MESSAGES_BLOCK#"
+			], [
+				$collapsedMessagesBlockIsCollapsed ? "" : "checked class=\"feed-com-collapsed-once\" ",
+				$collapsedMessages,
+				ob_get_clean()
+			],
+			$collapsedMessagesBlock
+		) ?><?php
+		$collapsedMessagesBlock = null;
+		$collapsedMessages = 0;
+		$collapsedMessagesBlockIsCollapsed = true;
+	}
+
+	?><!--RCRDLIST_END_<?=$arParams["ENTITY_XML_ID"]?>--><?php
+	if ($arParams["PREORDER"] == "Y"): ?><?=$arParams["NAV_STRING"]?><?php
+	endif;
 }
+$ajaxParams = [];
+if ($this->__component->__parent instanceof \Bitrix\Main\Engine\Contract\Controllerable)
+{
+	$ajaxParams = [
+		"componentName" => $this->__component->__parent->getName(),
+		"processComment" => method_exists($this->__component->__parent, "processCommentAction"),
+		"navigateComment" => method_exists($this->__component->__parent, "navigateCommentAction"),
+		"getComment" => method_exists($this->__component->__parent, "getCommentAction"),
+		"readComment" => method_exists($this->__component->__parent, "readCommentAction"),
+		"params" => $this->__component->__parent->getSignedParameters()
+	];
+}
+
+//AddMessage2Log($arParams["FORM_ID"], '', 50);
 ?>
 <script type="text/javascript">
 BX.ready(function(){
 	window["UC"]["<?=$arParams["ENTITY_XML_ID"]?>"] = new FCList({
-			ENTITY_XML_ID : '<?=$arParams["ENTITY_XML_ID"]?>',
-			container : BX('<?=$arParams["ENTITY_XML_ID"]?>_hidden_records'),
-			nav : BX('<?=$arParams["ENTITY_XML_ID"]?>_page_nav'),
-			mid : <?=(!!$arParams["LAST_RECORD"] ? $arParams["LAST_RECORD"]["ID"] : 0)?>,
-			order : '<?=($arParams["PREORDER"] == "N" ? "DESC" : "ASC")?>',
-			rights : {
+		EXEMPLAR_ID : '<?=CUtil::JSEscape(htmlspecialcharsbx($arParams["EXEMPLAR_ID"]))?>',
+		ENTITY_XML_ID : '<?=CUtil::JSEscape($arParams["ENTITY_XML_ID"])?>',
+		FORM_ID : '<?=CUtil::JSEscape($arParams["FORM_ID"])?>',
+		template : '<?=CUtil::JSEscape($template)?>',
+
+		mainNode : BX('<?=$eventNodeId?>'),
+		navigationNode : BX('<?=$prefixNode?>_page_nav'),
+		navigationNodeLoader : BX('<?=$prefixNode?>_page_nav_loader'),
+		nodeForOldMessages : BX('record-<?=$prefixNode?>-hidden'),
+		nodeForNewMessages : BX('record-<?=$prefixNode?>-new'),
+		nodeFormHolder : BX('record-<?=$prefixNode?>-form-holder'),
+
+		order : '<?=($arParams["PREORDER"] == "N" ? "DESC" : "ASC")?>',
+		mid : <?= (int)$arParams["LAST_RECORD"]["ID"] ?>,
+		rights : {
 				MODERATE : '<?=$arParams["RIGHTS"]["MODERATE"]?>',
 				EDIT : '<?=$arParams["RIGHTS"]["EDIT"]?>',
 				DELETE : '<?=$arParams["RIGHTS"]["DELETE"]?>',
-				CREATETASK : '<?=$arParams["RIGHTS"]["CREATETASK"]?>'
+				CREATETASK : '<?=$arParams['RIGHTS']['CREATETASK']?>',
+				CREATESUBTASK : '<?= ($arParams['RIGHTS']['CREATESUBTASK'] ?? 'N') ?>',
 			},
-			sign : '<?=$arParams["SIGN"]?>'
+		sign : '<?=$arParams["SIGN"]?>',
+		ajax : <?=CUtil::PhpToJSObject($ajaxParams)?>
 		},
 		{
 			VIEW_URL : '<?=CUtil::JSEscape($arParams["~VIEW_URL"])?>',
@@ -212,36 +366,65 @@ BX.ready(function(){
 			BIND_VIEWER : '<?=$arParams["BIND_VIEWER"]?>'
 		}
 	);
+	<?php
+	if ($arParams["BIND_VIEWER"] === "Y")
+	{
+		?>
+		setTimeout(function(){
+			if (BX["viewElementBind"])
+			{
+				BX.viewElementBind(
+					BX('<?=$eventNodeId?>'), {},
+					function(node){
+						return BX.type.isElementNode(node) && (node.getAttribute('data-bx-viewer') || node.getAttribute('data-bx-image'));
+					}
+				);
+			}
+		}, 500);
+		<?php
+	}
+	?>
 });
 </script>
-<div id="record-<?=$arParams["ENTITY_XML_ID"]?>-new"></div><?
+<div id="record-<?=$prefixNode?>-new"></div><?php
 if (!empty($arParams["ERROR_MESSAGE"]))
 {
 	?><div class="feed-add-error"><span class="feed-add-info-text"><span class="feed-add-info-icon"></span>
-		<b><?=GetMessage("B_B_PC_COM_ERROR")?></b><br /><?=$arParams["ERROR_MESSAGE"]?></span></div><?
+		<b><?=GetMessage("B_B_PC_COM_ERROR")?></b><br /><?=$arParams["ERROR_MESSAGE"]?></span></div><?php
 }
 include_once(__DIR__."/messages.php");
 if ($arParams["SHOW_POST_FORM"] == "Y")
 {
 	$AUTHOR_AVATAR = __mpl_get_avatar();
 
-	?><div class="feed-com-add-box-outer">
+	?><div class="feed-com-add-box-outer" id="record-<?=$prefixNode?>-form-holder">
 
-		<div class="feed-com-avatar feed-com-avatar-<?=($AUTHOR_AVATAR == '/bitrix/images/1.gif' ? "N" : "Y")?>"><?
-			?><img width="37" height="37" src="<?=$AUTHOR_AVATAR?>"><?
+		<div class="ui-icon ui-icon-common-user feed-com-avatar feed-com-avatar-<?=($AUTHOR_AVATAR == '/bitrix/images/1.gif' ? "N" : "Y")?>"><?php
+			?>
+			<i></i>
+			<img width="37" height="37" src="<?= $AUTHOR_AVATAR ?>">
+			<?php
 		?></div>
 
 		<div class="feed-com-add-box">
-			<div id="record-<?=$arParams["ENTITY_XML_ID"]?>-0-placeholder" class="blog-comment-edit feed-com-add-block blog-post-edit" style="display:none;"><?
-			?></div><?
-			?><div class="feed-com-footer" id="record-<?=$arParams["ENTITY_XML_ID"]?>-switcher" onclick="window['UC']['<?=$arParams["ENTITY_XML_ID"]?>'].reply();" <?
-			?><?if ($arParams['SHOW_MINIMIZED'] != "Y"): ?> style="display:none;" <? endif; ?>><?
-				?><div class="feed-com-add"><?
-					?><a class="feed-com-add-link" href="javascript:void(0);" style="outline: none;" hidefocus="true"><?=GetMessage("B_B_MS_ADD_COMMENT")?></a><?
-				?></div><?
-			?></div>
+			<div id="record-<?=$arParams["ENTITY_XML_ID"]?>-0-placeholder" class="blog-comment-edit feed-com-add-block blog-post-edit" style="display:none;"><?php
+			?></div><?php
+			?><div class="feed-com-footer" onclick="BX.onCustomEvent(BX('<?=$eventNodeId?>'), 'onReply', [this]);" <?php
+			?><?php if ($arParams['SHOW_MINIMIZED'] != "Y"): ?> style="display:none;" <?php
+			endif; ?>><?php
+				?><div class="feed-com-add"><?php
+					?><a class="feed-com-add-link" href="javascript:void(0);" style="outline: none;" hidefocus="true"><?=GetMessage("B_B_MS_ADD_COMMENT")?></a><?php
+				?></div><?php
+			?></div><?php
+			?><div id="record-<?=$arParams["ENTITY_XML_ID"]?>-writers-block" class="feed-com-writers" style="display:none;">
+				<div id="record-<?=$arParams["ENTITY_XML_ID"]?>-writers" class="feed-com-writers-wrap"></div>
+				<div class="feed-com-writers-pen"></div>
+			</div>
+		</div>
+		<div class="feed-com-add-box-dnd-notice">
+			<div class="feed-com-add-box-dnd-notice-inner"></div>
 		</div>
 	</div>
-	<?
+	<?php
 }
-?>
+?></div><?php

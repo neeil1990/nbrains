@@ -1,4 +1,6 @@
-<?
+<?php
+
+/** @global \CMain $APPLICATION */
 use Bitrix\Main;
 
 IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/interface/admin_lib.php");
@@ -8,59 +10,24 @@ class CAdminSubSorting extends CAdminSorting
 {
 	public $list_url;
 
-	function CAdminSubSorting($table_id, $by_initial = false, $order_initial = false, $by_name = "by", $ord_name = "order", $list_url)
+	public function __construct($table_id, $by_initial = false, $order_initial = false, $by_name = "by", $ord_name = "order", $list_url = '')
 	{
 		global $APPLICATION;
 
-		$this->by_name = $by_name;
-		$this->ord_name = $ord_name;
-		$this->table_id = $table_id;
-		$this->by_initial = $by_initial;
-		$this->order_initial = $order_initial;
-
-		$this->list_url = $list_url;
-		if ('' == $this->list_url)
+		parent::__construct($table_id, $by_initial, $order_initial, $by_name, $ord_name);
+		$this->list_url = trim((string)$list_url);
+		if ($this->list_url === '')
 			$this->list_url = $APPLICATION->GetCurPage();
-//TODO: need parameters in url for md5?
-		$uniq = md5($this->list_url);
-
-		$aOptSort = array();
-		if(isset($GLOBALS[$this->by_name]))
-			$_SESSION["SESS_SORT_BY"][$uniq] = $GLOBALS[$this->by_name];
-		elseif(isset($_SESSION["SESS_SORT_BY"][$uniq]))
-			$GLOBALS[$this->by_name] = $_SESSION["SESS_SORT_BY"][$uniq];
-		else
-		{
-			$aOptSort = CUserOptions::GetOption("list", $this->table_id, array("by"=>$by_initial, "order"=>$order_initial));
-			if(!empty($aOptSort["by"]))
-				$GLOBALS[$this->by_name] = $aOptSort["by"];
-			elseif($by_initial !== false)
-				$GLOBALS[$this->by_name] = $by_initial;
-		}
-
-		if(isset($GLOBALS[$this->ord_name]))
-			$_SESSION["SESS_SORT_ORDER"][$uniq] = $GLOBALS[$this->ord_name];
-		elseif(isset($_SESSION["SESS_SORT_ORDER"][$uniq]))
-			$GLOBALS[$this->ord_name] = $_SESSION["SESS_SORT_ORDER"][$uniq];
-		else
-		{
-			if(empty($aOptSort["order"]))
-				$aOptSort = CUserOptions::GetOption("list", $this->table_id, array("order"=>$order_initial));
-			if(!empty($aOptSort["order"]))
-				$GLOBALS[$this->ord_name] = $aOptSort["order"];
-			elseif($order_initial !== false)
-				$GLOBALS[$this->ord_name] = $order_initial;
-		}
 	}
 
-	function Show($text, $sort_by, $alt_title = false, $baseCssClass = "")
+	public function Show($text, $sort_by, $alt_title = false, $baseCssClass = "")
 	{
 		$ord = "asc";
 		$class = "";
 		$title = GetMessage("admin_lib_sort_title")." ".($alt_title?$alt_title:$text);
-		if(strtolower($GLOBALS[$this->by_name]) == strtolower($sort_by))
+		if(mb_strtolower($this->field) == mb_strtolower($sort_by))
 		{
-			if(strtolower($GLOBALS[$this->ord_name]) == "desc")
+			if(mb_strtolower($this->order) == "desc")
 			{
 				$class = "-down";
 				$title .= " ".GetMessage("admin_lib_sort_down");
@@ -74,7 +41,7 @@ class CAdminSubSorting extends CAdminSorting
 		}
 
 		$path = $this->list_url;
-		$sep = (false === strpos($path,'?') ? '?' : '&');
+		$sep = (false === mb_strpos($path, '?') ? '?' : '&');
 		$url = $path.$sep.$this->by_name."=".$sort_by."&".$this->ord_name."=".($class <> ""? $ord:"");
 
 		return 'class="'.$baseCssClass.' adm-list-table-cell-sort'.$class.'" onclick="'.$this->table_id.'.Sort(\''.htmlspecialcharsbx(CUtil::addslashes($url)).'\', '.($class <> ""? "false" : "true").', arguments);" title="'.$title.'"';
@@ -96,6 +63,8 @@ class CAdminSubList extends CAdminList
 	public $arFieldNames = array(); // add
 	public $arHideHeaders = array(); // add
 
+	protected $bPublicMode = false;
+
 	protected $dialogParams = array();
 	protected $requiredDialogParams = array(
 		'bxpublic' => 'Y'
@@ -104,14 +73,14 @@ class CAdminSubList extends CAdminList
 		'BX.CAdminDialog.btnSave', 'BX.CAdminDialog.btnCancel'
 	);
 
-
 	/**
 	 * @param string $table_id
 	 * @param bool|CAdminSubSorting $sort
-	 * @param string $list_url
+	 * @param string|array $list_url
 	 * @param bool|array $arHideHeaders
 	 */
-	function CAdminSubList($table_id, $sort = false, $list_url, $arHideHeaders = false)
+
+	public function __construct($table_id, $sort = false, $list_url = '', $arHideHeaders = false)
 	{
 		global $APPLICATION;
 
@@ -159,11 +128,12 @@ class CAdminSubList extends CAdminList
 		if ($this->bPublicMode)
 			$this->__AddListUrlParams('bxpublic', 'Y');
 
-		if (false == $sort)
+		if ($sort === false)
 			$sort = new CAdminSubSorting($table_id, 'ID', 'ASC', 'by', 'order', $this->GetListUrl(true));
 		else
 			$sort->list_url = $this->GetListUrl(true);
-		$this->CAdminList($table_id,$sort);
+
+		parent::__construct($table_id, $sort);
 
 		$this->SetBaseFieldNames();
 		if (!empty($arHideHeaders) && is_array($arHideHeaders))
@@ -184,7 +154,7 @@ class CAdminSubList extends CAdminList
 			foreach ($this->arListUrlParams as $key => $value)
 				$this->strListUrlParams .= $key.'='.$value.'&';
 			unset($key, $value);
-			$this->strListUrlParams = substr($this->strListUrlParams,0,-1);
+			$this->strListUrlParams = mb_substr($this->strListUrlParams, 0, -1);
 		}
 	}
 
@@ -238,11 +208,11 @@ class CAdminSubList extends CAdminList
 
 	function __ParseListUrl($boolClear = false)
 	{
-		$mxPos = strpos($this->strListUrl, '?');
+		$mxPos = mb_strpos($this->strListUrl, '?');
 		if (false !== $mxPos)
 		{
-			$this->__SetListUrlParams(substr($this->strListUrl,$mxPos+1),$boolClear);
-			$this->strListUrl = substr($this->strListUrl,0,$mxPos);
+			$this->__SetListUrlParams(mb_substr($this->strListUrl, $mxPos + 1), $boolClear);
+			$this->strListUrl = mb_substr($this->strListUrl, 0, $mxPos);
 		}
 	}
 
@@ -257,10 +227,14 @@ class CAdminSubList extends CAdminList
 	}
 
 	//id, name, content, sort, default
-	function AddHeaders($aParams)
+	public function AddHeaders($aParams)
 	{
-		if (isset($_REQUEST['showallcol']) && $_REQUEST['showallcol'])
-			$_SESSION['SHALL'] = ($_REQUEST['showallcol'] == 'Y');
+		$showAll = $this->request->get('showallcol');
+		if ($showAll !== null && $showAll !== '')
+		{
+			$this->session['SHALL'] = $showAll === 'Y';
+		}
+		$showAll = isset($this->session['SHALL']) && $this->session['SHALL'];
 
 		$hiddenColumns = (!empty($this->arHideHeaders) ? array_fill_keys($this->arHideHeaders, true) : array());
 
@@ -289,7 +263,7 @@ class CAdminSubList extends CAdminList
 			{
 				$this->aHeaders[$param["id"]] = $param;
 				if (
-					(isset($_SESSION['SHALL']) && $_SESSION['SHALL'])
+					$showAll
 					|| ($bEmptyCols && $param["default"] == true)
 					|| isset($userColumns[$param["id"]])
 				)
@@ -324,76 +298,70 @@ class CAdminSubList extends CAdminList
 			$this->ShowSettings($aAllCols, $aCols, $aOptions);
 	}
 
-	function AddVisibleHeaderColumn($id)
+	public function AddVisibleHeaderColumn($id)
 	{
 		if (!in_array($id, $this->arVisibleColumns) && !in_array($id,$this->arHideHeaders))
 			$this->arVisibleColumns[] = $id;
 	}
 
-	function AddAdminContextMenu($aContext=array(), $bShowExcel=true, $bShowSettings=true)
+	protected function GetSystemContextMenu(array $config = []): array
 	{
-		$aAdditionalMenu = array();
+		$result = [];
 
-		if ($bShowSettings)
+		if (isset($config['settings']))
 		{
 			$this->__AddListUrlParams('mode','subsettings');
-			$aAdditionalMenu[]= array(
-				"TEXT"=>GetMessage("admin_lib_context_sett"),
-				"TITLE"=>GetMessage("admin_lib_context_sett_title"),
-				"ONCLICK"=>$this->table_id.".ShowSettings('".CUtil::JSEscape($this->GetListUrl(true))."')",
-				"ICON"=>"btn_sub_settings",
-			);
+			$result[] = [
+				"TEXT" => GetMessage("admin_lib_context_sett"),
+				"TITLE" => GetMessage("admin_lib_context_sett_title"),
+				"ONCLICK" => $this->table_id.".ShowSettings('".CUtil::JSEscape($this->GetListUrl(true))."')",
+				"ICON" => "btn_sub_settings",
+			];
 			$this->__DeleteListUrlParams('mode');
 		}
-		if($bShowExcel)
+		if (isset($config['excel']))
 		{
 			$this->__AddListUrlParams('mode','excel');
-			$aAdditionalMenu[] = array(
-				"TEXT"=>"Excel",
-				"TITLE"=>GetMessage("admin_lib_excel"),
-				"ONCLICK"=>"location.href='".htmlspecialcharsbx($this->GetListUrl(true))."'",
-				"ICON"=>"btn_sub_excel",
-			);
+			$result[] = [
+				"TEXT" => "Excel",
+				"TITLE" => GetMessage("admin_lib_excel"),
+				"ONCLICK" => "location.href='".htmlspecialcharsbx($this->GetListUrl(true))."'",
+				"ICON" => "btn_sub_excel",
+			];
 			$this->__DeleteListUrlParams('mode');
 		}
-
-		if(count($aContext)>0 || count($aAdditionalMenu) > 0)
-			$this->context = new CAdminSubContextMenuList($aContext, $aAdditionalMenu);
+		return $result;
 	}
 
-	function GroupAction()
+	protected function InitContextMenu(array $menu = [], array $additional = []): void
 	{
-		if(!empty($_REQUEST['action_button']))
-			$_REQUEST['action'] = $_REQUEST['action_button'];
-
-		if(!isset($_REQUEST['action']) || !check_bitrix_sessid())
-			return false;
-
-		if($_REQUEST['action_button']=="edit")
+		if (!empty($menu) || !empty($additional))
 		{
-			if(isset($_REQUEST['SUB_ID']))
-			{
-				if(!is_array($_REQUEST['SUB_ID']))
-					$arID = Array($_REQUEST['SUB_ID']);
-				else
-					$arID = $_REQUEST['SUB_ID'];
-
-				$this->arEditedRows = $arID;
-				$this->bEditMode = true;
-			}
-			return false;
+			$this->context = new CAdminSubContextMenuList($menu, $additional);
 		}
+	}
 
-		$arID = array();
-		if($_REQUEST['action_sub_target']!='selected')
+	/**
+	 * Returns true if the user has set the flag "To all" in the list.
+	 *
+	 * @return bool
+	 */
+	public function IsGroupActionToAll()
+	{
+		return (isset($_REQUEST['action_sub_target']) && $_REQUEST['action_sub_target'] === 'selected');
+	}
+
+	/**
+	 * @return array|null
+	 */
+	protected function GetGroupIds()
+	{
+		$result = null;
+		if (isset($_REQUEST['SUB_ID']))
 		{
-			if(!is_array($_REQUEST['SUB_ID']))
-				$arID = array($_REQUEST['SUB_ID']);
-			else
-				$arID = $_REQUEST['SUB_ID'];
+			$result = (!is_array($_REQUEST['SUB_ID']) ? array($_REQUEST['SUB_ID']) : $_REQUEST['SUB_ID']);
 		}
-
-		return $arID;
+		return $result;
 	}
 
 	public function ActionPost($url = false, $action_name = false, $action_value = 'Y')
@@ -401,7 +369,7 @@ class CAdminSubList extends CAdminList
 		return $this->table_id.".FormSubmit();";
 	}
 
-	function ActionDoGroup($id, $action_id, $add_params='')
+	public function ActionDoGroup($id, $action_id, $add_params='')
 	{
 		$strParams = "SUB_ID=".urlencode($id)
 			."&action=".urlencode($action_id)
@@ -413,7 +381,7 @@ class CAdminSubList extends CAdminList
 		return $this->table_id.".GetAdminList('".CUtil::JSEscape($strUrl)."');";
 	}
 
-	function &AddRow($id = false, $arRes = array(), $link = false, $title = false, $boolBX = false)
+	public function &AddRow($id = false, $arRes = array(), $link = false, $title = false, $boolBX = false)
 	{
 		$row = new CAdminSubListRow($this->aHeaders, $this->table_id);
 		$row->id = $id;
@@ -435,7 +403,7 @@ class CAdminSubList extends CAdminList
 		return $row;
 	}
 
-	function Display()
+	public function Display()
 	{
 		foreach(GetModuleEvents("main", "OnAdminSubListDisplay", true) as $arEvent)
 			ExecuteModuleEventEx($arEvent, array(&$this));
@@ -562,26 +530,30 @@ echo '<table class="adm-list-table" id="'.$this->table_id.'">
 		echo $this->sNavText;
 	}
 
-	function ShowActionTable()
+	public function ShowActionTable()
 	{
-		if(count($this->arActions)<=0 && !$this->bCanBeEdited)
+		if (empty($this->arActions) && !$this->bCanBeEdited)
 			return;
-
 ?>
-<div class="adm-list-table-footer" id="<?=$this->table_id?>_footer<?=$this->bEditMode || count($this->arUpdateErrorIDs)>0 ? '_edit' : ''?>">
-	<input type="hidden" name="action_button" id="<?=$this->table_id.'_action_button'; ?>" value="" />
+<div class="adm-list-table-footer" id="<?=$this->table_id?>_footer<?=$this->bEditMode || !empty($this->arUpdateErrorIDs) ? '_edit' : ''?>">
+	<input type="hidden" name="action_button" id="<?=$this->table_id; ?>_action_button" value="" />
 <?
-
-		if($this->bEditMode || count($this->arUpdateErrorIDs)>0)
+		if($this->bEditMode || !empty($this->arUpdateErrorIDs))
 		{
-			echo '<input type="button" name="save_sub" id="'.$this->table_id.'_save_sub_button" value="'.GetMessage("admin_lib_list_edit_save").'" title="'.GetMessage("admin_lib_list_edit_save_title").'" onclick="'.$this->table_id.'.ExecuteFormAction(\'SAVE_BUTTON\');" />
-			<input type="button" name="cancel_sub" id="'.$this->table_id.'_cancel_sub_button" value="'.GetMessage("admin_lib_list_edit_cancel").'" title="'.GetMessage("admin_lib_list_edit_cancel_title").'" onclick="'.$this->ActionAjaxReload($this->GetListUrl(true)).'"/>';
+			$this->DisplayEditButtons();
 		}
 		else
 		{
-			if($this->arActionsParams["disable_action_sub_target"] <> true)
+			$showAll = true;
+			if (isset($this->arActionsParams["disable_action_target"]) && $this->arActionsParams["disable_action_target"] === true)
+				$showAll = false;
+			elseif (isset($this->arActionsParams["disable_action_sub_target"]) && $this->arActionsParams["disable_action_sub_target"] === true)
+				$showAll = false;
+			if ($showAll)
 			{
-				echo '<span class="adm-selectall-wrap"><input type="checkbox" class="adm-checkbox adm-designed-checkbox" name="action_sub_target" id="'.$this->table_id.'_action_sub_target" value="selected" onclick="if(this.checked && !confirm(\''.CUtil::JSEscape(GetMessage("admin_lib_list_edit_for_all_warn")).'\')) {this.checked=false;} '.$this->table_id.'.EnableActions();" title="'.GetMessage("admin_lib_list_edit_for_all").'" /><label title="'.GetMessage("admin_lib_list_edit_for_all").'" for="action_sub_target" class="adm-checkbox-label"><?=GetMessage("admin_lib_list_for_all");?></label></span>';
+?>
+	<span class="adm-selectall-wrap"><input type="checkbox" class="adm-checkbox adm-designed-checkbox" name="action_sub_target" id="<?=$this->table_id;?>_action_sub_target" value="selected" onclick="if(this.checked && !confirm('<?=CUtil::JSEscape(GetMessage("admin_lib_list_edit_for_all_warn"));?>')) {this.checked=false;} <?=$this->table_id;?>.EnableActions();" title="<?=GetMessage("admin_lib_list_edit_for_all");?>" /><label title="<?=GetMessage("admin_lib_list_edit_for_all");?>" for="action_sub_target" class="adm-checkbox-label"><?=GetMessage("admin_lib_list_for_all");?></label></span>
+<?
 			}
 			$this->bCanBeDeleted = array_key_exists("delete", $this->arActions);
 
@@ -598,65 +570,114 @@ echo '<table class="adm-list-table" id="'.$this->table_id.'">
 				echo '</span>';
 			}
 
-			$list = "";
-			$buttons = "";
-			$html = "";
-			foreach($this->arActions as $k=>$v)
+			$onchange = '';
+			if (isset($this->arActionsParams["select_onchange"]))
 			{
-				if($k === "delete")
+				if (is_array($this->arActionsParams["select_onchange"]))
 				{
-					continue;
+					$onchange = implode(' ', $this->arActionsParams["select_onchange"]);
 				}
-				else
+				elseif (is_string($this->arActionsParams["select_onchange"]))
 				{
-					if(is_array($v))
+					$onchange = $this->arActionsParams["select_onchange"];
+				}
+			}
+			$blockMap = [];
+
+			$list = '';
+			$html = '';
+			$buttons = '';
+			$actionList = array_filter($this->arActions);
+			if (isset($actionList['delete']))
+			{
+				unset($actionList['delete']);
+			}
+
+			$allowedTypes = [
+				'button' => true,
+				'html' => true,
+				'multicontrol' => true
+			];
+
+			foreach($actionList as $k=>$v)
+			{
+				if(is_array($v))
+				{
+					if (isset($v['type']) && isset($allowedTypes[$v['type']]))
 					{
-						if($v["type"] == "button")
+						switch ($v["type"])
 						{
-							$buttons .= '<input type="button" name="" value="'.htmlspecialcharsbx($v['name']).'" onclick="'.(!empty($v["action"])? str_replace("\"", "&quot;", $v['action']) : 'document.getElementById(\''.$this->table_id.'_action_button\').=\''.htmlspecialcharsbx($v["value"]).'\'; '.htmlspecialcharsbx($this->ActionPost()).'').'" title="'.htmlspecialcharsbx($v["title"]).'" />';
-						}
-						elseif($v["type"] == "html")
-						{
-							$html .= '<span class="adm-list-footer-ext">'.$v["value"].'</span>';
-						}
-						else
-						{
-							$list .= '<option value="'.htmlspecialcharsbx($v['value']).'"'.($v['action']?' custom_action="'.str_replace("\"", "&quot;", $v['action']).'"':'').'>'.htmlspecialcharsex($v['name']).'</option>';
+							case 'button':
+								$buttons .= '<input type="button" name="" value="'.htmlspecialcharsbx($v['name']).'" onclick="'.(!empty($v["action"])? htmlspecialcharsbx($v['action']) : 'document.getElementById(\''.$this->table_id.'_action_button\').value=\''.htmlspecialcharsbx($v["value"]).'\'; '.htmlspecialcharsbx($this->ActionPost()).'').'" title="'.htmlspecialcharsbx($v["title"]).'" />';
+								break;
+							case 'html':
+								$html .= '<span class="adm-list-footer-ext">'.$v["value"].'</span>';
+								break;
+							case 'multicontrol':
+								$data = $this->prepareGroupMultiControl($k, $v);
+								if (!empty($data))
+								{
+									$list .= $data['ITEM'];
+									if (isset($data['BLOCK']))
+									{
+										$html .= '<span class="adm-list-footer-ext">'.$data['BLOCK'].'</span>';
+									}
+									if (isset($data['ACTION']))
+									{
+										$blockMap[] = $data['ACTION'];
+									}
+								}
+								break;
 						}
 					}
 					else
 					{
-						$list .= '<option value="'.htmlspecialcharsbx($k).'">'.htmlspecialcharsex($v).'</option>';
+						$list .= '<option value="'.htmlspecialcharsbx($v['value']).'"'.($v['action']?' custom_action="'.htmlspecialcharsbx($v['action']).'"':'').'>'.htmlspecialcharsex($v['name']).'</option>';
 					}
 				}
+				else
+				{
+					$list .= '<option value="'.htmlspecialcharsbx($k).'">'.htmlspecialcharsex($v).'</option>';
+				}
 			}
+			unset($actionList, $k, $v);
+			unset($allowedTypes);
 
-			if (strlen($buttons) > 0)
+			if ($buttons != '')
 				echo '<span class="adm-list-footer-ext">'.$buttons.'</span>';
 
-			if (strlen($list) > 0):
+			if ($list != ''):
 ?>
 	<span class="adm-select-wrap">
-		<select name="action" id="<?=$this->table_id.'_action'; ?>" class="adm-select"<?=($this->arActionsParams["select_onchange"] <> ""? ' onchange="'.htmlspecialcharsbx($this->arActionsParams["select_onchange"]).'"':'')?>>
+		<select name="action" id="<?=$this->table_id.'_action'; ?>" class="adm-select"<?=($onchange != '' ? ' onchange="'.htmlspecialcharsbx($onchange).'"':'')?> <?
+		if (!empty($blockMap))
+		{
+?>
+			data-actions="<?=htmlspecialcharsbx(Main\Web\Json::encode($blockMap)); ?>" data-use-actions="Y"
+<?
+		}
+		?>>
 			<option value=""><?=GetMessage("admin_lib_list_actions")?></option>
 <?=$list?>
 		</select>
 	</span>
 <?
-				if (strlen($html) > 0)
+				if ($html != '')
 					echo $html;
-
-	echo '<input type="button" name="apply_sub" id="'.$this->table_id.'_apply_sub_button" value="'.GetMessage("admin_lib_list_apply").'" onclick="'.$this->table_id.'.ExecuteFormAction(\'ACTION_BUTTON\');" disabled="disabled" class="adm-table-action-button" />';
-
+?>
+	<input type="button" name="apply_sub" id="<?=$this->table_id;?>_apply_sub_button" value="<?=GetMessage("admin_lib_list_apply");?>" onclick="<?=$this->table_id;?>.ExecuteFormAction('ACTION_BUTTON');" disabled="disabled" class="adm-table-action-button" />
+<?
 			endif;
 ?>
 	<span class="adm-table-counter" id="<?=$this->table_id?>_selected_count"><?=GetMessage('admin_lib_checked')?>: <span>0</span></span>
 <?
 		}
-		echo '</div>';
+?>
+</div>
+<?
 	}
 
-	function DisplayList($boolFlag = true)
+	public function DisplayList($arParams = array())
 	{
 		$menu = new CAdminPopup($this->table_id."_menu", $this->table_id."_menu",false,array('zIndex' => 4000));
 		$menu->Show();
@@ -681,34 +702,25 @@ function ReloadOffers()
 		echo '</div>';
 	}
 
-	function CreateChain()
-	{
-		return new CAdminChain($this->table_id."_navchain_div", false);
-	}
-
-	function ShowChain($chain)
-	{
-		$this->BeginPrologContent();
-		$chain->Show();
-		$this->EndPrologContent();
-	}
-
-	function CheckListMode()
+	public function CheckListMode()
 	{
 		global $APPLICATION;
 
-		if ($_REQUEST["mode"]=='list' || $_REQUEST["mode"]=='frame')
+		if ($this->isPageMode())
+		{
+			return;
+		}
+
+		if ($this->isAjaxMode())
 		{
 			ob_start();
 			$this->Display();
 			$string = ob_get_contents();
 			ob_end_clean();
 
-			if($_REQUEST["mode"]=='frame')
+			if ($this->isActionMode())
 			{
-				echo '<html><head>';
-//				echo $GLOBALS["adminPage"]->ShowScript();
-				echo '</head><body>
+				echo '<html><head></head><body>
 <div id="'.$this->table_id.'_result_frame_div">'.$string.'</div>
 <script type="text/javascript">
 ';
@@ -731,10 +743,15 @@ function ReloadOffers()
 			require($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/include/epilog_admin_after.php");
 			die();
 		}
-		elseif ($_REQUEST["mode"]=='excel')
+		elseif ($this->isExportMode())
 		{
+			$fname = basename($APPLICATION->GetCurPage(), ".php");
+			// http response splitting defence
+			$fname = str_replace(array("\r", "\n"), "", $fname);
+
 			header("Content-Type: application/vnd.ms-excel");
-			header("Content-Disposition: filename=".basename($APPLICATION->GetCurPage(), ".php").".xls");
+			header("Content-Disposition: filename=".$fname.".xls");
+			$APPLICATION->EndBufferContentMan();
 			$this->DisplayExcel();
 			require($_SERVER["DOCUMENT_ROOT"].BX_ROOT."/modules/main/include/epilog_admin_after.php");
 			die();
@@ -845,19 +862,195 @@ function ReloadOffers()
 			'content_post': ".CUtil::PhpToJSObject($this->getDialogParams(true), false, true, true).",
 			'draggable': true,
 			'resizable': true,
+			'width': 900,
+			'height': 600,
 			'buttons': ".$this->getDialogButtons(true)."
 		})).Show();";
+	}
+
+	protected function DisplayEditButtons(): void
+	{
+?>
+		<input type="button" name="save_sub" id="<?=$this->table_id;?>_save_sub_button" value="<?=GetMessage("admin_lib_list_edit_save");?>." title="<?=GetMessage("admin_lib_list_edit_save_title");?>" onclick="<?=$this->table_id;?>.ExecuteFormAction('SAVE_BUTTON');" />
+		<input type="button" name="cancel_sub" id="<?=$this->table_id;?>_cancel_sub_button" value="<?=GetMessage("admin_lib_list_edit_cancel");?>" title="<?=GetMessage("admin_lib_list_edit_cancel_title");?>" onclick="<?=$this->ActionAjaxReload($this->GetListUrl(true));?>"/>
+<?
+	}
+
+	private function prepareGroupMultiControl(string $id, array $action)
+	{
+		$result = null;
+
+		if (empty($action['action']) || !is_array($action['action']))
+			return $result;
+
+		$subBlocks = $this->compileActions($action['action']);
+
+		$result = [
+			'ITEM' => '<option value="'.htmlspecialcharsbx($id).'">'.htmlspecialcharsex($action['name']).'</option>'
+		];
+		if (!empty($subBlocks))
+		{
+			$actionBlockId = $id.'_block';
+
+			$result['BLOCK'] = '<div id="'.htmlspecialcharsbx($actionBlockId).'" style="display: none;">'.
+				implode('', $subBlocks).
+				'</div>';
+
+			$result['ACTION'] = [
+				'VALUE' => $id,
+				'BLOCK' => $actionBlockId
+			];
+		}
+
+		return $result;
+	}
+
+	private function createGroupSubControl(array $data)
+	{
+		$result = [];
+
+		foreach ($data as $row)
+		{
+			if (empty($row) || !is_array($row) || !isset($row['TYPE']))
+				continue;
+			$item = null;
+			switch ($row['TYPE'])
+			{
+				case Main\Grid\Panel\Types::DROPDOWN:
+					$item = $this->createGroupSubControlDropdown($row);
+					break;
+				case Main\Grid\Panel\Types::TEXT:
+					$item = $this->createGroupSubControlText($row);
+					break;
+			}
+			if (!empty($item))
+				$result[] = $item;
+			unset($item);
+		}
+
+		return (!empty($result) ? $result: null);
+	}
+
+	/**
+	 * @param array $actions
+	 * @return array
+	 */
+	private function compileActions(array $actions)
+	{
+		$result = [];
+		foreach ($actions as $row)
+		{
+			if (empty($row) || !is_array($row))
+				continue;
+			if (!isset($row['ACTION']))
+				continue;
+			switch ($row['ACTION'])
+			{
+				case Main\Grid\Panel\Actions::CREATE:
+					if (!empty($row['DATA']) && is_array($row['DATA']))
+					{
+						$subControl = $this->createGroupSubControl($row['DATA']);
+						if (!empty($subControl))
+						{
+							$result = array_merge($result, $subControl);
+						}
+						unset($subControl);
+					}
+					break;
+			}
+		}
+		unset($row);
+		return $result;
+	}
+
+	private function createGroupSubControlDropdown(array $data)
+	{
+		$result = null;
+		if (!isset($data['ID']) || !isset($data['NAME']))
+			return $result;
+		if (empty($data['ITEMS']) || !is_array($data['ITEMS']))
+			return $result;
+
+		$items = [];
+		$subBlocks = [];
+		$blockMap = [];
+		$first = true;
+
+		foreach ($data['ITEMS'] as $row)
+		{
+			if (!isset($row['VALUE']) || !isset($row['NAME']))
+				continue;
+
+			if (!empty($row['ONCHANGE']) && is_array($row['ONCHANGE']))
+			{
+				$itemBlocks = $this->compileActions($row['ONCHANGE']);
+				if (!empty($itemBlocks))
+				{
+					$itemBlockId = $data['ID'].'_'.$row['VALUE'].'_block';
+					$subBlocks[] = '<span class="adm-list-footer-ext"><div id="'.htmlspecialcharsbx($itemBlockId).'" style="display: '.($first ? 'inline-block' : 'none').';">'.
+						implode('', $itemBlocks).
+						'</div></span>';
+					$blockMap[] = [
+						'VALUE' => $row['VALUE'],
+						'BLOCK' => $itemBlockId
+					];
+				}
+				unset($itemBlocks);
+			}
+
+			$items[] = '<option value="'.htmlspecialcharsbx($row['VALUE']).'">'.
+				htmlspecialcharsex($row['NAME']).
+				'</option>';
+
+			$first = false;
+		}
+		unset($row);
+
+		if (!empty($items))
+		{
+			$result = '<select id="'.htmlspecialcharsbx($data['ID']).'" '.
+				'name="'.htmlspecialcharsbx($data['NAME']).'"'.
+				(!empty($blockMap) ? ' data-actions="'.htmlspecialcharsbx(Main\Web\Json::encode($blockMap)).'" data-use-actions="Y"' : '').
+				'data-action-item="Y" '.
+				'>';
+			$result .= implode('', $items);
+			$result .= '</select>';
+			if (!empty($subBlocks))
+			{
+				$result .= implode('', $subBlocks);
+			}
+		}
+		unset($items);
+
+		return $result;
+	}
+
+	/**
+	 * @param array $data
+	 * @return string|null
+	 */
+	private function createGroupSubControlText(array $data)
+	{
+		if (!isset($data['ID']) || !isset($data['NAME']))
+			return null;
+		return '<span class="adm-input-text-wrap"><input type="text" id="'.htmlspecialcharsbx($data['ID']).'" '.
+			'name="'.htmlspecialcharsbx($data['NAME']).'" '.
+			'data-action-item="Y" '.
+			'value=""></span>';
 	}
 }
 
 class CAdminSubListRow extends CAdminListRow
 {
+	/** @var \CAdminSubList pList */
+	var $pList;
+
 	public $arFieldNames = array(); //add
 	public $boolBX = false; // add
 
-	function CAdminSubListRow(&$aHeaders, $table_id)
+	public function __construct($aHeaders,$table_id)
 	{
-		parent::CAdminListRow($aHeaders, $table_id);
+		parent::__construct($aHeaders,$table_id);
 	}
 
 	public function Display()
@@ -1059,11 +1252,11 @@ class CAdminSubListRow extends CAdminListRow
 
 	function AddFieldNames($strFieldName,$strFieldType = 'HIDDEN')
 	{
-		if (0 < strlen($strFieldName))
+		if ($strFieldName <> '')
 		{
 			if (false == isset($this->arFieldNames[$strFieldName]))
 			{
-				if (0 == strlen($strFieldType))
+				if ($strFieldType == '')
 					$strFieldType = 'HIDDEN';
 				$this->arFieldNames[$strFieldName] = ToUpper($strFieldType);
 			}
@@ -1078,14 +1271,14 @@ class CAdminSubListRow extends CAdminListRow
 
 class CAdminSubContextMenu extends CAdminContextMenu
 {
-	function CAdminSubContextMenu($items, $additional_items = array())
+	public function __construct($items, $additional_items = array())
 	{
-		$this->CAdminContextMenu($items, $additional_items);
+		parent::__construct($items, $additional_items);
 	}
 
 	function Show()
 	{
-		$hkInst = CHotKeys::getInstance();
+		$hkInst = CHotKeys::GetInstance();
 
 		foreach(GetModuleEvents("main", "OnAdminSubContextMenuShow", true) as $arEvent)
 		{
@@ -1094,7 +1287,6 @@ class CAdminSubContextMenu extends CAdminContextMenu
 
 		$bFirst = true;
 		$bNeedSplitClosing = false;
-		$bWasPopup = false;
 		foreach($this->items as $item)
 		{
 			if(!empty($item["NEWBAR"]))
@@ -1170,7 +1362,7 @@ class CAdminSubContextMenuList extends CAdminSubContextMenu
 
 	function GetClassByID($icon_id)
 	{
-		if (substr($icon_id, 0, 7) == 'btn_sub_new')
+		if (mb_substr($icon_id, 0, 7) == 'btn_sub_new')
 			return 'adm-btn-save adm-btn-add';
 		else
 			return parent::GetClassByID($icon_id);
@@ -1178,7 +1370,7 @@ class CAdminSubContextMenuList extends CAdminSubContextMenu
 
 	function GetActiveClassByID($icon_id)
 	{
-		if (substr($icon_id, 0, 7) == 'btn_sub_new')
+		if (mb_substr($icon_id, 0, 7) == 'btn_sub_new')
 			return 'adm-btn-save-active';
 		else
 			return parent::GetActiveClassByID($icon_id);
@@ -1200,9 +1392,9 @@ class CAdminSubForm extends CAdminForm
 	var $arListPostParams = array();
 	var $boolShowSettings = false;
 
-	function CAdminSubForm($name, $tabs, $bCanExpand = true, $bDenyAutosave = false, $list_url = '', $boolShowSettings = false)
+	public function __construct($name, $tabs, $bCanExpand = true, $bDenyAutosave = false, $list_url = '', $boolShowSettings = false)
 	{
-		global $APPLICATION;
+				global $APPLICATION;
 
 		$arJSDescr = array(
 			'js' => '/bitrix/js/iblock/subelementdet.js',
@@ -1214,7 +1406,7 @@ class CAdminSubForm extends CAdminForm
 
 		CUtil::InitJSCore(array("subelementdet"));
 
-		parent::CAdminForm($name, $tabs, $bCanExpand, $bDenyAutosave);
+		parent::__construct($name, $tabs, $bCanExpand, $bDenyAutosave);
 
 		$this->boolShowSettings = ($boolShowSettings === true);
 		$this->SetShowSettings($this->boolShowSettings);
@@ -1254,6 +1446,7 @@ class CAdminSubForm extends CAdminForm
 
 		require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_js.php");
 
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$adminFormParams = array(
 			'tabPrefix' => 'csubedit'
 		);
@@ -1288,7 +1481,7 @@ class CAdminSubForm extends CAdminForm
 		{
 			foreach ($this->arListUrlParams as $key => $value)
 				$this->strListUrlParams .= $key.'='.$value.'&';
-			$this->strListUrlParams = substr($this->strListUrlParams,0,-1);
+			$this->strListUrlParams = mb_substr($this->strListUrlParams, 0, -1);
 		}
 	}
 
@@ -1342,11 +1535,11 @@ class CAdminSubForm extends CAdminForm
 
 	private function __ParseListUrl($boolClear = false)
 	{
-		$mxPos = strpos($this->strListUrl,'?');
+		$mxPos = mb_strpos($this->strListUrl, '?');
 		if (false !== $mxPos)
 		{
-			$this->__SetListUrlParams(substr($this->strListUrl,$mxPos+1),$boolClear);
-			$this->strListUrl = substr($this->strListUrl,0,$mxPos);
+			$this->__SetListUrlParams(mb_substr($this->strListUrl, $mxPos + 1), $boolClear);
+			$this->strListUrl = mb_substr($this->strListUrl, 0, $mxPos);
 		}
 	}
 
@@ -1357,7 +1550,7 @@ class CAdminSubForm extends CAdminForm
 		{
 			foreach ($this->arListPostParams as $key => $value)
 				$this->strListPostParams .= $key.'='.$value.'&';
-			$this->strListPostParams = substr($this->strListPostParams,0,-1);
+			$this->strListPostParams = mb_substr($this->strListPostParams, 0, -1);
 		}
 	}
 
@@ -1426,9 +1619,13 @@ class CAdminSubForm extends CAdminForm
 				"ICON"=>"btn_settings",
 			);
 
+			$nameExists = isset($this->session["ADMIN_CUSTOM_FIELDS"])
+				&& is_array($this->session["ADMIN_CUSTOM_FIELDS"])
+				&& array_key_exists($this->name, $this->session["ADMIN_CUSTOM_FIELDS"])
+			;
 			if($this->bCustomFields)
 			{
-				if(is_array($_SESSION["ADMIN_CUSTOM_FIELDS"]) && array_key_exists($this->name, $_SESSION["ADMIN_CUSTOM_FIELDS"]))
+				if ($nameExists)
 				{
 					$aAdditionalMenu[] = array(
 						"TEXT" => GetMessage("admin_lib_sett_sett_enable_text"),
@@ -1451,9 +1648,7 @@ class CAdminSubForm extends CAdminForm
 			if (count($aAdditionalMenu) > 1)
 			{
 				$sMenuUrl = "BX.adminShowMenu(this, ".htmlspecialcharsbx(CAdminPopupEx::PhpToJavaScript($aAdditionalMenu)).", {active_class: 'bx-settings-btn-active'});";
-				$bCustomFieldsOff = is_array($_SESSION["ADMIN_CUSTOM_FIELDS"]) && array_key_exists($this->name, $_SESSION["ADMIN_CUSTOM_FIELDS"]);
-
-				$s .= '<span id="'.$this->name.'_settings_btn" class="adm-detail-subsettings adm-detail-subsettings-arrow'.($bCustomFieldsOff ? '' : ' adm-detail-subsettings-active').'" onclick="'.$sMenuUrl.'"></span>';
+				$s .= '<span id="'.$this->name.'_settings_btn" class="adm-detail-subsettings adm-detail-subsettings-arrow'.($nameExists ? '' : ' adm-detail-subsettings-active').'" onclick="'.$sMenuUrl.'"></span>';
 			}
 			else
 			{
@@ -1467,7 +1662,7 @@ class CAdminSubForm extends CAdminForm
 
 	function End()
 	{
-		$hkInst = CHotKeys::getInstance();
+		$hkInst = CHotKeys::GetInstance();
 
 		if(!$this->bButtons)
 		{
@@ -1557,7 +1752,7 @@ echo '
 		$result = '<script type="text/javascript">';
 		$result .= '
 			var currentWindow = top.window;
-			if (top.BX.SidePanel.Instance && top.BX.SidePanel.Instance.getTopSlider())
+			if (top.BX.SidePanel && top.BX.SidePanel.Instance && top.BX.SidePanel.Instance.getTopSlider())
 			{
 				currentWindow = top.BX.SidePanel.Instance.getTopSlider().getWindow();
 			}
@@ -1578,20 +1773,20 @@ class CAdminSubResult extends CAdminResult
 	var $list_url;
 	var $list_url_params;
 
-	function CAdminSubResult($res, $table_id, $list_url)
+	public function __construct($res, $table_id, $list_url)
 	{
 		$this->list_url = $list_url;
 		$this->list_url_params = '';
-		$intPos = strpos($this->list_url, '?');
+		$intPos = mb_strpos($this->list_url, '?');
 		if (false !== $intPos)
 		{
-			$this->list_url_params = substr($this->list_url, $intPos+1);
-			$this->list_url = substr($this->list_url, 0, $intPos);
+			$this->list_url_params = mb_substr($this->list_url, $intPos + 1);
+			$this->list_url = mb_substr($this->list_url, 0, $intPos);
 		}
-		parent::CAdminResult($res, $table_id);
+		parent::__construct($res, $table_id);
 	}
 
-	function NavStart($nPageSize=20, $bShowAll=true, $iNumPage=false)
+	public function NavStart($nPageSize=20, $bShowAll=true, $iNumPage=false)
 	{
 		$navResult = new CAdminSubResult(null, '', '');
 		$nSize = $navResult->GetNavSize($this->table_id, $nPageSize, $this->list_url.('' != $this->list_url_params ? '?'.$this->list_url_params : ''));
@@ -1615,7 +1810,7 @@ class CAdminSubResult extends CAdminResult
 	 * @param string $list_url
 	 * @return int
 	 */
-	function GetNavSize($table_id=false, $nPageSize=20, $list_url = '')
+	public static function GetNavSize($table_id=false, $nPageSize=20, $list_url = '')
 	{
 		$list_url = (string)$list_url;
 		if ($list_url != '')
@@ -1627,19 +1822,25 @@ class CAdminSubResult extends CAdminResult
 		return parent::GetNavSize($table_id, $nPageSize);
 	}
 
-	function GetNavPrint($title, $show_allways=true, $StyleText="", $template_path=false, $arDeleteParam=false)
+	public function GetNavPrint($title, $show_allways=true, $StyleText="", $template_path=false, $arDeleteParam=false)
 	{
 		if($template_path === false)
 			$template_path = $_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/iblock/admin/templates/navigation.php";
 
-		$res = '';
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$add_anchor = $this->add_anchor;
 
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sBegin = GetMessage("nav_begin");
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sEnd = GetMessage("nav_end");
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sNext = GetMessage("nav_next");
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sPrev = GetMessage("nav_prev");
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sAll = GetMessage("nav_all");
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sPaged = GetMessage("nav_paged");
 
 		$nPageWindow = $this->nPageWindow;
@@ -1647,10 +1848,12 @@ class CAdminSubResult extends CAdminResult
 		if(!$show_allways)
 		{
 			if ($this->NavRecordCount == 0 || ($this->NavPageCount == 1 && $this->NavShowAll == false))
-				return;
+				return '';
 		}
 
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$sUrlPath = $this->list_url;
+		/** @noinspection PhpUnusedLocalVariableInspection */
 		$strNavQueryString = htmlspecialcharsbx($this->list_url_params);
 
 		if($template_path!==false && !file_exists($template_path) && file_exists($_SERVER["DOCUMENT_ROOT"].$template_path))
@@ -1701,6 +1904,7 @@ class CAdminSubResult extends CAdminResult
 		if($template_path!==false && file_exists($template_path))
 		{
 			ob_start();
+			/** @noinspection PhpIncludeInspection */
 			include($template_path);
 			$res = ob_get_contents();
 			ob_end_clean();
@@ -1716,12 +1920,12 @@ class CAdminSubResult extends CAdminResult
 
 class CAdminSubMessage extends CAdminMessage
 {
-	function CAdminSubMessage($message, $exception=false)
+	public function __construct($message, $exception = false)
 	{
-		parent::CAdminMessage($message, $exception);
+		parent::__construct($message,$exception);
 	}
 
-	function Show()
+	public function Show()
 	{
 		if (defined('BX_PUBLIC_MODE') && BX_PUBLIC_MODE == 1)
 		{
@@ -1784,7 +1988,7 @@ class CAdminSubMessage extends CAdminMessage
 		}
 	}
 
-	function ShowOldStyleError($message)
+	public static function ShowOldStyleError($message)
 	{
 		if(!empty($message))
 		{
@@ -1793,7 +1997,7 @@ class CAdminSubMessage extends CAdminMessage
 		}
 	}
 
-	function ShowMessage($message)
+	public static function ShowMessage($message)
 	{
 		if(!empty($message))
 		{
@@ -1802,7 +2006,7 @@ class CAdminSubMessage extends CAdminMessage
 		}
 	}
 
-	function ShowNote($message)
+	public static function ShowNote($message)
 	{
 		if(!empty($message))
 		{

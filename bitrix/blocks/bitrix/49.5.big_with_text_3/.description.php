@@ -10,7 +10,8 @@ return array(
 	'block' => array(
 		'name' => Loc::getMessage('LANDING_BLOCK_49_5--NAME'),
 		'section' => array('cover','video'),
-		'version' => '18.5.0',
+		'dynamic' => false,
+		'version' => '18.5.0', // old param for backward compatibility. Can used for old versions of module via repo. Do not delete!
 	),
 	'cards' => array(),
 	'nodes' => array(
@@ -46,7 +47,7 @@ return array(
 			),
 			'.landing-block-node-title' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_49_5--LANDINGBLOCKNODETITLE'),
-				'type' => 'typo',
+				'type' => ['typo', 'heading'],
 			),
 			'.landing-block-node-text' => array(
 				'name' => Loc::getMessage('LANDING_BLOCK_49_5--LANDINGBLOCKNODETEXT'),

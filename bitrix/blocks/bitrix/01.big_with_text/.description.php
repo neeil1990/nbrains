@@ -10,6 +10,7 @@ return array(
 	'block' => array(
 		'name' => Loc::getMessage('LANDING_BLOCK_1BIG_WITH_TEXT_NAME'),
 		'section' => array('cover'),
+		'dynamic' => false,
 	),
 	'cards' => array(
 		'.landing-block-card-img' => array(
@@ -40,6 +41,7 @@ return array(
 			'type' => 'img',
 			'dimensions' => array('width' => 1920, 'height' => 1080),
 			'allowInlineEdit' => false,
+			'useInDesigner' => false,
 		),
 	),
 	'style' => array(
@@ -49,15 +51,15 @@ return array(
 		'nodes' => array(
 			'.landing-block-node-text-container' => array(
 				'title' => Loc::getMessage('LANDING_BLOCK_1BIG_WITH_TEXT_NODES_LANDINGBLOCKNODE_TEXT_CONTAINER_NEW'),
-				'type' => array('background-color', 'background-gradient', 'animation'),
+				'type' => array('background-color', 'animation'),
 			),
 			'.landing-block-node-small-title' => array(
 				'title' => Loc::getMessage('LANDING_BLOCK_1BIG_WITH_TEXT_NODES_LANDINGBLOCKNODESMALLTITLE'),
-				'type' => 'typo',
+				'type' => ['typo', 'heading'],
 			),
 			'.landing-block-node-title' => array(
 				'title' => Loc::getMessage('LANDING_BLOCK_1BIG_WITH_TEXT_NODES_LANDINGBLOCKNODETITLE'),
-				'type' => 'typo',
+				'type' => ['typo', 'heading'],
 			),
 			'.landing-block-node-text' => array(
 				'title' => Loc::getMessage('LANDING_BLOCK_1BIG_WITH_TEXT_NODES_LANDINGBLOCKNODETEXT'),

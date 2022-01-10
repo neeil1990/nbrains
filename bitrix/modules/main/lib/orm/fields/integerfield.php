@@ -22,6 +22,11 @@ class IntegerField extends ScalarField
 	 */
 	public function cast($value)
 	{
+		if ($this->is_nullable && $value === null)
+		{
+			return $value;
+		}
+
 		return (int) $value;
 	}
 
@@ -45,5 +50,21 @@ class IntegerField extends ScalarField
 	public function convertValueToDb($value)
 	{
 		return $this->getConnection()->getSqlHelper()->convertToDbInteger($value);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getGetterTypeHint()
+	{
+		return '\\int';
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getSetterTypeHint()
+	{
+		return '\\int';
 	}
 }

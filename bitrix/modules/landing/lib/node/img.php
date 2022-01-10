@@ -18,29 +18,58 @@ class Img extends \Bitrix\Landing\Node
 
 	/**
 	 * Save data for this node.
-	 * @param \Bitrix\Landing\Block &$block Block instance.
+	 * @param \Bitrix\Landing\Block $block Block instance.
 	 * @param string $selector Selector.
 	 * @param array $data Data array.
 	 * @return void
 	 */
-	public static function saveNode(\Bitrix\Landing\Block &$block, $selector, array $data)
+	public static function saveNode(\Bitrix\Landing\Block $block, $selector, array $data)
 	{
 		$doc = $block->getDom();
 		$resultList = $doc->querySelectorAll($selector);
+		$files = null;
 
 		foreach ($data as $pos => $value)
 		{
-			// 2x – this for retina support
+			// 2x - this for retina support
 
-			$src = isset($value['src']) ? trim($value['src']) : '';
-			$src2x = isset($value['src2x']) ? trim($value['src2x']) : '';
-			$alt = isset($value['alt']) ? trim($value['alt']) : '';
-			$url = isset($value['url']) ? trim($value['url']) : '';
+			$src = (isset($value['src']) && is_string($value['src'])) ? trim($value['src']) : '';
+			$src2x = (isset($value['src2x']) && is_string($value['src2x'])) ? trim($value['src2x']) : '';
+			$alt = (isset($value['alt']) && is_string($value['alt'])) ? trim($value['alt']) : '';
 			$id = isset($value['id']) ? intval($value['id']) : 0;
 			$id2x = isset($value['id2x']) ? intval($value['id2x']) : 0;
+			$isLazy = isset($value['isLazy']) && $value['isLazy'] === 'Y';
+
+			if (isset($value['url']))
+			{
+				$url = is_array($value['url'])
+						? json_encode($value['url'])
+						: $value['url'];
+			}
+			else
+			{
+				$url = '';
+			}
 
 			if (isset($resultList[$pos]))
 			{
+				// check permissions to this file ids
+				if ($id || $id2x)
+				{
+					if ($files === null)
+					{
+						$files = File::getFilesFromBlock($block->getId());
+					}
+					if (!in_array($id, $files))
+					{
+						$id = 0;
+					}
+					if (!in_array($id2x, $files))
+					{
+						$id2x = 0;
+					}
+				}
+				// update in content
 				if ($resultList[$pos]->getTagName() !== 'IMG')
 				{
 					$styles = StyleInliner::getStyle($resultList[$pos]);
@@ -93,6 +122,24 @@ class Img extends \Bitrix\Landing\Node
 					$style = array_merge($oldStyles, $newStyles);
 					$style = implode(' ', $style);
 					$resultList[$pos]->setAttribute('style', $style);
+
+					// for lazyload
+					if($isLazy)
+					{
+						$resultList[$pos]->setAttribute('data-lazy-bg', 'Y');
+						if($lazyOrigSrc = $value['lazyOrigSrc'])
+						{
+							$resultList[$pos]->setAttribute('data-src', $lazyOrigSrc);
+						}
+						if($lazyOrigSrc2x = $value['lazyOrigSrc2x'])
+						{
+							$resultList[$pos]->setAttribute('data-src2x', $lazyOrigSrc2x);
+						}
+						if($lazyOrigStyle = $value['lazyOrigStyle'])
+						{
+							$resultList[$pos]->setAttribute('data-style', $lazyOrigStyle);
+						}
+					}
 				}
 				else
 				{
@@ -101,6 +148,25 @@ class Img extends \Bitrix\Landing\Node
 					if ($src2x)
 					{
 						$resultList[$pos]->setAttribute('srcset', "{$src2x} 2x");
+					}
+					else
+					{
+						$resultList[$pos]->setAttribute('srcset', '');
+					}
+
+					// for lazyload
+					if($isLazy)
+					{
+						$resultList[$pos]->setAttribute('data-lazy-img', 'Y');
+						$resultList[$pos]->setAttribute('loading', 'lazy');
+						if($lazyOrigSrc = $value['lazyOrigSrc'])
+						{
+							$resultList[$pos]->setAttribute('data-src', $lazyOrigSrc);
+						}
+						if($lazyOrigSrcset = $value['lazyOrigSrcset'])
+						{
+							$resultList[$pos]->setAttribute('data-srcset', $lazyOrigSrcset);
+						}
 					}
 				}
 				if ($id)
@@ -121,11 +187,11 @@ class Img extends \Bitrix\Landing\Node
 
 	/**
 	 * Get data for this node.
-	 * @param \Bitrix\Landing\Block &$block Block instance.
+	 * @param \Bitrix\Landing\Block $block Block instance.
 	 * @param string $selector Selector.
 	 * @return array
 	 */
-	public static function getNode(\Bitrix\Landing\Block &$block, $selector)
+	public static function getNode(\Bitrix\Landing\Block $block, $selector)
 	{
 		$data = array();
 		$doc = $block->getDom();
@@ -165,11 +231,32 @@ class Img extends \Bitrix\Landing\Node
 						$data[$pos] = [];
 						if ($src)
 						{
-							$data[$pos]['src'] = $src;
+							$data[$pos]['src'] = Manager::getUrlFromFile($src);
 						}
 						if ($src2x)
 						{
-							$data[$pos]['src2x'] = $src2x;
+							$data[$pos]['src2x'] = Manager::getUrlFromFile($src2x);
+						}
+					}
+
+					// for lazyload
+					if(
+						($isLazy = $res->getAttribute('data-lazy-bg'))
+						&& $isLazy === 'Y'
+					)
+					{
+						$data[$pos]['isLazy'] = 'Y';
+						if($lazyOrigSrc = $res->getAttribute('data-src'))
+						{
+							$data[$pos]['lazyOrigSrc'] = $lazyOrigSrc;
+						}
+						if($lazyOrigSrc2x = $res->getAttribute('data-src2x'))
+						{
+							$data[$pos]['lazyOrigSrc2x'] = $lazyOrigSrc2x;
+						}
+						if($lazyOrigStyle = $res->getAttribute('data-style'))
+						{
+							$data[$pos]['lazyOrigStyle'] = $lazyOrigStyle;
 						}
 					}
 				}
@@ -185,16 +272,67 @@ class Img extends \Bitrix\Landing\Node
 				);
 				if (preg_match('/[\,\s]*(.*?)\s+2x/is', $srcSet, $matches))
 				{
-					$data[$pos]['src2x'] = $matches[1];
+					$data[$pos]['src2x'] = Manager::getUrlFromFile($matches[1]);
+				}
+
+				// for lazyload
+				if(
+					($isLazy = $res->getAttribute('data-lazy-img'))
+					&& $isLazy === 'Y'
+				)
+				{
+					$data[$pos]['isLazy'] = 'Y';
+					if($lazyOrigSrc = $res->getAttribute('data-src'))
+					{
+						$data[$pos]['lazyOrigSrc'] = $lazyOrigSrc;
+					}
+					if($lazyOrigSrcset = $res->getAttribute('data-srcset'))
+					{
+						$data[$pos]['lazyOrigSrcset'] = $lazyOrigSrcset;
+					}
 				}
 			}
-			$pseudoUrl = $res->getAttribute('data-pseudo-url');
-			if ($pseudoUrl)
+			$dataAtrs = [
+				'data-pseudo-url' => 'url',
+				'data-fileid' => 'id',
+				'data-fileid2x' => 'id2x',
+			];
+			foreach ($dataAtrs as $codeFrom => $codeTo)
 			{
-				$data[$pos]['data-pseudo-url'] = $pseudoUrl;
+				if ($val = $res->getAttribute($codeFrom))
+				{
+					$data[$pos][$codeTo] = $val;
+				}
 			}
 		}
 
 		return $data;
+	}
+
+	/**
+	 * This node may participate in searching.
+	 * @param \Bitrix\Landing\Block $block Block instance.
+	 * @param string $selector Selector.
+	 * @return array
+	 */
+	public static function getSearchableNode($block, $selector)
+	{
+		$searchContent = [];
+
+		$nodes = self::getNode($block, $selector);
+		foreach ($nodes as $node)
+		{
+			if (!isset($node['alt']))
+			{
+				continue;
+			}
+			$node['alt'] = self::prepareSearchContent($node['alt']);
+			if ($node['alt'] && !in_array($node['alt'], $searchContent))
+			{
+				$searchContent[] = $node['alt'];
+			}
+		}
+
+		return $searchContent;
 	}
 }

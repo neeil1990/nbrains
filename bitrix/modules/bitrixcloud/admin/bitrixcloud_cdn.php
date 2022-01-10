@@ -14,8 +14,6 @@ if (!$USER->CanDoOperation("bitrixcloud_cdn"))
 $strError = "";
 if (!CModule::IncludeModule("bitrixcloud"))
 	$strError = GetMessage("MODULE_INCLUDE_ERROR");
-elseif (IsModuleInstalled('intranet'))
-	$strError = GetMessage("MODULE_INTRANET_ERROR");
 
 if ($strError != "")
 {
@@ -93,7 +91,7 @@ if (
 				CBitrixCloudCDN::domainChanged();
 			}
 
-			$cdn_config->setSites(array_keys($_POST["site"]));
+			$cdn_config->setSites(is_array($_POST["site"])? array_keys($_POST["site"]): array());
 			$cdn_config->setDomain($server_name);
 			$cdn_config->setHttps($https);
 			$cdn_config->setOptimization($optimize);
@@ -229,9 +227,7 @@ $tabControl->BeginNextTab();
 		</td>
 	</tr>
 <?
-$by = 'sort';
-$order = 'asc';
-$rsSites = CSite::GetList($by, $order);
+$rsSites = CSite::GetList();
 while ($arSite = $rsSites->Fetch())
 {
 ?>

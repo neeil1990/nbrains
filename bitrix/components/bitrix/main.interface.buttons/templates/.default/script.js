@@ -84,6 +84,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 		this.moreButton = null;
 		this.messages = null;
 		this.licenseParams = null;
+		this.ajaxSettings = null;
 		this.isSubmenuShown = false;
 		this.isSubmenuShownOnDragStart = false;
 		this.isSettingsEnabled = true;
@@ -104,6 +105,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			getDisabledItems: BX.delegate(this.getDisabledItems, this),
 			getMoreButton: BX.delegate(this.getMoreButton, this),
 			adjustMoreButtonPosition: BX.delegate(this.adjustMoreButtonPosition, this),
+			getSubmenu: BX.delegate(this.getSubmenu, this),
 			showSubmenu: BX.delegate(this.showSubmenu, this),
 			closeSubmenu: BX.delegate(this.closeSubmenu, this),
 			refreshSubmenu: BX.delegate(this.refreshSubmenu, this),
@@ -180,6 +182,8 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				this.visibleControlMoreButton();
 			}
 
+			this.initSaving(params.ajaxSettings);
+
 			this.moreButton = this.getMoreButton();
 
 			this.listChildItems = {};
@@ -225,6 +229,130 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			}
 
 			this.bindOnResizeFrame();
+
+			var showChildButtons = Array.from(this.container.querySelectorAll('.main-buttons-item-child-button'));
+			showChildButtons.forEach(function(button) {
+				var realChildButton = button.closest('.main-buttons-item-child');
+				if (realChildButton.dataset.isOpened)
+				{
+					this.realChildButton = realChildButton;
+					var clonedChildButton = realChildButton.closest('.main-buttons-item-child-button-cloned')
+					if (clonedChildButton)
+					{
+						this.clonedChildButton = clonedChildButton;
+					}
+				}
+				BX.Event.bind(button, 'click', this.onShowChildButtonClick.bind(this));
+			}, this);
+		},
+
+		calculateChildListWidth: function()
+		{
+			if (this.realChildButton)
+			{
+				var buttons = this.realChildButton
+					.querySelectorAll('.main-buttons-item-child-list-inner .main-buttons-item');
+
+				var offset = 10;
+				return Array.from(buttons).reduce(function(acc, button) {
+					var width = BX.Text.toNumber(BX.Dom.style(button, 'width'));
+					var marginLeft = BX.Text.toNumber(BX.Dom.style(button, 'margin-left'));
+					var marginRight = BX.Text.toNumber(BX.Dom.style(button, 'margin-right'));
+
+					return acc + width + marginLeft + marginRight;
+				}, offset);
+			}
+			return 0;
+		},
+
+		onShowChildButtonClick: function(event)
+		{
+			event.preventDefault();
+
+			if (!this.realChildButton)
+			{
+				this.realChildButton = event.currentTarget.closest('.main-buttons-item-child');
+			}
+
+			var childListContainer = this.realChildButton
+				.querySelector('.main-buttons-item-child-list');
+
+			var childIds = BX.Dom.attr(this.realChildButton, 'data-child-items');
+			var isOpened = BX.Dom.attr(this.realChildButton, 'data-is-opened');
+			var expandedParentIds = {};
+			if (isOpened)
+			{
+				BX.Dom.attr(this.realChildButton, 'data-is-opened', null);
+
+				childIds.forEach(function(childId) {
+					var button = this.getContainer().querySelector('[data-id="'+childId+'"]');
+					BX.Dom.style(button, 'display', null);
+					if (childId.hasOwnProperty('PARENT_ITEM_ID'))
+					{
+						expandedParentIds[childId['PARENT_ITEM_ID']] = 'N';
+					}
+				}, this);
+
+				if (this.clonedChildButton)
+				{
+					BX.Dom.remove(this.clonedChildButton);
+				}
+
+				BX.Dom.style(childListContainer, {
+					overflow: null,
+					'max-width': null,
+				});
+
+				expandedParentIds = JSON.stringify(expandedParentIds);
+				this.saveOptions('expanded_lists', expandedParentIds);
+			}
+			else
+			{
+				BX.Dom.attr(this.realChildButton, 'data-is-opened', true);
+				BX.Dom.style(childListContainer, 'max-width', this.calculateChildListWidth() + 'px');
+
+				this.cloneChildButton(this.realChildButton);
+
+				childIds.forEach(function(childId) {
+					var button = this.getContainer().querySelector('[data-id="'+childId+'"]');
+					BX.Dom.insertBefore(button, this.realChildButton);
+					BX.Dom.style(button, 'display', 'inline-block');
+					if (childId.hasOwnProperty('PARENT_ITEM_ID')) {
+						expandedParentIds[childId['PARENT_ITEM_ID']] = 'Y';
+					}
+				}, this);
+
+				setTimeout(function() {
+					BX.Dom.style(childListContainer, 'overflow', 'unset');
+				}.bind(this), 200);
+
+				expandedParentIds = JSON.stringify(expandedParentIds);
+				this.saveOptions('expanded_lists', expandedParentIds);
+			}
+
+			setTimeout(function() {
+				this._onResizeHandler();
+			}.bind(this), 200);
+		},
+
+		cloneChildButton: function(realChildButton)
+		{
+			this.clonedChildButton = BX.Runtime.clone(realChildButton);
+
+			var childList = this.clonedChildButton.querySelector('.main-buttons-item-child-list');
+			if (childList)
+			{
+				BX.Dom.remove(childList);
+			}
+
+			BX.Dom.addClass(this.clonedChildButton, 'main-buttons-item-child-button-cloned');
+			BX.Dom.style(this.clonedChildButton, 'transition', 'none');
+			BX.Dom.insertBefore(this.clonedChildButton, realChildButton);
+			BX.Event.bind(this.clonedChildButton, 'click', this.onShowChildButtonClick.bind(this));
+
+			setTimeout(function() {
+				BX.Dom.style(this.clonedChildButton, 'transition', null);
+			}.bind(this));
 		},
 
 		_onDocumentClick: function(event)
@@ -434,7 +562,6 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			BX.bind(window, 'scroll', BX.delegate(this._onScroll, this));
 		},
 
-
 		/**
 		 * Gets active element
 		 * @return {?HTMLElement}
@@ -455,7 +582,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 					}
 
 					if (BX.type.isPlainObject(tmpData) && 'IS_ACTIVE' in tmpData &&
-						(tmpData.IS_ACTIVE === true || tmpData.IS_ACTIVE === 'true' || tmpData.IS_ACTIVE === 'Y'))
+						(tmpData.IS_ACTIVE === 1 || tmpData.IS_ACTIVE === true || tmpData.IS_ACTIVE === 'true' || tmpData.IS_ACTIVE === 'Y'))
 					{
 						result = tmpData;
 					}
@@ -720,7 +847,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 
 			if (this.lastHomeLink !== firstPageLink)
 			{
-				BX.userOptions.save('ui', this.listContainer.id, 'firstPageLink', firstPageLink);
+				this.saveOptions('firstPageLink', firstPageLink);
 				BX.onCustomEvent('BX.Main.InterfaceButtons:onFirstItemChange', [firstPageLink, firstVisibleItem]);
 			}
 
@@ -1254,7 +1381,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			var lastItem = this.getLastVisibleItem();
 			var lastItemIsMoreButton = this.isMoreButton(lastItem);
 
-			if (!lastItemIsMoreButton)
+			if (!lastItemIsMoreButton && lastItem.parentNode === this.listContainer)
 			{
 				this.listContainer.insertBefore(this.moreButton, lastItem);
 			}
@@ -1400,7 +1527,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 						disabledItems.indexOf(current) === -1)
 					{
 						result.push({
-							text: this.getSubmenuItemText(current),
+							html: this.getSubmenuItemText(current),
 							href: this.dataValue(current, 'url'),
 							onclick: this.dataValue(current, 'onclick'),
 							title: current.getAttribute('title'),
@@ -1439,7 +1566,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 					}
 
 					result.push({
-						text: this.getSubmenuItemText(current),
+						html: this.getSubmenuItemText(current),
 						href: this.dataValue(current, 'url'),
 						onclick: this.dataValue(current, 'onclick'),
 						title: current.getAttribute('title'),
@@ -1452,7 +1579,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			if (this.isSettingsEnabled)
 			{
 				result.push({
-					text: '<span>'+this.message('MIB_HIDDEN')+'</span>',
+					html: '<span>'+this.message('MIB_HIDDEN')+'</span>',
 					className: [
 						this.classSeporator,
 						this.classSubmenuItem,
@@ -1463,7 +1590,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				if (!disabledItems.length)
 				{
 					result.push({
-						text: '<span>'+this.message('MIB_NO_HIDDEN')+'</span>',
+						html: '<span>'+this.message('MIB_NO_HIDDEN')+'</span>',
 						className: [
 							this.classSubmenuItem,
 							this.classSubmenuNoHiddenItem
@@ -1495,7 +1622,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 						}
 
 						result.push({
-							text: this.getSubmenuItemText(current),
+							html: this.getSubmenuItemText(current),
 							href: this.dataValue(current, 'url'),
 							onclick: this.dataValue(current, 'onclick'),
 							title: current.getAttribute('title'),
@@ -1507,7 +1634,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				}
 
 				result.push({
-					text: '<span>'+this.message('MIB_MANAGE')+'</span>',
+					html: '<span>'+this.message('MIB_MANAGE')+'</span>',
 					className: [
 						this.classSeporator,
 						this.classSubmenuItem,
@@ -1517,7 +1644,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				});
 
 				result.push({
-					text: this.message('MIB_SETTING_MENU_ITEM'),
+					html: this.message('MIB_SETTING_MENU_ITEM'),
 					className: [
 						this.classSettingMenuItem,
 						this.classSubmenuItem
@@ -1525,7 +1652,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				});
 
 				result.push({
-					text: this.message('MIB_APPLY_SETTING_MENU_ITEM'),
+					html: this.message('MIB_APPLY_SETTING_MENU_ITEM'),
 					className: [
 						this.classSettingsApplyButton,
 						this.classSubmenuItem
@@ -1533,7 +1660,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				});
 
 				result.push({
-					text: this.message('MIB_RESET_SETTINGS'),
+					html: this.message('MIB_RESET_SETTINGS'),
 					className: [this.classSettingsResetButton, this.classSubmenuItem].join(' ')
 				});
 			}
@@ -1607,23 +1734,134 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 				var item = listAllItems[itemId];
 				if (item["PARENT_ID"] === parentId)
 				{
+					var events = {}, items = [], ajaxMode = item.hasOwnProperty("AJAX_OPTIONS");
+
+					if (ajaxMode)
+					{
+						events = this._getEvents(item["AJAX_OPTIONS"]);
+						items = [
+							{
+								id: "loading",
+								text: this.message("MIB_MAIN_BUTTONS_LOADING")
+							}
+						];
+					}
+
 					var listChildItems, itemData = {
 						text: item["TEXT"],
 						href: item["URL"],
 						onclick: item["ON_CLICK"],
-						title: item["TITLE"]
+						title: item["TITLE"],
+						events: events,
+						items: items
 					};
-					listChildItems = this.getListItems(listAllItems, itemId);
-					if (listChildItems.length)
+
+					if (ajaxMode)
 					{
-						itemData.items = listChildItems;
+						itemData.cacheable = true;
 					}
+					else
+					{
+						listChildItems = this.getListItems(listAllItems, itemId);
+						if (listChildItems.length)
+						{
+							itemData.items = listChildItems;
+						}
+					}
+
 					listItems.push(itemData);
 					delete listAllItems[itemId];
 				}
 			}
 
 			return listItems;
+		},
+
+		_setAjaxMode: function(items)
+		{
+			for (var itemId in items)
+			{
+				if (!items.hasOwnProperty(itemId))
+				{
+					continue;
+				}
+				if (items[itemId].hasOwnProperty("ajaxOptions"))
+				{
+					items[itemId].cacheable = true;
+					items[itemId].events = this._getEvents(items[itemId]["ajaxOptions"]);
+					items[itemId].items = [
+						{
+							id: "loading",
+							text: this.message("MIB_MAIN_BUTTONS_LOADING")
+						}
+					];
+				}
+			}
+		},
+
+		_getEvents: function(ajaxOptions)
+		{
+			var _this = this;
+			return {
+				onSubMenuShow: function()
+				{
+					if (this.subMenuLoaded)
+					{
+						return;
+					}
+
+					var submenu = this.getSubMenu();
+					submenu.removeMenuItem("loading");
+					var loadingItem = submenu.getMenuItem("loading");
+
+					_this.getSubItems(ajaxOptions).then(function(items)
+					{
+						_this._setAjaxMode(items);
+						this.subMenuLoaded = true;
+						this.addSubMenu(items);
+						this.showSubMenu();
+					}.bind(this)).catch(function(text)
+					{
+						if (loadingItem)
+						{
+							loadingItem.getLayout().text.innerText = text;
+						}
+					});
+				}
+			};
+		},
+
+		getSubItems: function(ajaxOptions)
+		{
+			return new Promise(function(resolve, reject) {
+				if (this.progress)
+				{
+					reject(this.message("MIB_MAIN_BUTTONS_LOADING"));
+					return;
+				}
+				if (ajaxOptions.mode === "component")
+				{
+					this.progress = true;
+					BX.ajax.runComponentAction(ajaxOptions.component, ajaxOptions.action, {
+						mode: ajaxOptions.componentMode,
+						signedParameters: (ajaxOptions.signedParameters ? ajaxOptions.signedParameters : {}),
+						data: ajaxOptions.data,
+					}).then(function(response) {
+						this.progress = false;
+						resolve(response.data);
+					}.bind(this));
+				}
+				else
+				{
+					this.progress = true;
+					BX.ajax.runAction(ajaxOptions.action, {
+						data: ajaxOptions.data,
+					}).then(function(response) {
+						this.progress = false;
+						resolve(response.data);
+					}.bind(this));
+				}
+			});
 		},
 
 		/**
@@ -1948,6 +2186,78 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			return settings;
 		},
 
+		initSaving: function(ajaxSettings)
+		{
+			this.sendOptions = this.sendOptions.bind(this);
+			this.optionsToSave = [];
+			this.debouncedSendOptions = BX.debounce(this.sendOptions, 5000);
+			if (BX.type.isPlainObject(ajaxSettings))
+			{
+				this.ajaxSettings = {
+					componentName: ajaxSettings.componentName,
+					signedParams: ajaxSettings.signedParams,
+				};
+			}
+		},
+
+		/**
+		 * Sends settings to the server
+		 * @private
+		 * @method sendSettings
+		 * @return {undefined}
+		 */
+		sendOptions: function()
+		{
+			if (this.optionsToSave.length <= 0)
+			{
+				return;
+			}
+
+			var dataToSend = {};
+			this.optionsToSave.forEach(function(item){
+				dataToSend[item.name] = item.value;
+			});
+			this.optionsToSave = [];
+			window.removeEventListener("beforeunload", this.sendOptions);
+			BX.removeCustomEvent("SidePanel.Slider:onClose", this.sendOptions);
+			BX.ajax.runComponentAction(
+				this.ajaxSettings.componentName,
+				'save',
+				{
+					mode: 'class',
+					signedParameters: this.ajaxSettings.signedParams,
+					data: {
+						options: dataToSend
+					}
+				}
+			);
+		},
+
+		/**
+		 * Collects settings into storage and then sends
+		 * @private
+		 * @method saveOptions
+		 * @return {undefined}
+		 * @param name
+		 * @param value
+		 */
+		saveOptions: function(name, value)
+		{
+			if (this.ajaxSettings)
+			{
+				if (this.optionsToSave.length <= 0)
+				{
+					window.addEventListener("beforeunload", this.sendOptions);
+					BX.addCustomEvent("SidePanel.Slider:onClose", this.sendOptions);
+				}
+				this.optionsToSave.push({'name': name, 'value': value});
+				this.debouncedSendOptions();
+			}
+			else if (this.listContainer.id)
+			{
+				BX.userOptions.save('ui', this.listContainer.id, name, value);
+			}
+		},
 
 		/**
 		 * Saves current component settings
@@ -1959,7 +2269,6 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 		{
 			var settings = this.getCurrentSettings();
 			var paramName = 'settings';
-			var containerId;
 
 			if (!BX.type.isPlainObject(settings))
 			{
@@ -1970,10 +2279,7 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			{
 				if ('id' in this.listContainer)
 				{
-					containerId = this.listContainer.id;
-
-					settings = JSON.stringify(settings);
-					BX.userOptions.save('ui', containerId, paramName, settings);
+					this.saveOptions(paramName, JSON.stringify(settings));
 					this.setHome();
 				}
 			}
@@ -2014,9 +2320,8 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 										}
 										else
 										{
-											var paramName = 'settings';
-											BX.userOptions.save('ui', this.listContainer.id, paramName, JSON.stringify({}));
-											BX.userOptions.save('ui', this.listContainer.id, 'firstPageLink', '');
+											this.saveOptions('settings', JSON.stringify({}));
+											this.saveOptions('firstPageLink', '');
 											window.location.reload();
 										}
 									}.bind(this));
@@ -2829,7 +3134,9 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 
 			if (this.isMoreButton(this.dragItem) ||
 				this.isSeparator(this.dragItem) ||
-				this.isNotHiddenItem(this.dragItem))
+				this.isNotHiddenItem(this.dragItem) ||
+				BX.Dom.attr(this.dragItem, 'data-parent-item-id') ||
+				BX.Dom.attr(this.dragItem, 'data-has-child'))
 			{
 				event.preventDefault();
 				return;
@@ -2980,7 +3287,9 @@ if (typeof(BX.Main.interfaceButtons) === 'undefined')
 			if (!BX.type.isDomNode(this.overItem) ||
 				!BX.type.isDomNode(this.dragItem) ||
 				this.overItem === this.dragItem ||
-				this.isNotHiddenItem(this.overItem))
+				this.isNotHiddenItem(this.overItem) ||
+				BX.Dom.attr(this.overItem, 'data-parent-item-id') ||
+				BX.Dom.attr(this.overItem, 'data-has-child'))
 			{
 				return;
 			}

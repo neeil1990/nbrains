@@ -19,7 +19,6 @@ return array(
 			'VIEW_USE' => 'N',
 			'VIEW_TYPE' => 'no',
 			'THEME_CODE' => 'travel',
-			'THEME_CODE_TYPO' => 'travel',
 		),
 	),
 	'layout' => array(
@@ -43,10 +42,10 @@ return array(
 				],
 				'.landing-block-node-card-link' => array(
 					0 => [
-						'href' => 'tel:+74952128506',
-						'text' => '+7 (495) 212 85 06',
+						'href' => 'tel:1-800-643-4500',
+						'text' => '1-800-643-4500',
 					],
-				
+
 				),
 				'.landing-block-node-card-text' => [
 					0 => Loc::getMessage("LANDING_DEMO_STORE_CLOTHES-HEADER--TEXT_8"),
@@ -68,7 +67,8 @@ return array(
 				'.landing-block-node-menu-logo' => array(
 					0 => array(
 						'alt' => 'Logo',
-						'src' => 'https://cdn.bitrix24.site/bitrix/images/landing/business/eshop/logo-en.png',
+						'src' => 'https://cdn.bitrix24.site/bitrix/images/landing/business/eshop/logo_wo_icon.png',
+						'src2x' => 'https://cdn.bitrix24.site/bitrix/images/landing/business/eshop/logo_wo_icon@2x.png',
 					),
 				),
 				'.landing-block-node-menu-logo-link' => array(
@@ -126,7 +126,7 @@ return array(
 			),
 			'style' => array(
 				'#wrapper' => array(
-					0 => 'landing-block landing-block-menu g-bg-white u-header u-header--fixed',
+					0 => 'landing-block landing-block-menu g-bg-white u-header u-header--static u-header--relative',
 				),
 			),
 			'attrs' => array(),

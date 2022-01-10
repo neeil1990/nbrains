@@ -1,69 +1,308 @@
+function deleteAccessRow(link)
+{
+	landingAccessSelected[BX.data(BX(link), 'id')] = false;
+	BX.remove(BX.findParent(BX(link), {tag: 'tr'}, true));
+}
+
 (function() {
 
 	'use strict';
 
 	BX.namespace('BX.Landing');
 
+	var slice = BX.Landing.Utils.slice;
+	var proxy = BX.Landing.Utils.proxy;
+	var bind = BX.Landing.Utils.bind;
+	var unbind = BX.Landing.Utils.unbind;
+	var addClass = BX.Landing.Utils.addClass;
+	var removeClass = BX.Landing.Utils.removeClass;
+	var isNumber = BX.Landing.Utils.isNumber;
+	var style = BX.Landing.Utils.style;
+	var data = BX.Landing.Utils.data;
+
 	/**
-	 * For change domain name.
+	 * For setting color palette
 	 */
-	BX.Landing.EditDomainForm = function (node, params)
+	BX.Landing.ColorPalette = function(params)
 	{
-		this.domain = node.querySelector('.ui-domain-input-btn-js');
-		this.postfix = node.querySelectorAll('.ui-postfix');
-		this.domains = node.querySelectorAll('.ui-domainname');
-		this.content = params.content || '';
-		this.messages = params.messages || {};
-		this.popup = BX.Landing.UI.Tool.ActionDialog.getInstance();
+		this.themesPalete = document.querySelector(".landing-template-themes");
+		this.themesSiteCustomColorNode = document.querySelector(".landing-template-custom-color");
+		this.init();
 
-		BX.bind(this.domain, 'click', BX.delegate(this.editDomain, this));
+		return this;
 	};
-	BX.Landing.EditDomainForm.prototype =
+
+	BX.Landing.ColorPalette.getInstance = function(params)
 	{
-		editDomain: function (event)
+		return (
+			BX.Landing.ColorPalette.instance ||
+			(BX.Landing.ColorPalette.instance = new BX.Landing.ColorPalette(params))
+		);
+	};
+
+
+	BX.Landing.ColorPalette.prototype = {
+		/**
+		 * Initializes template preview elements
+		 */
+		init: function()
 		{
-			event.stopPropagation();
+			// themes
+			var colorItems = slice(this.themesPalete.children);
+			if(this.themesSiteColorNode)
+			{
+				colorItems = colorItems.concat(slice(this.themesSiteColorNode.children));
+			}
+			if(this.themesSiteCustomColorNode)
+			{
+				colorItems = colorItems.concat(slice(this.themesSiteCustomColorNode.children));
+			}
+			colorItems.forEach(this.initSelectableItem, this);
 
-			var promise = this.popup.show({
-				title: this.messages.title,
-				content: this.content,
-				contentColor: 'grey'
-			});
-			this.content.style.display = 'block';
+			// site group
+			if(this.siteGroupPalette )
+			{
+				var siteGroupItems = slice(this.siteGroupPalette.children);
+				siteGroupItems.forEach(this.initSelectableItem, this);
+			}
 
-			promise
-				.then(function()
+			bind(this.previewFrame, "load", this.onFrameLoad);
+			bind(this.closeButton, "click", this.onCancelButtonClick);
+
+			if (!this.disableClickHandler)
+			{
+				bind(this.createButton, "click", this.onCreateButtonClick);
+			}
+
+			this.setColor();
+		},
+
+		setColor: function(theme) {
+			if(theme === undefined)
+			{
+				this.color = data(this.getActiveColorNode(), "data-value");
+			}
+			else
+			{
+				this.color = theme;
+			}
+
+			var colorpicker = document.getElementById('colorpicker');
+			if(colorpicker)
+			{
+				colorpicker.setAttribute('value', this.color);
+			}
+		},
+
+		getActiveColorNode: function()
+		{
+			var active = this.themesPalete.querySelector(".active");
+			if(!active && this.themesSiteColorNode)
+			{
+				active = this.themesSiteColorNode.querySelector(".active");
+			}
+			if(!active && this.themesSiteCustomColorNode)
+			{
+				active = this.themesSiteCustomColorNode.querySelector(".active");
+			}
+			// by default - first
+			if(!active)
+			{
+				active = this.themesPalete.firstElementChild;
+			}
+
+			return active;
+		},
+
+		getActiveSiteGroupItem: function()
+		{
+			return this.siteGroupPalette.querySelector(".active");
+		},
+
+		/**
+		 * Loads template preview
+		 * @param {string} src
+		 * @return {Function}
+		 */
+		loadPreview: function(src)
+		{
+			return function()
+			{
+				return new Promise(function(resolve) {
+					if (this.previewFrame.src !== src)
 					{
-						var domainName = '';
-						for (var i = 0, c = this.postfix.length; i < c; i++)
-						{
-							if (
-								this.postfix[i].checked &&
-								typeof this.domains[i] !== 'undefined'
-							)
-							{
-								this.domains[i].value = BX.util.trim(this.domains[i].value);
-								if (this.domains[i].value !== '')
-								{
-									domainName = this.domains[i].value + this.postfix[i].value;
-								}
-							}
-						}
-						if (domainName === '')
-						{
-							alert(this.messages.errorEmpty);
-							this.editDomain(event);
-						}
-						else
-						{
-							BX('ui-domainname-title').textContent = domainName;
-							BX('ui-domainname-text').value = domainName;
-						}
-					}.bind(this),
-					function()
-					{
+						this.previewFrame.src = src;
+						this.previewFrame.onload = function() {
+							resolve(this.previewFrame);
+						}.bind(this);
+						return;
 					}
-				);
+
+					resolve(this.previewFrame);
+				}.bind(this));
+			}.bind(this)
+		},
+
+		/**
+		 * Shows preview loader
+		 * @return {Promise}
+		 */
+		showLoader: function()
+		{
+			return new Promise(function(resolve) {
+				void this.loader.show(this.loaderContainer);
+				addClass(this.imageContainer, "landing-template-preview-overlay");
+				resolve();
+			}.bind(this));
+		},
+
+		/**
+		 * Hides loader
+		 * @return {Function}
+		 */
+		hideLoader: function()
+		{
+			return function(iframe)
+			{
+				return new Promise(function(resolve) {
+					void this.loader.hide();
+					removeClass(this.imageContainer, "landing-template-preview-overlay");
+					resolve(iframe);
+				}.bind(this));
+			}.bind(this);
+		},
+
+		/**
+		 * Creates delay
+		 * @param delay
+		 * @return {Function}
+		 */
+		delay: function(delay)
+		{
+			delay = isNumber(delay) ? delay : 0;
+
+			return function(image)
+			{
+				return new Promise(function(resolve) {
+					setTimeout(resolve.bind(null, image), delay);
+				});
+			}
+		},
+
+		/**
+		 * Gets value
+		 * @return {Object}
+		 */
+		getValue: function()
+		{
+			var result = {};
+
+			if(this.themesSiteColorNode && this.getActiveColorNode().parentElement === this.themesSiteColorNode)
+			{
+				// add theme_use_site flag
+				result[data(this.themesSiteColorNode, "data-name")] = 'Y';
+			}
+			if(this.siteGroupPalette)
+			{
+				result[data(this.siteGroupPalette, "data-name")] = data(this.getActiveSiteGroupItem(), "data-value");
+			}
+			result[data(this.themesPalete, "data-name")] = data(this.getActiveColorNode(), "data-value");
+			result[data(this.themesSiteCustomColorNode, "data-name")] = data(this.getActiveColorNode(), "data-value");
+			result[data(this.title, "data-name")] = this.title.value;
+			result[data(this.description, "data-name")] = this.description.value;
+
+			return result;
+		},
+
+		/**
+		 * Handles click event on close button
+		 * @param {MouseEvent} event
+		 */
+		onCancelButtonClick: function(event)
+		{
+			event.preventDefault();
+			top.BX.SidePanel.Instance.close();
+		},
+
+		/**
+		 * Handles click event on create button
+		 * @param {MouseEvent} event
+		 */
+		onCreateButtonClick: function(event)
+		{
+			event.preventDefault();
+
+			if(this.isStore() && this.IsLoadedFrame) {
+				this.loaderText = BX.create("div", { props: { className: "landing-template-preview-loader-text"},
+					text: this.messages.LANDING_LOADER_WAIT});
+
+				this.progressBar = new BX.UI.ProgressBar({
+					column: true
+				});
+
+				this.progressBar.getContainer().classList.add("ui-progressbar-landing-preview");
+
+				this.loaderContainer.appendChild(this.loaderText);
+				this.loaderContainer.appendChild(this.progressBar.getContainer());
+			}
+
+			if (this.isStore())
+			{
+				if (this.IsLoadedFrame)
+				{
+					this.showLoader();
+					this.initCatalogParams();
+					this.createCatalog();
+				}
+			}
+			else
+			{
+				this.showLoader()
+					.then(this.delay(200))
+					.then(function() {
+						this.finalRedirectAjax(
+							this.getCreateUrl()
+						);
+					}.bind(this));
+			}
+		},
+
+		/**
+		 * Initializes selectable items
+		 * @param {HTMLElement} item
+		 */
+		initSelectableItem: function(item)
+		{
+			bind(item, "click", proxy(this.onSelectableItemClick, this));
+		},
+
+		/**
+		 * Handles click on selectable item
+		 * @param event
+		 */
+		onSelectableItemClick: function(event)
+		{
+			event.preventDefault();
+
+			// themes
+			if (
+				event.currentTarget.parentElement === this.themesPalete ||
+				(this.themesSiteColorNode && event.currentTarget.parentElement === this.themesSiteColorNode) ||
+				(this.themesSiteCustomColorNode && event.currentTarget.parentElement === this.themesSiteCustomColorNode)
+			)
+			{
+				if (event.currentTarget.hasAttribute('data-value'))
+				{
+					removeClass(this.getActiveColorNode(), "active");
+					addClass(event.currentTarget, "active");
+					this.setColor(data(event.currentTarget, 'data-value'));
+				}
+			}
+		},
+
+		isStore: function()
+		{
+			return this.createStore;
 		}
 	};
 
@@ -97,7 +336,8 @@
 		{
 			event.stopPropagation();
 
-			if(!this.input.IsWidthSet) {
+			if(!this.input.IsWidthSet)
+			{
 				this.input.style.width = this.label.offsetWidth + this.additionalWidth + 17 + 'px';
 			}
 
@@ -113,7 +353,7 @@
 
 			this.input.IsWidthSet = true;
 
-			BX.bind(document, 'click', this.hideInput);
+			BX.bind(document, 'mousedown', this.hideInput);
 		},
 		hideInput : function (event)
 		{
@@ -134,7 +374,7 @@
 			this.input.IsWidthSet = false;
 			this.input.setAttribute("data-height", this.label.offsetHeight);
 
-			BX.unbind(document, 'click', this.hideInput);
+			BX.unbind(document, 'mousedown', this.hideInput);
 		}
 	};
 
@@ -147,6 +387,7 @@
 		this.toggleBtn = node.querySelector('.landing-form-collapse-block-js');
 		this.formInner = node.querySelector('.landing-form-inner-js');
 		this.tableWparp = node.querySelector('.landing-form-table-wrap-js');
+		this.sectionWrap = node.querySelector('.landing-additional-alt-promo-wrap');
 		this.startHeight = 0;
 		this.endHeight = 0;
 		this.isHidden = true;
@@ -155,7 +396,36 @@
 		this.setHeightAuto = this.setHeightAuto.bind(this);
 		this.removeClassName = this.removeClassName.bind(this);
 
+
+		this.attributeMainOption = 'data-landing-main-option';
+		this.attributeOption = 'data-landing-additional-option';
+		this.attributeDetail = 'data-landing-additional-detail';
+
+		var sectionList = this.sectionWrap.children;
+		sectionList = BX.convert.nodeListToArray(sectionList);
+		sectionList.forEach(this.initSection, this);
+
 		BX.bind(this.toggleBtn, 'click', this.clickHandler);
+
+		if(window.location.hash)
+		{
+			var anchor = window.location.hash.substr(1);
+
+			sectionList.forEach(function (section) {
+				var id = section.getAttribute(this.attributeOption);
+
+				if (id === anchor)
+				{
+					BX.fireEvent(section, 'click');
+				}
+			}, this);
+
+			var neededMainOption = this.formInner.querySelector('[' + this.attributeMainOption + '="' + anchor + '"]');
+			if(neededMainOption)
+			{
+				this.highlightSection(neededMainOption);
+			}
+		}
 	};
 	BX.Landing.ToggleFormFields.prototype =
 	{
@@ -171,7 +441,8 @@
 
 			this.isHidden = false;
 		},
-		closeRows  : function ()
+
+		closeRows : function ()
 		{
 			this.formInner.style.height = this.endHeight + 'px';
 
@@ -183,6 +454,7 @@
 
 			this.isHidden = true;
 		},
+
 		clickHandler : function ()
 		{
 			if(this.isHidden)
@@ -190,15 +462,51 @@
 			else
 				this.closeRows();
 		},
+
 		setHeightAuto : function ()
 		{
 			this.formInner.style.height = 'auto';
 			BX.unbind(this.formInner, 'transitionend', this.setHeightAuto);
 		},
+
 		removeClassName : function ()
 		{
 			this.form.classList.remove('landing-form-collapsed-open');
 			BX.unbind(this.formInner, 'transitionend', this.removeClassName);
+		},
+
+		initSection : function (section)
+		{
+			BX.bind(section, "click", BX.delegate(function(e){
+				e.stopPropagation();
+				this.showSection(section);
+			}, this))
+		},
+
+		showSection : function(section)
+		{
+			this.showRows();
+			var id = section.getAttribute(this.attributeOption);
+			var detailNode = this.formInner.querySelector('[' + this.attributeDetail + '="' + id + '"]');
+			this.highlightSection(detailNode);
+		},
+
+		highlightSection: function(node)
+		{
+			BX.addClass(node, "landing-form-hidden-row-highlight");
+
+			setTimeout(function(){
+				var position = BX.pos(node);
+
+				window.scrollTo({
+					top: position.top,
+					behavior: "smooth"
+				});
+			}, 300);
+
+			setTimeout(function(){
+				BX.removeClass(node, "landing-form-hidden-row-highlight");
+			}, 1500);
 		}
 	};
 
@@ -214,38 +522,64 @@
 			colors: this.setColors()
 		});
 
-		this.colorPickerNode = node;
+		this.input = node;
+		this.colorPickerNode = node.parentElement;
+		BX.addClass(this.colorPickerNode, 'ui-colorpicker');
 
-		this.colorIcon = node.querySelector('.ui-colorpicker-color-js');
-		this.clearBtn = node.querySelector('.ui-colorpicker-clear');
-		this.input = node.querySelector('.landing-colorpicker-inp-js');
+		this.colorIcon = BX.create('span', {
+			props: {
+				className: 'ui-colorpicker-color'
+			}
+		});
+		BX.insertBefore(this.colorIcon, this.input);
+
+		this.colorValue = node.value;
+		if (this.colorValue)
+		{
+			BX.adjust(this.colorIcon, {
+				attrs: {
+					style: 'background-color:' + this.colorValue
+				}
+			});
+
+			BX.addClass(this.colorPickerNode, 'ui-colorpicker-selected');
+		}
+
+		this.clearBtn = BX.create('span', {
+			props: {
+				className: 'ui-colorpicker-clear'
+			}
+		});
+		BX.insertAfter(this.clearBtn, this.input);
 
 		BX.bind(this.colorPickerNode, 'click', this.show.bind(this));
 		BX.bind(this.clearBtn, 'click', this.clear.bind(this));
 
 	};
-	BX.Landing.ColorPicker.prototype =
-	{
-		onColorSelected : function (color)
+	BX.Landing.ColorPicker.prototype = {
+		onColorSelected: function(color)
 		{
 			this.colorPickerNode.classList.add('ui-colorpicker-selected');
 			this.colorIcon.style.backgroundColor = color;
 			this.input.value = color;
 		},
-		show : function (event)
+		show: function(event)
 		{
-			if(event.target == this.clearBtn)
+			if (event.target == this.clearBtn)
+			{
 				return;
+			}
 
 			this.picker.open();
 		},
-		clear : function ()
+		clear: function()
 		{
 			this.colorPickerNode.classList.remove('ui-colorpicker-selected');
 			this.input.value = '';
 			this.picker.setSelectedColor(null);
 		},
-		setColors :function () {
+		setColors: function()
+		{
 			return [
 				["#f5f5f5", "#eeeeee", "#e0e0e0", "#9e9e9e", "#757575", "#616161", "#212121"],
 				["#cfd8dc", "#b0bec5", "#90a4ae", "#607d8b", "#546e7a", "#455a64", "#263238"],
@@ -266,8 +600,10 @@
 				["#e1bee7", "#ce93d8", "#ba68c8", "#9c27b0", "#8e24aa", "#7b1fa2", "#4a148c"],
 				["#f8bbd0", "#f48fb1", "#f06292", "#e91e63", "#d81b60", "#c2185b", "#880e4f"],
 				["#ffcdd2", "#ef9a9a", "#e57373", "#f44336", "#e53935", "#d32f2f", "#b71c1c"]
-			].map(function(item, index, arr) {
-				return arr.map(function(row) {
+			].map(function(item, index, arr)
+			{
+				return arr.map(function(row)
+				{
 					return row[index];
 				});
 			})
@@ -299,250 +635,6 @@
 				}
 			});
 		})
-	};
-
-	/**
-	 * Domain name popup.
-	 */
-	BX.Landing.DomainNamePopup = function(params)
-	{
-		var isAvailableDomain = null;
-		var isDeletedDomain = null;
-		var messages = params.messages || {};
-		var dialog = new BX.Landing.EditDomainForm(BX('ui-editable-domain'), {
-			messages: {
-				title: messages.title || '',
-				errorEmpty: messages.errorEmpty || ''
-			},
-			content: BX('ui-editable-domain-content')
-		});
-		BX.addCustomEvent(dialog.popup.popup, 'onPopupShow', function(obj)
-		{
-			var domainInput = obj.contentContainer.querySelectorAll('.ui-domainname');
-			var textNode1 = obj.contentContainer.querySelector('#landing-form-domain-name-text');
-			var textNode2 = obj.contentContainer.querySelector('#landing-form-domain-any-name-text');
-			var domainRadioBtn = obj.contentContainer.querySelectorAll('.ui-radio');
-			var saveBtn = BX('action_dialog_confirm');
-
-			var onKeyUp = function(event) {
-				handlerDomainName(event.target.value, event.target);
-			};
-
-			var handlerDomainName = function(value, target) {
-
-				var domainName = value;
-				var postfix = BX.data(target, 'postfix');
-
-
-				// fill instruction
-				var fillInstruction = function(domainName)
-				{
-					var domainParts = domainName.split('.');
-					var domainRe = /^(com|net|org)\.[a-z]{2}$/;
-
-					textNode2.parentNode.style.display = 'none';
-
-					textNode1.textContent = domainName ? domainName : 'landing.mydomain';
-
-					if (
-						(domainParts.length === 2) ||
-						(domainParts.length === 3 && domainParts[0] === 'www') ||
-						(domainParts.length === 3 && (domainParts[1] + '.' + domainParts[2]).match(domainRe))
-					)
-					{
-						textNode2.parentNode.style.display = 'table-row';
-						if ((domainParts.length === 3 && domainParts[0] === 'www'))
-						{
-							textNode2.textContent = domainParts[1] + '.' + domainParts[2];
-						}
-						else
-						{
-
-							textNode1.textContent = 'www.' + domainName;
-							textNode2.textContent = domainName;
-						}
-					}
-
-					textNode1.textContent = BX.util.trim(textNode1.textContent) + '.';
-					textNode2.textContent = BX.util.trim(textNode2.textContent) + '.';
-				};
-
-
-				BX.ajax({
-					url: '/bitrix/tools/landing/ajax.php?action=Domain::check',
-					method: 'POST',
-					data: {
-						data: {
-							domain: domainName + postfix,
-							filter: {
-								'!ID': params.domainId
-							}
-						},
-						sessid: BX.message('bitrix_sessid')
-					},
-					dataType: 'json',
-					onsuccess: function (data) {
-						// fill instructions for custom domain
-						if (
-							//postfix === '' &&
-							data.result &&
-							data.result.domain
-						)
-						{
-							fillInstruction(data.result.domain);
-						}
-						isAvailableDomain = data.result.available;
-						isDeletedDomain = data.result.deleted;
-
-						for (var i = 0, c = domainRadioBtn.length; i < c; i++)
-						{
-							if(domainRadioBtn[i].checked) {
-
-								var currentInput = domainRadioBtn[i].nextElementSibling.querySelector(".ui-domainname");
-								var domainStatus = domainRadioBtn[i].nextElementSibling.querySelector(".landing-site-name-status");
-
-								var maxlength = currentInput.getAttribute('maxlength');
-								var currentLength = data.result.domain.length;
-
-								// check available symbols for subdomain
-								if(domainRadioBtn[i].getAttribute('id') === "landing-domain-name-1"){
-									var domain = currentInput.value;
-
-									if(!(domain === "") && !(/^[\w_\-]+$/.test(domain))) {
-										addDisableClass(currentInput);
-										domainStatus.textContent = BX.message('LANDING_DOMAIN_INCORRECT');
-
-										return;
-
-									} else {
-										removeDisableClass(currentInput);
-										domainStatus.textContent = "";
-									}
-								}
-
-								//check max length and availability domain name
-								if(currentLength >= maxlength && maxlength !== null) {
-									addDisableClass(currentInput);
-									domainStatus.textContent = BX.message('LANDING_DOMAIN_LIMIT_LENGTH');
-								} else {
-									saveBtn.classList.remove('btn-disabled');
-
-									if(currentInput.classList.contains("ui-domainname-unavailable")) {
-										currentInput.classList.remove('ui-domainname-unavailable');
-										domainStatus.textContent = '';
-									}
-
-									highlight(isAvailableDomain, isDeletedDomain, currentInput, domainStatus);
-
-								}
-							}
-						}
-
-					}
-				});
-
-			};
-			// keyup domain name
-			for (var i = 0, c = domainInput.length; i < c; i++) {
-
-				var inp = domainInput[i];
-				inp.addEventListener('keyup', BX.debounce(onKeyUp.bind(this), 300));
-
-				inp.addEventListener('focus', function(event){
-					event.target.parentNode.previousElementSibling.checked = true;
-					var targetStatus = event.target.parentNode.querySelector(".landing-site-name-status");
-					runDomainCheck(event.target, targetStatus);
-				});
-
-			}
-
-
-
-			for (var a = 0, b = domainRadioBtn.length; a < b; a++) {
-				domainRadioBtn[a].addEventListener('click', function(event){
-					var targetInput = event.target.nextElementSibling.querySelector(".ui-domainname");
-					var targetStatus = event.target.nextElementSibling.querySelector(".landing-site-name-status");
-					runDomainCheck(targetInput, targetStatus);
-
-				});
-			}
-
-			var runDomainCheck = function(targetInput, targetStatus)
-			{
-				findUnselectedItem();
-
-				isAvailableDomain = null;
-				isDeletedDomain = null;
-				handlerDomainName(targetInput.value, targetInput);
-
-				if(isAvailableDomain !== null && isDeletedDomain !== null) {
-					highlight(isAvailableDomain, isDeletedDomain, targetInput, targetStatus);
-				}
-
-			};
-
-			var highlight = function(isAvailableDomain, isDeletedDomain, item, status)
-			{
-				if(isAvailableDomain) {
-					item.classList.add("ui-domainname-available");
-					removeDisableClass(item);
-					status.textContent = "";
-
-				} else {
-					if(isDeletedDomain) {
-						status.textContent = BX.message('LANDING_DOMAIN_EXIST2');
-					} else {
-						status.textContent = BX.message('LANDING_DOMAIN_EXIST');
-					}
-					addDisableClass(item);
-					item.classList.remove("ui-domainname-available");
-				}
-
-			};
-
-			var findUnselectedItem = function()
-			{
-
-				for (var i = 0, c = domainRadioBtn.length; i < c; i++) {
-					if(!(domainRadioBtn[i].checked)) {
-						var uncheckedInput = domainRadioBtn[i].nextElementSibling.querySelector(".ui-domainname");
-						var uncheckedStatus = domainRadioBtn[i].nextElementSibling.querySelector(".landing-site-name-status");
-						resetHighlight(uncheckedInput, uncheckedStatus);
-					}
-				}
-			};
-
-			var resetHighlight = function(item, status)
-			{
-				item.classList.remove('ui-domainname-available');
-				item.classList.remove('ui-domainname-unavailable');
-				status.textContent = "";
-			};
-
-			var addDisableClass = function(item)
-			{
-				item.classList.add("ui-domainname-unavailable");
-				saveBtn.classList.add('btn-disabled');
-			};
-
-			var removeDisableClass = function(item)
-			{
-				item.classList.remove("ui-domainname-unavailable");
-				saveBtn.classList.remove('btn-disabled');
-			};
-
-			BX.fireEvent(inp, 'keyup');
-
-			// domain type
-			var inpList = obj.contentContainer.querySelectorAll('input.ui-domainname');
-			for(var i=0; i<inpList.length; i++)
-			{
-				BX.bind(inpList[i], 'focus', function ()
-				{
-					this.parentNode.parentNode.querySelector('input').checked = true;
-				})
-			}
-		});
 	};
 
 	/**
@@ -623,6 +715,10 @@
 	BX.Landing.Custom503 = function()
 	{
 		var select = BX('landing-form-503-select');
+		if (!select)
+		{
+			return;
+		}
 		BX.bind(select, 'change', function ()
 		{
 			if(this.value === '')
@@ -655,6 +751,60 @@
 	};
 
 	/**
+	 * Rights.
+	 */
+	BX.Landing.Access = function(params)
+	{
+		var selected = landingAccessSelected;
+		var name = 'RIGHTS';
+		var tbl = BX('landing-' + name.toLowerCase() + '-table');
+		var select = params.select;
+		var inc = params.inc;
+
+		BX.Access.Init({
+			other: {
+				disabled_cr: true
+			}
+		});
+
+		BX.Access.SetSelected(selected, name);
+
+		function showForm()
+		{
+			BX.Access.ShowForm({callback: function(obSelected)
+				{
+					for (var provider in obSelected)
+					{
+						if (obSelected.hasOwnProperty(provider))
+						{
+							for (var id in obSelected[provider])
+							{
+								if (obSelected[provider].hasOwnProperty(id))
+								{
+									var cnt = tbl.rows.length;
+									var row = tbl.insertRow(cnt-1);
+									row.classList.add("landing-form-rights");
+
+									selected[id] = true;
+									row.insertCell(-1);
+									row.insertCell(-1);
+										row.cells[0].innerHTML = BX.Access.GetProviderName(provider) + ' ' +
+										BX.util.htmlspecialchars(obSelected[provider][id].name) + ':' +
+										'<input type="hidden" name="fields[' + name + '][ACCESS_CODE][]" value="' + id + '">';
+									row.cells[0].classList.add("landing-form-rights-right");
+									row.cells[1].classList.add("landing-form-rights-left");
+									row.cells[1].innerHTML = select.replace('#inc#', inc++) + ' ' + '<a href="javascript:void(0);" onclick="deleteAccessRow(this);" data-id="' + id + '" class="landing-form-rights-delete"></a>';
+								}
+							}
+						}
+					}
+				}, bind: name})
+		}
+
+		BX('landing-rights-form').addEventListener('click', showForm.bind(this));
+	};
+
+	/**
 	 * Layout.
 	 */
 	BX.Landing.Layout = function(params)
@@ -664,6 +814,8 @@
 		var layouts = document.querySelectorAll('.landing-form-layout-item');
 		var detailLayoutContainer = document.querySelector('.landing-form-layout-detail');
 		var layoutForm = document.querySelector('.landing-form-page-layout');
+		var gaSendClickCheckbox = document.getElementById('field-gacounter_send_click-use');
+		var gaSendClickSelect = document.getElementById('field-gacounter_click_type-use');
 		layouts = Array.prototype.slice.call(layouts, 0);
 		params.messages = params.messages || {};
 
@@ -727,6 +879,17 @@
 			var saveRefs = BX('layout-tplrefs').value.split(',');
 			area = [];
 			layoutBlockContainer.innerHTML = '';
+			var rebuildHiddenField = function()
+			{
+				var refs = '';
+				for (var i= 0, c = area.length; i < c; i++)
+				{
+					refs += (i+1) + ':' +
+						(area[i].getValue() ? area[i].getValue().substr(8) : 0) +
+						',';
+				}
+				BX('layout-tplrefs').value = refs;
+			};
 			for (var i = 0; i < blocks; i++)
 			{
 				var block = BX.create('div', {
@@ -772,17 +935,8 @@
 							'=TYPE': params.type
 						}
 					},
-					onInput: function()
-					{
-						var refs = '';
-						for (var i= 0, c = area.length; i < c; i++)
-						{
-							refs += (i+1) + ':' +
-									(area[i].getValue() ? area[i].getValue().substr(8) : 0) +
-									',';
-						}
-						BX('layout-tplrefs').value = refs;
-					}
+					onInit: BX.delegate(rebuildHiddenField),
+					onInput: BX.delegate(rebuildHiddenField)
 				});
 
 				area[i] = layoutField;
@@ -813,19 +967,43 @@
 
 		var arrowContainer = document.querySelector('.landing-form-select-buttons');
 		var layoutContainer = document.querySelector('.landing-form-list-inner');
-		var layoutWithoutRight = BX('layout-radio-6');
-		arrowContainer.addEventListener('click', handleArrowClick.bind(this));
+		arrowContainer.addEventListener('click', handlerOnArrowClick.bind(this));
 
-		function handleArrowClick(event) {
-			if(event.target.classList.contains('landing-form-select-next')) {
+		function handlerOnArrowClick(event) {
+			if (event.target.classList.contains('landing-form-select-next'))
+			{
 				layoutContainer.classList.add('landing-form-list-inner-prev');
-			} else {
+			}
+			else
+			{
 				layoutContainer.classList.remove('landing-form-list-inner-prev');
 			}
 		}
 
-		if(layoutWithoutRight.checked) {
-			layoutContainer.classList.add('landing-form-list-inner-prev');
+		function checkGaSendClickCheckbox() {
+
+			var parentNode = gaSendClickCheckbox.closest('.ui-checkbox-hidden-input-inner');
+
+			if (gaSendClickCheckbox.checked)
+			{
+				gaSendClickSelect.classList.add('ui-select-gacounter-show');
+				parentNode.classList.add('ui-checkbox-hidden-input-inner-gacounter');
+			}
+			else
+			{
+				gaSendClickSelect.classList.remove('ui-select-gacounter-show');
+				parentNode.classList.remove('ui-checkbox-hidden-input-inner-gacounter');
+			}
+		}
+
+		if (gaSendClickCheckbox)
+		{
+			gaSendClickCheckbox.addEventListener('click', function()
+			{
+				checkGaSendClickCheckbox();
+			}.bind(this));
+
+			checkGaSendClickCheckbox();
 		}
 	};
 
@@ -833,13 +1011,19 @@
 	 * GA metrika.
 	 */
 
-	BX.Landing.Metrika = function()
+	BX.Landing.ExternalMetrika = function()
 	{
+		if (!BX('field-gacounter_counter-use'))
+		{
+			return;
+		}
+
 		var inputGa = BX('field-gacounter_counter-use');
 		var inputGaClick = BX('field-gacounter_send_click-use');
 		var inputGaShow = BX('field-gacounter_send_show-use');
 
-		if(inputGa.value === '') {
+		if (inputGa.value === '')
+		{
 			inputGaClick.disabled = true;
 			inputGaShow.disabled = true;
 		}
@@ -847,13 +1031,16 @@
 		inputGa.addEventListener('input', onInput.bind(this));
 
 		function onInput() {
-			if(inputGa.value === '') {
+			if (inputGa.value === '')
+			{
 				inputGaClick.disabled = true;
 				inputGaClick.checked = false;
 
 				inputGaShow.disabled = true;
 				inputGaShow.checked = false;
-			} else {
+			}
+			else
+			{
 				inputGaClick.disabled = false;
 				inputGaShow.disabled = false;
 			}
@@ -878,7 +1065,6 @@
 	/**
 	 * Change iblock select.
 	 */
-
 	BX.Landing.IblockSelect = function()
 	{
 		this.section = BX("row_section_id");
@@ -888,12 +1074,168 @@
 	BX.Landing.IblockSelect.prototype = {
 
 		init: function(section) {
-			if(!BX("settings_iblock_id").value) {
+			if (!BX("settings_iblock_id").value)
+			{
 				section.classList.add("landing-form-field-section-hidden");
-			} else {
+			}
+			else
+			{
 				section.classList.remove("landing-form-field-section-hidden");
 			}
 		}
+	};
+
+	/**
+	 * Cookies.
+	 */
+	BX.Landing.Cookies = function(params)
+	{
+		this.bgPickerBtn = document.querySelector('.landing-form-cookies-color-bg');
+		this.textPickerBtn = document.querySelector('.landing-form-cookies-color-text');
+		this.simplePreview = document.querySelector('.landing-form-cookies-settings-type-simple');
+		this.advancedPreview = document.querySelector('.landing-form-cookies-settings-type-advanced');
+		this.positions = document.querySelectorAll('.landing-form-cookies-position-item');
+		this.inputApp = document.querySelector('#radio-cookies-mode-A');
+		this.inputInfo = document.querySelector('#radio-cookies-mode-I');
+		this.settings = document.querySelector('.landing-form-cookies-settings-wrapper');
+
+		this.bgPicker = new BX.ColorPicker({
+			bindElement: this.bgPickerBtn,
+			popupOptions: {angle: false, offsetTop: 5},
+			onColorSelected: this.onBgColorSelected.bind(this),
+			colors: BX.Landing.ColorPicker.prototype.setColors()
+		});
+
+		this.textPicker = new BX.ColorPicker({
+			bindElement: this.textPickerBtn,
+			popupOptions: {angle: false, offsetTop: 5},
+			onColorSelected: this.onTextColorSelected.bind(this),
+			colors: BX.Landing.ColorPicker.prototype.setColors()
+		});
+
+		this.setSelectedBgColor(this.bgPickerBtn.value);
+		this.setSelectedTextColor(this.textPickerBtn.value);
+		this.hideCookiesSettings(this.inputInfo);
+
+		this.bindEvents();
+	};
+
+	BX.Landing.Cookies.prototype = {
+
+		bindEvents: function () {
+			this.positions.forEach(function (position) {
+				position.addEventListener('click', this.onSelectCookiesPosition.bind(this));
+			}.bind(this));
+
+			this.bgPickerBtn.addEventListener('click', this.showBgPicker.bind(this));
+			this.textPickerBtn.addEventListener('click', this.showTextPicker.bind(this));
+			this.inputInfo.addEventListener('change', this.hideCookiesSettings.bind(this));
+			this.inputApp.addEventListener('change', this.showCookiesSettings.bind(this));
+
+		},
+
+		onBgColorSelected: function() {
+			var color = this.bgPicker.getSelectedColor();
+			this.setSelectedBgColor(color);
+		},
+
+		onTextColorSelected: function() {
+			var color = this.textPicker.getSelectedColor();
+			this.setSelectedTextColor(color);
+		},
+
+		onSelectCookiesPosition: function(event) {
+			this.positions.forEach(function (position) {
+				if (position.classList.contains('landing-form-cookies-position-item-selected'))
+				{
+					position.classList.remove('landing-form-cookies-position-item-selected');
+				}
+			}.bind(this));
+			event.currentTarget.classList.add('landing-form-cookies-position-item-selected');
+		},
+
+		showBgPicker: function() {
+			this.bgPicker.open();
+		},
+
+		showTextPicker: function() {
+			this.textPicker.open();
+		},
+
+		setSelectedBgColor: function(color) {
+			this.bgPickerBtn.style.background = color;
+			this.bgPickerBtn.value = color;
+			this.simplePreview.style.background = color;
+			this.advancedPreview.style.background = color;
+		},
+
+		setSelectedTextColor: function(color) {
+			this.textPickerBtn.style.background = color;
+			this.textPickerBtn.value = color;
+			this.advancedPreview.style.color = color;
+
+			var svgList = document.querySelectorAll('.landing-form-cookies-settings-preview-svg');
+			svgList.forEach(function(svg)
+			{
+				svg.style.fill = color;
+			});
+		},
+
+		hideCookiesSettings: function(event) {
+			var hiddenBlock;
+
+			if (event.target)
+			{
+				hiddenBlock = event.target.closest('.ui-checkbox-hidden-input-inner');
+			}
+			else
+			{
+				hiddenBlock = event.closest('.ui-checkbox-hidden-input-inner');
+			}
+
+			if (this.inputInfo.checked)
+			{
+				hiddenBlock.style.height = '330px';
+				this.settings.style.opacity = '0';
+			}
+		},
+
+		showCookiesSettings: function(event) {
+			var hiddenBlock = event.target.closest('.ui-checkbox-hidden-input-inner');
+
+			if (this.inputApp.checked)
+			{
+				hiddenBlock.style.height = '617px';
+				this.settings.style.opacity = '1';
+			}
+		}
+
 	}
 
+	BX.Landing.B24ButtonColor = function(typeControl, valueControl)
+	{
+		this.colorCustomType = 'custom';
+
+		this.typeControl = typeControl;
+		this.valueControl = valueControl;
+		this.valueControlWrap = BX.findParent(valueControl, {class:'ui-control-wrap'});
+
+		bind(typeControl, "change", BX.delegate(this.checkVisibility, this));
+
+		this.checkVisibility();
+	};
+
+	BX.Landing.B24ButtonColor.prototype = {
+		checkVisibility: function()
+		{
+			if(this.typeControl.value === 'custom')
+			{
+				this.valueControlWrap.hidden = false;
+			}
+			else
+			{
+				this.valueControlWrap.hidden = true;
+			}
+		}
+	};
 })();

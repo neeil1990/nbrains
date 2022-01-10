@@ -6,6 +6,22 @@ use \Bitrix\Main\Entity;
 
 Loc::loadMessages(__FILE__);
 
+/**
+ * Class HookDataTable
+ *
+ * DO NOT WRITE ANYTHING BELOW THIS
+ *
+ * <<< ORMENTITYANNOTATION
+ * @method static EO_HookData_Query query()
+ * @method static EO_HookData_Result getByPrimary($primary, array $parameters = array())
+ * @method static EO_HookData_Result getById($id)
+ * @method static EO_HookData_Result getList(array $parameters = array())
+ * @method static EO_HookData_Entity getEntity()
+ * @method static \Bitrix\Landing\Internals\EO_HookData createObject($setDefaultValues = true)
+ * @method static \Bitrix\Landing\Internals\EO_HookData_Collection createCollection()
+ * @method static \Bitrix\Landing\Internals\EO_HookData wakeUpObject($row)
+ * @method static \Bitrix\Landing\Internals\EO_HookData_Collection wakeUpCollection($rows)
+ */
 class HookDataTable extends Entity\DataManager
 {
 	/**
@@ -47,6 +63,10 @@ class HookDataTable extends Entity\DataManager
 			)),
 			'VALUE' => new Entity\StringField('VALUE', array(
 				'title' => Loc::getMessage('LANDING_TABLE_FIELD_VALUE')
+			)),
+			'PUBLIC' => new Entity\StringField('PUBLIC', array(
+				'title' => Loc::getMessage('LANDING_TABLE_FIELD_PUBLIC'),
+				'default_value' => 'N'
 			))
 		);
 	}

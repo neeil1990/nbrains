@@ -30,8 +30,8 @@ class ManagedCache
 		static $type = null;
 		if ($type === null)
 		{
-			$cm = Main\Application::getInstance()->getConnectionPool();
-			$type = $cm->getDefaultConnectionType();
+			$type = Main\Application::getInstance()->getConnection()->getType();
+			$type = strtoupper($type);
 		}
 		return $type;
 	}
@@ -158,9 +158,6 @@ class ManagedCache
 
 		$obCache = Cache::createInstance();
 		$obCache->cleanDir(false, "managed_cache");
-
-		$taggedCache = Main\Application::getInstance()->getTaggedCache();
-		$taggedCache->clearByTag(true);
 	}
 
 	// Use it to flush cache to the files.
@@ -190,7 +187,7 @@ class ManagedCache
 		}
 		else
 		{
-			$salt = "/".substr(md5($BX_STATE), 0, 3);
+			$salt = "/".mb_substr(md5($BX_STATE), 0, 3);
 		}
 
 		$path = "/".SITE_ID.$relativePath.$salt;
