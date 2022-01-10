@@ -745,3 +745,138 @@
 2019-05-06 09:21:07 -  - exec CUpdateClientPartner::__CollectRequestData
 2019-05-06 09:21:07 -  - exec CUpdateClientPartner::GetHTTPPage
 2019-05-06 09:21:07 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:20:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:20:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:20:52 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:20:52 -  - TIME GetUpdatesList(request) 0.252 sec
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:20:52 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:20:53 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:01 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:01 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:01 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:01 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:01 -  - TIME GetUpdatesList(request) 0.232 sec
+2020-08-07 11:21:01 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:09 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:09 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:09 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:10 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:10 -  - TIME GetUpdatesList(request) 0.274 sec
+2020-08-07 11:21:10 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:12 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:12 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:12 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:12 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:12 -  - TIME GetUpdatesList(request) 0.214 sec
+2020-08-07 11:21:12 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:19 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.1%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:19 -  - TIME GetUpdatesList(request) 0.216 sec
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:19 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:19 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:20 -  - TIME GetUpdatesList(request) 0.281 sec
+2020-08-07 11:21:20 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:21:34 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:21:34 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:21:34 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:21:34 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:21:34 -  - TIME GetUpdatesList(request) 0.279 sec
+2020-08-07 11:21:34 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:22:51 - Ux12 - Ошибка описания модуля "thebrainstech.copyiblock"
+2020-08-07 11:22:51 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:22:51 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:22:51 - Ux12 - Ошибка описания модуля "thebrainstech.copyiblock"
+2020-08-07 11:22:51 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:22:51 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:22:51 -  - TIME GetUpdatesList(request) 0.31 sec
+2020-08-07 11:22:51 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:22:51 - Ux12 - Ошибка описания модуля "thebrainstech.copyiblock"
+2020-08-07 11:23:11 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:23:11 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:23:11 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:23:11 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:23:12 -  - TIME GetUpdatesList(request) 0.223 sec
+2020-08-07 11:23:12 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:23:18 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:23:18 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:23:18 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:23:18 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:23:18 -  - TIME GetUpdatesList(request) 0.21 sec
+2020-08-07 11:23:18 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:23:20 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:23:20 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:23:20 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:23:20 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:23:21 -  - TIME GetUpdatesList(request) 0.284 sec
+2020-08-07 11:23:21 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:23:23 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:23:23 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:23:23 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:23:23 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:23:24 -  - TIME GetUpdatesList(request) 0.276 sec
+2020-08-07 11:23:24 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:24:02 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:24:02 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:24:02 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:24:02 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:24:02 -  - TIME GetUpdatesList(request) 0.496 sec
+2020-08-07 11:24:02 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:24:11 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:24:11 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:24:11 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:24:11 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:24:11 -  - TIME GetUpdatesList(request) 0.368 sec
+2020-08-07 11:24:11 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:24:30 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:24:30 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:24:30 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:24:30 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:24:30 -  - TIME GetUpdatesList(request) 0.239 sec
+2020-08-07 11:24:30 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 11:24:43 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 11:24:43 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 11:24:43 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.0.0%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 11:24:43 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 11:24:43 -  - TIME GetUpdatesList(request) 0.268 sec
+2020-08-07 11:24:43 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 12:30:50 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 12:30:50 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 12:30:50 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 12:30:50 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 12:30:51 -  - TIME GetUpdatesList(request) 0.379 sec
+2020-08-07 12:30:51 -  - exec CUpdateClientPartner::ParseServerData
+2020-08-07 12:30:56 -  - exec CUpdateClientPartner::GetUpdatesList
+2020-08-07 12:30:56 -  - exec CUpdateClientPartner::__CollectRequestData
+2020-08-07 12:30:56 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.1.12&NGINX=Y&dbv=5.6.38&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2020-08-07 12:30:56 -  - exec CUpdateClientPartner::GetHTTPPage
+2020-08-07 12:30:56 -  - TIME GetUpdatesList(request) 0.265 sec
+2020-08-07 12:30:56 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 14:45:22 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 14:45:22 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 14:45:23 -  - TIME GetUpdatesList(request) 0.23 sec
+2022-01-10 14:45:23 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 14:45:23 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 14:45:23 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 14:45:23 -  - exec CUpdateClientPartner::ParseServerData
+2022-01-10 15:03:34 -  - exec CUpdateClientPartner::GetUpdatesList
+2022-01-10 15:03:34 -  - exec CUpdateClientPartner::__CollectRequestData
+2022-01-10 15:03:34 -  - utf=Y&lang=ru&stable=Y&CANGZIP=Y&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&LICENSE_KEY=X&SUPD_STS=1&SUPD_URS=0&SUPD_URSA=2&TYPENC=E&CLIENT_PHPVER=7.4.14&NGINX=Y&dbv=5.6.47&instm=main%2C18.5.180%2CN%3Basd.tplvars%2C1.5.1%2CN%3Bb24connector%2C18.5.0%2CN%3Bbitrix.sitecorporate%2C15.5.0%2CN%3Bbitrixcloud%2C18.5.0%2CN%3Bclouds%2C18.0.0%2CN%3Bcompression%2C16.0.0%2CN%3Bfileman%2C18.5.400%2CN%3Bhighloadblock%2C18.5.100%2CN%3Biblock%2C18.6.400%2CN%3Blanding%2C18.6.75%2CN%3Bmessageservice%2C18.0.3%2CN%3Bperfmon%2C18.5.0%2CN%3Brest%2C18.5.7%2CN%3Bsearch%2C18.5.200%2CN%3Bsender%2C18.5.3%2CN%3Bseo%2C18.6.100%2CN%3Bsocialservices%2C18.5.100%2CN%3Bthebrainstech.copyiblock%2C1.1.2%2CN%3Btranslate%2C18.0.0%2CN%3Bui%2C18.5.150%2CN&reqm=asd.tplvars%2Cbitrix.sitecorporate%2Cthebrainstech.copyiblock&fullmoduleinfo=Y&SUPD_SRS=RU&SUPD_CMP=N
+2022-01-10 15:03:34 -  - exec CUpdateClientPartner::GetHTTPPage
+2022-01-10 15:03:34 -  - TIME GetUpdatesList(request) 0.205 sec
+2022-01-10 15:03:34 -  - exec CUpdateClientPartner::ParseServerData

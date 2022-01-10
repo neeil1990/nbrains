@@ -47,29 +47,34 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 					</ul>
 				</div>
 				<div class="col-md-5 col-lg-4 col-xl-3">
-					<p class="custom-heading-1 custom-heading-bordered">Latest news</p>
-					<div class="divider"></div>
-					<div class="post-small-wrap">
-						<!-- Post small-->
-						<article class="post-small">
-							<div class="post-small__aside"><a class="post-small__media" href="blog-post.html"><img class="post-small__image" src="images/post-small-1-80x68.jpg" alt="" width="80" height="68"/></a></div>
-							<div class="post-small__main">
-								<p class="post-small__title"><a href="blog-post.html">Benefits of Async/Await in Programming</a></p>
-								<time class="post-small__time" datetime="2018">January 12, 2018</time>
-							</div>
-						</article>
-						<!-- Post small-->
-						<article class="post-small">
-							<div class="post-small__aside"><a class="post-small__media" href="blog-post.html"><img class="post-small__image" src="images/post-small-2-80x68.jpg" alt="" width="80" height="68"/></a></div>
-							<div class="post-small__main">
-								<p class="post-small__title"><a href="blog-post.html">Key Considerations and Warnings of iPaaS</a></p>
-								<time class="post-small__time" datetime="2018">January 12, 2018</time>
-							</div>
-						</article>
-					</div>
+                    <?$APPLICATION->IncludeComponent(
+                            "bitrix:news.line",
+                            ".latest.news.footer",
+                        Array(
+                        "ACTIVE_DATE_FORMAT" => "M j, Y",
+                        "CACHE_GROUPS" => "Y",	// Учитывать права доступа
+                        "CACHE_TIME" => "300",	// Время кеширования (сек.)
+                        "CACHE_TYPE" => "A",	// Тип кеширования
+                        "DETAIL_URL" => "",	// URL, ведущий на страницу с содержимым элемента раздела
+                        "FIELD_CODE" => array(	// Поля
+                            0 => "PREVIEW_PICTURE",
+                            1 => "",
+                        ),
+                        "IBLOCKS" => array(	// Код информационного блока
+                            0 => "10",
+                        ),
+                        "IBLOCK_TYPE" => "contents",	// Тип информационного блока
+                        "NEWS_COUNT" => "2",	// Количество новостей на странице
+                        "SORT_BY1" => "ACTIVE_FROM",	// Поле для первой сортировки новостей
+                        "SORT_BY2" => "SORT",	// Поле для второй сортировки новостей
+                        "SORT_ORDER1" => "DESC",	// Направление для первой сортировки новостей
+                        "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
+                    ),
+                        false
+                    );?>
 				</div>
 				<div class="col-md-10 col-lg-5 col-xl-4">
-					<p class="custom-heading-1 custom-heading-bordered">Useful Links</p>
+					<p class="custom-heading-1 custom-heading-bordered">Полезные ссылки</p>
 					<div class="divider"></div>
 					<div class="row row-5">
 						<div class="col-sm-6">

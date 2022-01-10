@@ -730,3 +730,39 @@
 	INDEX ASD_OPTION_NAME (NAME),
 	INDEX ASD_OPTION_SITE (SITE_ID)
 );, )
+2020-08-07 12:50:23 -  - exec CUpdateClient::GetUpdatesList
+2020-08-07 12:50:23 -  - exec CUpdateClient::CollectRequestData
+2020-08-07 12:50:23 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.12&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2020-08-07 12:50:23 -  - exec CUpdateClient::GetHTTPPage
+2020-08-07 12:50:24 -  - TIME GetUpdatesList(request) 0.374 sec
+2020-08-07 12:50:24 -  - exec CUpdateClient::ParseServerData
+2020-08-07 12:50:43 -  - exec CUpdateClient::GetUpdatesList
+2020-08-07 12:50:43 -  - exec CUpdateClient::CollectRequestData
+2020-08-07 12:50:43 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.1.12&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2020-08-07 12:50:43 -  - exec CUpdateClient::GetHTTPPage
+2020-08-07 12:50:44 -  - TIME GetUpdatesList(request) 0.296 sec
+2020-08-07 12:50:44 -  - exec CUpdateClient::ParseServerData
+2022-01-10 15:02:39 -  - exec CUpdateClient::GetUpdatesList
+2022-01-10 15:02:39 -  - exec CUpdateClient::CollectRequestData
+2022-01-10 15:02:39 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.4.14&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2022-01-10 15:02:39 -  - exec CUpdateClient::GetHTTPPage
+2022-01-10 15:02:39 -  - TIME GetUpdatesList(request) 0.29 sec
+2022-01-10 15:02:39 -  - exec CUpdateClient::ParseServerData
+2022-01-10 15:02:44 -  - exec CUpdateClient::GetUpdatesList
+2022-01-10 15:02:44 -  - exec CUpdateClient::CollectRequestData
+2022-01-10 15:02:44 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.4.14&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2022-01-10 15:02:44 -  - exec CUpdateClient::GetHTTPPage
+2022-01-10 15:02:44 -  - TIME GetUpdatesList(request) 0.21 sec
+2022-01-10 15:02:44 -  - exec CUpdateClient::ParseServerData
+2022-01-10 15:03:12 -  - exec CUpdateClient::GetUpdatesList
+2022-01-10 15:03:12 -  - exec CUpdateClient::CollectRequestData
+2022-01-10 15:03:12 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.4.14&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2022-01-10 15:03:12 -  - exec CUpdateClient::GetHTTPPage
+2022-01-10 15:03:12 -  - TIME GetUpdatesList(request) 0.188 sec
+2022-01-10 15:03:12 -  - exec CUpdateClient::ParseServerData
+2022-01-10 15:03:40 -  - exec CUpdateClient::GetUpdatesList
+2022-01-10 15:03:40 -  - exec CUpdateClient::CollectRequestData
+2022-01-10 15:03:40 -  - LICENSE_KEY=X&lang=ru&SUPD_VER=18.5.100&VERSION=18.5.180&TYPENC=E&SUPD_STS=1&SUPD_URS=0&SUPD_DBS=MYSQL&XE=N&CLIENT_SITE=nbrains.loc&CHHB=nbrains.loc&CSAB=127.0.0.1&SUID=7b370009b0413adf5f08db1b982a59de&CANGZIP=Y&CLIENT_PHPVER=7.4.14&stable=Y&NGINX=Y&SMD=N&rerere=Y&bitm_main=18.5.180&bitm_b24connector=18.5.0&bitm_bitrixcloud=18.5.0&bitm_clouds=18.0.0&bitm_compression=16.0.0&bitm_fileman=18.5.400&bitm_highloadblock=18.5.100&bitm_iblock=18.6.400&bitm_landing=18.6.75&bitm_messageservice=18.0.3&bitm_perfmon=18.5.0&bitm_rest=18.5.7&bitm_search=18.5.200&bitm_sender=18.5.3&bitm_seo=18.6.100&bitm_socialservices=18.5.100&bitm_translate=18.0.0&bitm_ui=18.5.150&bitl_en=&bitl_ru=&SUPD_SRS=RU&SUPD_CMP=N&SALE_15=Y&LICENSE_SIGNED=%7Enew_license18_0_sign-Y
+2022-01-10 15:03:40 -  - exec CUpdateClient::GetHTTPPage
+2022-01-10 15:03:40 -  - TIME GetUpdatesList(request) 0.211 sec
+2022-01-10 15:03:40 -  - exec CUpdateClient::ParseServerData

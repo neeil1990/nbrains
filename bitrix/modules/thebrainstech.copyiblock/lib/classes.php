@@ -45,22 +45,21 @@ class TheBrains {
                     array(
                         "TEXT" => GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY'),
                         "TITLE" => GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY'),
-                        "ACTION" => self::htmlspecialchars("javascript:(new BX.CDialog({
+                        "ACTION" => "javascript:(new BX.CDialog({
 					content_url: '" . $APPLICATION->GetCurPageParam("", array("mode", "table_id")) . "',
 					width: 500,
 					height: 180,
 					resizable: false,
 					draggable: true,
 					content: '<h3 style=\"text-align: center\">". GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY') ." ID : ". $_REQUEST['ID'] ." ". $name ."</h3>"
-					."<form style=\"text-align: center\" action=\"\" name=\"\">"
-                    .$select_ib_wath_copy.""
-					."<input type=\"hidden\" name=\"the_brains_copy_action\" value=\"copy\">"
-					."<input type=\"hidden\" name=\"ID\" value=\"". $_REQUEST['ID'] ."\">"
-					."<h3 style=\"text-align: center\">".GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY_TYPE_IB')."</h3>"
-                    .$select_ib_type.""
-					."</form>',
-					buttons: [BX.CDialog.btnSave, BX.CDialog.btnCancel]
-				})).Show()"),
+                            ."<form style=\"text-align: center\" action=\"\" name=\"\">"
+                            .$select_ib_wath_copy.""
+                            ."<input type=\"hidden\" name=\"the_brains_copy_action\" value=\"copy\">"
+                            ."<input type=\"hidden\" name=\"ID\" value=\"". $_REQUEST['ID'] ."\">"
+                            ."<h3 style=\"text-align: center\">".GetMessage('THEBRAINSE_COPYIBLOCK_MODULE_LIB_COPY_TYPE_IB')."</h3>"
+                            .$select_ib_type.""
+                            ."</form>',
+					buttons: [BX.CDialog.btnSave, BX.CDialog.btnCancel]})).Show()",
                         "ICON" => "copy",
                     )
                 ),
@@ -174,7 +173,7 @@ class TheBrains {
                 else
                     echo $bError;
             }
-              die();
+            die();
         }
     }
 
@@ -197,21 +196,12 @@ class TheBrains {
                 "SORT"           => $arFields['SORT'],
                 "NAME"           => $arFields['NAME'],
                 "CODE"           => $arFields['CODE'],
-                "ACTIVE"         => "Y",            // àêòèâåí
+                "ACTIVE"         => "Y",            // Ð°ÐºÑ‚Ð¸Ð²ÐµÐ½
                 "PREVIEW_TEXT"   => $arFields['PREVIEW_TEXT'],
                 "DETAIL_TEXT"    => $arFields['DETAIL_TEXT']
             );
-           $PRODUCT_ID = $el->Add($arLoadProductArray);
+            $PRODUCT_ID = $el->Add($arLoadProductArray);
 
         }
-
     }
-
-    public static function htmlspecialchars($string, $flags=ENT_COMPAT)
-    {
-        return $string;
-    }
-
-
-
 }
