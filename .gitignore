@@ -11,3 +11,4 @@ access/*
 bitrix/html_pages/*
 bitrix/backup/*
 .htaccess
+*.log
