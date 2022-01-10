@@ -44,6 +44,12 @@ if(!defined("B_PROLOG_INCLUDED")||B_PROLOG_INCLUDED!==true)die();
                                 <textarea class="form-input" id="contact-message-modal" name="message"></textarea>
                             </div>
                         </div>
+                        <div class="col-md-7">
+                            <div class="form-wrap form-wrap-recaptcha">
+                                <!-- Google captcha-->
+                                <div class="recaptcha" id="captcha2" data-sitekey="6Ld7FAQeAAAAAKh8SPzrCgCZn5PNLRknObcUbOpc"></div>
+                            </div>
+                        </div>
                         <div class="col-md-6">
                             <input type="hidden" name="PARAMS_HASH" value="<?=$arResult["PARAMS_HASH"]?>">
                             <button class="button button-block button-primary button-ujarak" name="submit" type="submit"><?=GetMessage("MFT_SUBMIT_MODAL")?></button>

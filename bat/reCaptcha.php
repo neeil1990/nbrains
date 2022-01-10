@@ -4,11 +4,11 @@ require_once 'ReCaptcha/autoload.php';
 
 // Register You API keys at https://www.google.com/recaptcha/admin
 // And write it here
-$siteKey = '6LfZlSETAAAAAC5VW4R4tQP8Am_to4bM3dddxkEt';
-$secret = '6LfZlSETAAAAAOi4lh7GHcSOO0pbXnAMJRhnsr7O';
+$siteKey = '6Ld7FAQeAAAAAKh8SPzrCgCZn5PNLRknObcUbOpc';
+$secret = '6Ld7FAQeAAAAAM06cX1-si-72loa7S2fO51qgk_Y';
 
 // reCAPTCHA supported 40+ languages listed here: https://developers.google.com/recaptcha/docs/language
-$lang = 'en';
+$lang = 'ru';
 
 // If No key
 if ($siteKey === '' || $secret === ''):

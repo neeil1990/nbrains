@@ -23,7 +23,6 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 	<div style="background: #212121; padding: 10px 0; box-shadow: 3px 3px 5px 0 rgba(0,0,0,.3); clear: both; text-align:center; position: relative; z-index:1;"><a href="http://windows.microsoft.com/en-US/internet-explorer/"><img src="images/ie8-panel/warning_bar_0000_us.jpg" border="0" height="42" width="820" alt="You are using an outdated browser. For a faster, safer browsing experience, upgrade for free today."></a></div>
 	<script src="js/html5shiv.min.js"></script>
 	<![endif]-->
-
 </head>
 <body>
 <?$APPLICATION->ShowPanel()?>
@@ -56,7 +55,7 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
                                 <a class="brand" href="/">
 									<div class="brand__name">
                                         <img class="brand__logo-dark" src="<?=SITE_TEMPLATE_PATH?>/images/logo-default-95x80.png" alt="" width="95" height="80"/>
-                                        <img class="brand__logo-mobile" src="images/logo-mobile-170x50.png" alt="" width="170" height="50"/>
+                                        <img class="brand__logo-mobile" src="<?=SITE_TEMPLATE_PATH?>/images/logo-default-95x80.png" alt="" width="170" height="50"/>
                                     </div>
                                 </a>
                             </div>
