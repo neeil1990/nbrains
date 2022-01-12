@@ -48,7 +48,7 @@ class TheBrains {
                         "ACTION" => "javascript:(new BX.CDialog({
 					content_url: '" . $APPLICATION->GetCurPageParam("", array("mode", "table_id")) . "',
 					width: 500,
-					head: '<div style=\"text-align: center;\"><a href=\"https://www.donationalerts.com/r/nbrains\" target=\"_blank\">".GetMessage('THEBRAINSE_DONAT')."</a> | <a href=\" ".self::dialogDonation()." \"> ".GetMessage('THEBRAINSE_DONAT_THANKS')."</a></div>',
+					head: '<div style=\"text-align: center;\"><a href=\"https://nbrains.ru/\" target=\"_blank\"><img src=\"https://nbrains.ru/bitrix/templates/nbrains/images/logo-default-95x80.png\" width=\"50\"></a></div>',
 					height: 260,
 					resizable: false,
 					draggable: true,
@@ -208,18 +208,6 @@ class TheBrains {
             $PRODUCT_ID = $el->Add($arLoadProductArray);
 
         }
-    }
-
-    static public function dialogDonation() {
-
-        $arDialogParams = array(
-            "title" => GetMessage('THEBRAINSE_DONAT_TITLE'),
-            "content_url" => '/bitrix/admin/thebrainstech.copyiblock/donation.php',
-        );
-
-        $strParams = CUtil::PhpToJsObject($arDialogParams);
-
-        return addcslashes('javascript:(new BX.CDialog('.$strParams.')).Show()', '\'');
     }
 
 }
