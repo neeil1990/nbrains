@@ -80,12 +80,12 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 												</dl>
 											</li>
 											<li>
-												<ul class="list-inline list-inline-xs">
+												<!--<ul class="list-inline list-inline-xs">
 													<li><a class="icon icon-gray-dark icon-style-brand fa fa-facebook" href="#"></a></li>
 													<li><a class="icon icon-gray-dark icon-style-brand fa fa-twitter" href="#"></a></li>
 													<li><a class="icon icon-gray-dark icon-style-brand fa fa-google-plus" href="#"></a></li>
 													<li><a class="icon icon-gray-dark icon-style-brand fa fa-pinterest-p" href="#"></a></li>
-												</ul>
+												</ul>-->
 											</li>
 										</ul>
 									</div>

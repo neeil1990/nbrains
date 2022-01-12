@@ -12,7 +12,7 @@
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 ?>
-<section class="section section-lg bg-white text-center">
+<section class="section section-lg bg-white text-center" id="services">
 	<div class="container">
 		<h2><?=$arResult["NAME"]?></h2>
 		<div class="row row-30 justify-content-md-center">

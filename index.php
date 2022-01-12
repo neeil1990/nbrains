@@ -339,7 +339,7 @@ $APPLICATION->SetTitle('Главная');
 
 
         <!-- Tabs -->
-        <?$APPLICATION->IncludeComponent(
+        <?/* $APPLICATION->IncludeComponent(
             "bitrix:news.line",
             ".tabs.slider",
             Array(
@@ -361,9 +361,9 @@ $APPLICATION->SetTitle('Главная');
                 "SORT_ORDER1" => "ASC",
                 "SORT_ORDER2" => "DESC"
             )
-        );?>
+        ); */ ?>
 
-        <section class="section parallax-container bg-gray-darker" data-parallax-img="<?=SITE_TEMPLATE_PATH?>/images/bg-image-3-1920x730.jpg">
+        <section class="section parallax-container bg-gray-darker" id="write" data-parallax-img="<?=SITE_TEMPLATE_PATH?>/images/bg-image-3-1920x730.jpg">
             <div class="parallax-content">
                 <div class="section-md text-center">
                     <div class="container">

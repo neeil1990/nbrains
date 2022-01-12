@@ -18,12 +18,12 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 					</div>
 				</div>
 				<div class="col-md-10 col-lg-6">
-					<div class="group-md">
+					<!--<div class="group-md">
 						<h3>Подписывайся</h3>
 						<p class="large">Получите последние обновления и предложения</p>
-					</div>
+					</div>-->
 					<!-- RD Mailform-->
-					<form class="rd-mailform form_inline form_lg" data-form-output="form-output-global" data-form-type="subscribe" method="post" action="bat/rd-mailform.php">
+					<!--<form class="rd-mailform form_inline form_lg" data-form-output="form-output-global" data-form-type="subscribe" method="post" action="bat/rd-mailform.php">
 						<div class="form-wrap">
 							<input class="form-input" id="subscribe-form-footer-form-email" type="email" name="email" data-constraints="@Email @Required">
 							<label class="form-label" for="subscribe-form-footer-form-email">Your E-mail</label>
@@ -31,7 +31,7 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 						<div class="form-button">
 							<button class="button button-lg button-primary button-ujarak" type="submit">присоединяться</button>
 						</div>
-					</form>
+					</form>-->
 				</div>
 			</div>
 			<div class="row row-50 justify-content-md-center justify-content-lg-start justify-content-xl-between">
@@ -47,7 +47,7 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 					</ul>
 				</div>
 				<div class="col-md-5 col-lg-4 col-xl-3">
-                    <?$APPLICATION->IncludeComponent(
+                    <?/*$APPLICATION->IncludeComponent(
                             "bitrix:news.line",
                             ".latest.news.footer",
                         Array(
@@ -71,7 +71,7 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
                         "SORT_ORDER2" => "ASC",	// Направление для второй сортировки новостей
                     ),
                         false
-                    );?>
+                    );*/?>
 				</div>
 				<div class="col-md-10 col-lg-5 col-xl-4">
 					<p class="custom-heading-1 custom-heading-bordered">Полезные ссылки</p>
@@ -79,19 +79,14 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 					<div class="row row-5">
 						<div class="col-sm-6">
 							<ul class="list-marked list-marked_primary">
-								<li><a href="#">DB Management</a></li>
-								<li><a href="#">iOS/MacOs Apps</a></li>
-								<li><a href="#">Android Apps</a></li>
-								<li><a href="#">Windows Apps</a></li>
-								<li><a href="#">UX Design</a></li>
+								<li><a href="#services">Услуги</a></li>
+								<li><a href="#tariffs">Тарифы</a></li>
 							</ul>
 						</div>
 						<div class="col-sm-6">
 							<ul class="list-marked list-marked_primary">
-								<li><a href="#">Tutorials</a></li>
-								<li><a href="#">Product Support</a></li>
-								<li><a href="contact-us.html">Contact Us</a></li>
-								<li><a href="blog.html">Blog</a></li>
+								<li><a href="#about">О нас</a></li>
+								<li><a href="#write">Написать нам</a></li>
 							</ul>
 						</div>
 					</div>
@@ -103,10 +98,9 @@ if(!defined('B_PROLOG_INCLUDED') || B_PROLOG_INCLUDED !== true)
 		<div class="container">
 			<div class="footer-default__aside-inner">
 				<!-- Rights-->
-				<p class="rights"><span>&copy;&nbsp; </span><span class="copyright-year"></span><span>&nbsp;</span><span>Techsoft</span><span>.&nbsp;</span><a href="privacy-policy.html">Privacy Policy</a></p>
+				<p class="rights"><span>&copy;&nbsp; </span><span class="copyright-year"></span><span>&nbsp;</span><span>nBrains</span><span>.&nbsp;</span><a href="privacy-policy.html">Privacy Policy</a></p>
 				<ul class="list-separated list-inline">
-					<li><a href="faq.html">FAQ</a></li>
-					<li><a href="#">Support</a></li>
+					<li><a href="#write">Поддержка</a></li>
 				</ul>
 			</div>
 		</div>

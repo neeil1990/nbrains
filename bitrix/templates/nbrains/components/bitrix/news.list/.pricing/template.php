@@ -12,7 +12,7 @@
 /** @var CBitrixComponent $component */
 $this->setFrameMode(true);
 ?>
-<section class="section section-md bg-gray-2 text-center oh">
+<section class="section section-md bg-gray-2 text-center oh" id="tariffs">
 	<div class="container wow fadeInUpSmall">
 		<h2><?=$arResult["NAME"]?></h2>
 		<div class="pricing-table pricing-table-classic">
